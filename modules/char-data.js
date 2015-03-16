@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose');
 
-//modifier array: damage, armor, health, magic
+/**
 var charSchema = new mongoose.Schema({
   invArray: {type: Array, default: [
     {name: 'Arm of Wilfaerd', slot: 'mainHand', modifiers: {melee: true}, flvtxt: 'This sword does terrible, terrible damage.'},
@@ -11,8 +11,9 @@ var charSchema = new mongoose.Schema({
     {name: 'Shock n\' Awe', slot: 'twoHand', modifiers: {melee: false}, flvtxt: 'Speak up!'},
     {name: 'Neosteel Cuirass', slot: 'cuirass', use: 'armor', modifiers: {}, flvtxt: 'Practically useless.'},
     {name: 'The One to Rule Them All', slot: 'ring', modifiers: {}, flvtxt: 'The one dental plan to rule them all.'}
-  ],
+  ]},
   name: {type: String, default: 'Nemo'}
 });
+*/
 
 module.exports = mongoose.model('Note', charSchema);
