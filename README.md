@@ -24,7 +24,6 @@ Start mongod from the project root directory:
 
 - URLs use "_" to separate words.
 - File Names use "-" to separate words.
-- Files with JSX to be named with .jsx
 - All lowercase for file names.
 - All lowercase for URLs.
 
