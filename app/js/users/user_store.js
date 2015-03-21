@@ -28,31 +28,31 @@ var UserStore = Fluxxor.createStore({
   onCreateUser: function(user) {
     user.email = user.username;
 
-    // '/api/v1/create_user'
-    // request
-    //   .post('/api/v1/create_user')
-    //   .send(user)
-    //   .end(function(err, res) {
-    //     if (err) return console.log(err);
+    '/api/v1/create_user'
+    request
+      .post('/api/v1/create_user')
+      .send(user)
+      .end(function(err, res) {
+        if (err) return console.log(err);
 
-    //     this.eat = res.body.eat;
-    //     Cookies.set('eat', this.eat);
-    //     this.emit('change');
-    //   }.bind(this));
+        this.eat = res.body.eat;
+        Cookies.set('eat', this.eat);
+        this.emit('change');
+      }.bind(this));
     this.emit('change');
   },
 
   onLogin: function(user) {
-    // request
-    //   .get('/api/v1/sign_in')
-    //   .auth(user.username, user.password)
-    //   .end(function(err, res) {
-    //     if (err) return console.log(err);
+    request
+      .get('/api/v1/sign_in')
+      .auth(user.username, user.password)
+      .end(function(err, res) {
+        if (err) return console.log(err);
 
-    //     this.eat = res.body.eat;
-    //     Cookies.set('eat', this.eat);
-    //     this.emit('change');
-    //   }.bind(this));
+        this.eat = res.body.eat;
+        Cookies.set('eat', this.eat);
+        this.emit('change');
+      }.bind(this));
 
     this.emit('change');
   },
