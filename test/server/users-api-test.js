@@ -13,6 +13,7 @@ var expect = chai.expect;
 
 var testEmail = 'test@example.com';
 var testPassword = 'your cats name';
+var testUserName = 'dragon84217';
 var routesBase = 'localhost:3000/api/v1';
 
 describe('user endpoints', function () {
@@ -23,6 +24,7 @@ describe('user endpoints', function () {
     var newUser = new User();
     newUser.basic.email = testEmail;
     newUser.basic.password = newUser.generateHash(testPassword);
+    newUser.username = testUserName;
     newUser.save(function (err, user) {
       if (err) return console.error('could not create user');
       chai.request(routesBase)
@@ -44,7 +46,7 @@ describe('user endpoints', function () {
   it('should create a user', function (done) {
     chai.request(routesBase)
       .post('/create_user')
-      .send({"basic.email": "t2@example.com", "basic.password": testPassword})
+      .send({"email": "t2@example.com", "password": testPassword, "username": "Tom Bombadil"})
       .end(function (err, res) {
         expect(err).to.eql(null);
         expect(res.body).to.have.property('token');
@@ -62,4 +64,15 @@ describe('user endpoints', function () {
           done();
         });
     });
+
+    it('should fail to create a user', function (done) {
+    chai.request(routesBase)
+      .post('/create_user')
+      .send({"email": testEmail, "password": testPassword, "username": testUserName})
+      .end(function (err, res) {
+        expect(err).to.eql(null);
+        expect(res.body).to.eql({ msg: 'could not create user' });
+        done();
+      });
+  });
 });

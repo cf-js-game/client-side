@@ -1,16 +1,19 @@
 'use strict';
 
 var mongoose = require('mongoose');
+var uniqueValidator = require('mongoose-unique-validator');
 var bcrypt = require('bcrypt-nodejs');
 var eat = require('eat');
 
 var userSchema = new mongoose.Schema({
   basic: {
-    email: String,
-    password: String
+    email: {type: String, required: true, unique: true},
+    password: {type: String, required: true}
   },
-  username: String
+  username: {type: String, required: true}
 });
+
+userSchema.plugin(uniqueValidator);
 
 userSchema.methods.generateHash = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
