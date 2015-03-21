@@ -41,6 +41,8 @@ var CreateUser = React.createClass({
       submitButton = <button type="submit" >Create a new user</button>;
 
     return (
+      <div>
+      <h2>Create User</h2>
       <form name="signupform" onSubmit={this.handleSubmit}>
         <label htmlFor="username">User Name:</label>
         {usernameError}
@@ -50,6 +52,7 @@ var CreateUser = React.createClass({
         <input type="password" name="user-password" id="password" value={this.state.newUser.password} onChange={this.handleChange} />
         {submitButton}
       </form>
+      </div>
     )
   }
 });
