@@ -3,7 +3,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var passport = require('passport');
-var passport_strat = require('./lib/passport_strat');
+var passportStrat = require('./lib/passport_strat');
 var userRoutes = require('./routes/user_routes');
 
 var app = express();
@@ -16,7 +16,7 @@ mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/jsgame_dev');
 // Security init
 app.set('appSecret', process.env.SECRET || 'loot!loot!loot!loot!');
 app.use(passport.initialize());
-passport_strat(passport);
+passportStrat(passport);
 
 // Routes
 var userRouter = express.Router();
