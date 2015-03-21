@@ -16,4 +16,4 @@ var charSchema = new mongoose.Schema({
 });
 */
 
-module.exports = mongoose.model('Note', charSchema);
+// module.exports = mongoose.model('Note', charSchema);
