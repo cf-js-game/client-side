@@ -2,6 +2,23 @@
 
 var mongoose = require('mongoose');
 
+var charSchema = new mongoose.Schema({
+  name: {type: String, default: 'Nemo'},
+  invArray: {type: Array, default: []},
+  equipArray: {type: Array, default: []},
+  maxHP: {type: Number, default: 1},
+  maxMana: {type: Number, default: 1}
+});
+
+var charQSchema = new mongoose.Schema({
+  HP: {type: Number, default: 1},
+  Mana: {type: Number, default: 1},
+  psn: {type: Boolean, default: false},
+  brn: {type: Boolean, default: false}
+});
+
+module.exports = mongoose.model('CharSchema', charSchema);
+module.exports = mongoose.model('CharQSchema', charQSchema);
 /**
 var charSchema = new mongoose.Schema({
   invArray: {type: Array, default: [
