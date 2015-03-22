@@ -3,7 +3,7 @@
 var Game = require('../game');
 
 // Tile Map Key
-// 0: An impassable entity, used for map bounds
+// -1 - 0: An impassable entity, used for map bounds ( Collidable Entities )
 // 1: Passable area
 
 
@@ -50,10 +50,8 @@ module.exports = {
 	generateBlob: function () {
 		this.initMap();
 
-		var iterations = 3000;
+		var iterations = Game.map_grid.iterations();
 		var curPos = {x: this.w / 2, y: this.h / 2};
-
-		
 
 		while (iterations--) {
 
@@ -86,19 +84,20 @@ module.exports = {
 		//check
 		for (var y = 1; y < this.h-1; y++) {
 			for (var x = 1; x < this.w-1; x++) {
-				if ((this.tileMap[y][x] === 0  || this.tileMap[y+1][x] === -1)
+				if ((this.tileMap[y][x] === 0  || this.tileMap[y][x] === -1)
 					&& (this.tileMap[y+1][x] === 0 || this.tileMap[y+1][x] === -1)
-					&& (this.tileMap[y-1][x] === 0 || this.tileMap[y+1][x] === -1)
-					&& (this.tileMap[y+1][x+1] === 0 || this.tileMap[y+1][x] === -1)
-					&& (this.tileMap[y][x+1] === 0 || this.tileMap[y+1][x] === -1)
-					&& (this.tileMap[y-1][x+1] === 0 || this.tileMap[y+1][x] === -1)
-					&& (this.tileMap[y-1][x-1] === 0 || this.tileMap[y+1][x] === -1)
-					&& (this.tileMap[y][x-1] === 0 || this.tileMap[y+1][x] === -1)
-					&& (this.tileMap[y+1][x-1] === 0 || this.tileMap[y+1][x] === -1))
+					&& (this.tileMap[y-1][x] === 0 || this.tileMap[y-1][x] === -1)
+					&& (this.tileMap[y+1][x+1] === 0 || this.tileMap[y+1][x+1] === -1)
+					&& (this.tileMap[y][x+1] === 0 || this.tileMap[y][x+1] === -1)
+					&& (this.tileMap[y-1][x+1] === 0 || this.tileMap[y-1][x+1] === -1)
+					&& (this.tileMap[y-1][x-1] === 0 || this.tileMap[y-1][x-1] === -1)
+					&& (this.tileMap[y][x-1] === 0 || this.tileMap[y][x-1] === -1)
+					&& (this.tileMap[y+1][x-1] === 0 || this.tileMap[y+1][x-1] === -1))
 					this.tileMap[y][x] = -1;
 			}
 		}
 
+		this.tileMap[this.h / 2][this.w / 2] = 1;
 	}
 };
 

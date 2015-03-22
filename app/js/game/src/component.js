@@ -23,8 +23,7 @@ Crafty.c('Grid', {
   }
 });
  
-// An "Actor" is an entity that is drawn in 2D on canvas
-//  via our logical coordinate grid
+
 Crafty.c('Actor', {
   init: function() {
     this.requires('2D, Canvas, Grid');
@@ -34,11 +33,13 @@ Crafty.c('Actor', {
 Crafty.c('PlayerCharacter', {
   init: function() {
     this.requires('Hero, Actor, 2D, Fourway, Color, Collision')
-      .attr({w: 10, h: 10})
+      .attr({w: 7, h: 7})
       .fourway(4)
       .color('#1122ff')
       .stopOnSolids()
-      .onHit('Item', this.visitItem);
+      .onHit('Item', this.visitItem)
+      .onHit('Ruby', this.visitItem)
+      .onHit('Emerald', this.visitItem);
   },
  
   // Registers a stop-movement function to be called when
@@ -85,11 +86,41 @@ Crafty.c('Rock', {
   },
 });
 
+Crafty.c('Floor', {
+  init: function() {
+    this.requires('Actor, Color')
+      .color('#222222');
+  }
+});
 
 Crafty.c('Item', {
   init: function() {
     this.requires('Actor, Color')
       .color('rgb(170, 125, 40)');
+  },
+ 
+  collect: function() {
+    this.destroy();
+  }
+});
+
+Crafty.c('Ruby', {
+  init: function() {
+    this.requires('Actor, Color')
+      .attr({w: 4, h: 4,})
+      .color('#ff0022');
+  },
+ 
+  collect: function() {
+    this.destroy();
+  }
+});
+
+Crafty.c('Emerald', {
+  init: function() {
+    this.requires('Actor, Color')
+      .attr({w: 4, h: 4,})
+      .color('#00ff00');
   },
  
   collect: function() {
