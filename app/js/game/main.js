@@ -11,7 +11,8 @@ Game.start = function () {
 	Crafty.init();
 
 	TileMap.generateBlob();
-	Crafty.scene('main', function () {
+
+	Crafty.defineScene('main', function () {
 
 		Crafty.viewport.init(1200, 800);
 		Crafty.background('#000');
@@ -31,13 +32,11 @@ Game.start = function () {
 	        } else if (TileMap.tileMap[x][y] === 1) {
 	        	Crafty.e('Floor').at(x, y);
 	        }
-	        // else if (Math.random() < 0.04) {
-	        // 	Crafty.e('Bush').at(x, y);
-	        // }
+
 	      }
 	    }
+	    console.log('map created');
 
-	    // Generate up to five villages on the map in random locations
 	    var max_items = 400;
 	    for (var x = 20; x < Game.map_grid.width-20; x++) {
 	      for (var y = 20; y < Game.map_grid.height-20; y++) {
@@ -53,47 +52,32 @@ Game.start = function () {
 	        
 	      }
 	    }
+	    console.log('items placed');
 
-	    var max_items = 700;
-	    for (var x = 20; x < Game.map_grid.width-20; x++) {
-	      for (var y = 20; y < Game.map_grid.height-20; y++) {
-	      	if (TileMap.tileMap[x][y] === 1) {
-	      		if (Math.random() < 0.03) {
-		          Crafty.e('Ruby').at(x, y);
+	    // var max_items = 400;
+	    // for (var x = 20; x < Game.map_grid.width-20; x++) {
+	    //   for (var y = 20; y < Game.map_grid.height-20; y++) {
+	    //   	if (TileMap.tileMap[x][y] === 1) {
+	    //   		if (Math.random() < 0.01) {
+		   //        Crafty.e('StaticSprite').at(x, y);
 		 
-		          if (Crafty('Ruby').length >= max_items) {
-		            return;
-		          }
-		        }	
-	      	}
+		   //        if (Crafty('StaticSprite').length >= max_items) {
+		   //          return;
+		   //        }
+		   //      }	
+	    //   	}
 	        
-	      }
-	    }
-
-	    var max_items = 700;
-	    for (var x = 20; x < Game.map_grid.width-20; x++) {
-	      for (var y = 20; y < Game.map_grid.height-20; y++) {
-	      	if (TileMap.tileMap[x][y] === 1) {
-	      		if (Math.random() < 0.009) {
-		          Crafty.e('Emerald').at(x, y);
-		 
-		          if (Crafty('Emerald').length >= max_items) {
-		            return;
-		          }
-		        }	
-	      	}
-	        
-	      }
-	    }
-
-	    var hero = Crafty.e('PlayerCharacter').at(250, 250);
-
-	    Crafty.viewport.follow(hero, -60, 0);
+	    //   }
+	    // }
+		var hero = Crafty.e('PlayerCharacter').at(250, 250); 
+	    Crafty.viewport.follow(hero, 0, 0);
 	});
-	
+
+	Crafty.defineScene('loading', function() {
+
+	});	
+
 	Crafty.scene('main');
-	
-    
 }
 
 

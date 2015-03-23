@@ -5,11 +5,11 @@ var Game = {
 		width: 500,
 		height: 500,
 		tile: {
-			width: 8,
-			height: 8
+			width: 32,
+			height: 32
 		},
 		iterations: function() {
-			return Math.floor(Math.random() * 4000 + 4000);
+			return Math.floor(Math.random() * 32000 + 4000);
 		}
 	},
 	width: function () {

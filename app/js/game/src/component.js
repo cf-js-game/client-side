@@ -2,6 +2,26 @@
 
 var Game = require('../game');
 
+var directions = {
+  card: [
+    'n',
+    'ne',
+    'e',
+    'se',
+    's',
+    'sw',
+    'w',
+    'nw'
+  ],
+  roll: function() {
+    return Math.floor(Math.random() * 8);
+  }
+};
+
+
+Crafty.sprite(32, 'assets/rock.png', {
+  rock: [0, 0]
+});
 // The Grid component allows an element to be located
 //  on a grid of tiles
 Crafty.c('Grid', {
@@ -32,58 +52,70 @@ Crafty.c('Actor', {
 
 Crafty.c('PlayerCharacter', {
   init: function() {
-    this.requires('Hero, Actor, 2D, Fourway, Color, Collision')
-      .attr({w: 7, h: 7})
-      .fourway(4)
+    this.requires('Hero, Actor, Fourway, Color, Collision, Animate')
+      .attr({w: 16, h: 16,})
       .color('#1122ff')
-      .stopOnSolids()
+      .fourway(2)
+      .collision()
+      .bind('Moved', function(old) {
+        if (this.hit('Solid')) {
+          this.x = old.x;
+          this.y = old.y;
+        }
+      })
       .onHit('Item', this.visitItem)
-      .onHit('Ruby', this.visitItem)
-      .onHit('Emerald', this.visitItem);
-  },
- 
-  // Registers a stop-movement function to be called when
-  //  this entity hits an entity with the "Solid" component
-  stopOnSolids: function() {
-    this.onHit('Solid', this.stopMovement);
- 
-    return this;
-  },
- 
-  // Stops the movement
-  stopMovement: function() {
-    this._speed = 0;
-    if (this._movement) {
-      this.x -= this._movement.x;
-      this.y -= this._movement.y;
-    }
+      .onHit('EnemyNPC', this.hitEnemy);
   },
   visitItem: function(data) {
     var item = data[0].obj;
     item.collect();
     console.log('Item Visited: ' + data);
+  },
+  hitEnemy: function(data) {
+    var enemy = data[0].obj;
+    enemy.kill();
+    console.log('Killed enemy.');
   }
 });
 
-Crafty.c('Tree', {
+Crafty.c('EnemyNPC', {
   init: function() {
-    this.requires('Actor, Color, Solid')
-      .color('rgb(20, 125, 40)');
+    this.requires('Actor, Color, Collision')
+      .attr({w: 16, h: 16})
+      .color('#ff0000')
+      .collision();
   },
+  kill: function() {
+    this.destroy();
+  }
 });
 
-Crafty.c('Bush', {
-  init: function() {
-    this.requires('Actor, Color, Solid')
-      .color('rgb(20, 185, 40)');
-  },
+Crafty.c('FollowAI', {
+  followAI: function(obj) {
+    this.bind('EnterFrame', function(obj) {
+      if ((this.x < (obj.x + 100)) || (this.y < (obj.y + 100))) {
+        this.x += this._speed;
+      }
+    });
+  }
+});
+
+
+Crafty.c('AI', {
+
 });
 
 Crafty.c('Rock', {
   init: function() {
     this.requires('Actor, Color, Solid')
       .color('#808080');
-  },
+  }
+});
+
+Crafty.c('StaticSprite', {
+  init: function() {
+    this.requires('Actor, Solid, rock');
+  }
 });
 
 Crafty.c('Floor', {
@@ -96,7 +128,8 @@ Crafty.c('Floor', {
 Crafty.c('Item', {
   init: function() {
     this.requires('Actor, Color')
-      .color('rgb(170, 125, 40)');
+      .attr({w: 4, h: 4,})
+      .color('#ff0033');
   },
  
   collect: function() {
@@ -104,23 +137,11 @@ Crafty.c('Item', {
   }
 });
 
-Crafty.c('Ruby', {
+Crafty.c('FitItem', {
   init: function() {
     this.requires('Actor, Color')
       .attr({w: 4, h: 4,})
-      .color('#ff0022');
-  },
- 
-  collect: function() {
-    this.destroy();
-  }
-});
-
-Crafty.c('Emerald', {
-  init: function() {
-    this.requires('Actor, Color')
-      .attr({w: 4, h: 4,})
-      .color('#00ff00');
+      .color('#ff0033');
   },
  
   collect: function() {

@@ -48,6 +48,7 @@ module.exports = {
 		}
 	},
 	generateBlob: function () {
+		console.log('starting map generation');
 		this.initMap();
 
 		var iterations = Game.map_grid.iterations();
@@ -98,6 +99,7 @@ module.exports = {
 		}
 
 		this.tileMap[this.h / 2][this.w / 2] = 1;
+		console.log('Map gen complete');
 	}
 };
 
