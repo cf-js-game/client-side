@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var passportStrat = require('./lib/passport_strat');
 var userRoutes = require('./routes/user_routes');
+var characterRoutes = require('./routes/character_routes');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -20,10 +21,13 @@ passportStrat(passport);
 
 // Routes
 var userRouter = express.Router();
+var characterRouter = express.Router();
 
 userRoutes(userRouter, passport, app.get('appSecret'));
+characterRoutes(characterRouter, passport, app.get('appSecret'));
 
 app.use('/api/v1', userRouter);
+app.use('/api/v1', characterRouter);
 
 // Server init
 app.listen(port, function() {
