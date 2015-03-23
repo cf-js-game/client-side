@@ -31,6 +31,9 @@ Game.start = function () {
 	          Crafty.e('Rock').at(x, y);
 	        } else if (TileMap.tileMap[x][y] === 1) {
 	        	Crafty.e('Floor').at(x, y);
+	        } else if (TileMap.tileMap[x][y] === 2) {
+	        	Crafty.e('Floor').at(x, y);
+	        	Crafty.e('StaticSprite').at(x, y);
 	        }
 
 	      }
@@ -49,22 +52,6 @@ Game.start = function () {
 		          }
 		        }	
 	      	}
-	      }
-	    }
-
-	    var max_items = 200;
-	    for (var x = 20; x < Game.map_grid.width-20; x++) {
-	      for (var y = 20; y < Game.map_grid.height-20; y++) {
-	      	if (TileMap.tileMap[x][y] === 1) {
-	      		if (Math.random() < 0.01) {
-		          Crafty.e('StaticSprite').at(x, y);
-		 
-		          if (Crafty('StaticSprite').length >= max_items) {
-		            return;
-		          }
-		        }	
-	      	}
-	        
 	      }
 	    }
 	    console.log('items placed');

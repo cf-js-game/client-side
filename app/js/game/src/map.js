@@ -5,6 +5,9 @@ var Game = require('../game');
 // Tile Map Key
 // -1 - 0: An impassable entity, used for map bounds ( Collidable Entities )
 // 1: Passable area
+// 2: Rocks
+// 3: Monster Locations
+// 
 
 
 // 1 N
@@ -16,7 +19,7 @@ var Game = require('../game');
 // 7 W
 // 8 NW
 
-module.exports = {
+var map = {
 
 	tileMap: [],
 	initMap: function() {
@@ -126,6 +129,30 @@ module.exports = {
 		this.farthestFromOrigin[0] = farthestPoint[0];
 		this.farthestFromOrigin[1] = farthestPoint[1];
 
+		function checkSurrounding(y, x, tileType) {
+			
+			if ((map.tileMap[y+1][x] === tileType)
+					&& (map.tileMap[y-1][x] === tileType)
+					&& (map.tileMap[y+1][x+1] === tileType)
+					&& (map.tileMap[y][x+1] === tileType)
+					&& (map.tileMap[y-1][x+1] === tileType)
+					&& (map.tileMap[y-1][x-1] === tileType)
+					&& (map.tileMap[y][x-1] === tileType)
+					&& (map.tileMap[y+1][x-1] === tileType)) {
+				return true;
+			}
+
+			return false;
+		};
+
+		//Rock Locations
+		for ( var i = 0; i < coordsOfMap.length; i++ ) {
+			if (rand() < 0.03) {
+				if (checkSurrounding(coordsOfMap[i][0], coordsOfMap[i][1], 1)) {
+					this.tileMap[coordsOfMap[i][0]][coordsOfMap[i][1]] = 2;
+				}
+			}
+		}
 
 		// Starting Point
 		this.tileMap[this.h / 2][this.w / 2] = 1;
@@ -141,4 +168,4 @@ function rand() {
 	return Math.random();
 }
 
-
+module.exports = map;
