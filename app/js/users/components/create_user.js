@@ -8,7 +8,7 @@ var StoreWatchMixin = Fluxxor.StoreWatchMixin;
 var CreateUser = React.createClass({
   mixins: [FluxMixin],
   getInitialState: function() {
-    return {newUser: {username: '', email: '', password: ''}, changed: false};
+    return {newUser: {username: '', password: '', email: ''}, changed: false};
   },
   handleChange: function(event) {
     var stateCopy = this.state;
@@ -55,7 +55,7 @@ var CreateUser = React.createClass({
         <label htmlFor="email">Email:</label>
         {emailError}
         <input type="text" name="user-email" id="email" value={this.state.newUser.email} onChange={this.handleChange} />
-         <label htmlFor="password">Password:</label>
+        <label htmlFor="password">Password:</label>
         {passwordError}
         <input type="password" name="user-password" id="password" value={this.state.newUser.password} onChange={this.handleChange} />
         {submitButton}

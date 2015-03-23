@@ -28,7 +28,7 @@ var UserStore = Fluxxor.createStore({
   },
 
   onCreateUser: function(user) {
-    user.email = user.username;
+    //user.email = user.username;
 
     request
       .post('/api/v1/create_user')
@@ -47,7 +47,8 @@ var UserStore = Fluxxor.createStore({
     console.log("onLogin");
     request
       .get('/api/v1/sign_in')
-      .auth(user.username, user.password)
+      .auth(user.email, user.password)
+      .send(user.username)
       .end(function(err, res) {
         if (err) return console.log(err);
 

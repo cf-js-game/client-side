@@ -6,6 +6,7 @@ var chai = require('chai');
 var chaihttp = require('chai-http');
 var mongoose = require('mongoose');
 var User = require('../../models/User');
+var Character = require('../../models/Character.js');
 
 chai.use(chaihttp);
 
@@ -16,9 +17,10 @@ var testPassword = 'your cats name';
 var testUserName = 'dragon84217';
 var routesBase = 'localhost:3000/api/v1';
 
-describe('user endpoints', function () {
-  var id;
+describe('character endpoints', function () {
+  var tempOwner;
   var tempToken;
+  var tempCharId;
 
   before(function (done) {
     var newUser = new User();
@@ -32,8 +34,25 @@ describe('user endpoints', function () {
         .auth(testEmail, testPassword)
         .end(function (err, res) {
           tempToken = res.body.token;
+          tempOwner = user._id;
           done();
         });
+    });
+  });
+
+  before(function (done) {
+    var newCharacter = new Character();
+    newCharacter.name = 'PkTeamKilla';
+    newCharacter.owner = tempOwner;
+    newCharacter.save(function (err, character) {
+    if (err) return console.error('could not create character');
+    chai.request(routesBase)
+      .get('/character_list')
+      .send({"token": tempToken})
+      .end(function (err, res) {
+        tempCharId = character._id;
+        done();
+      });
     });
   });
 
@@ -43,35 +62,35 @@ describe('user endpoints', function () {
     });
   });
 
-  it('should create a user', function (done) {
+  it('should make a character', function (done) {
     chai.request(routesBase)
-      .post('/create_user')
-      .send({"email": "t2@example.com", "password": testPassword, "username": "Tom Bombadil"})
+      .post('/character_list')
+      .send({"name": "bob", "token": tempToken})
       .end(function (err, res) {
         expect(err).to.eql(null);
-        expect(res.body).to.have.property('token');
+        expect(res.body.name).to.eql('bob');
         done();
       });
   });
 
-  it('should sign-in', function (done) {
-      chai.request(routesBase)
-        .get('/sign_in')
-        .auth(testEmail, testPassword)
-        .end(function (err, res) {
-          expect(err).to.eql(null);
-          expect(res.body).to.have.property('token');
-          done();
-        });
-    });
-
-    it('should fail to create a user', function (done) {
+  it('should update a character', function (done) {
     chai.request(routesBase)
-      .post('/create_user')
-      .send({"email": testEmail, "password": testPassword, "username": testUserName})
+      .put('/character_list/' + tempCharId)
+      .send({"name": "Lerch", "baseHP": 99, "token": tempToken})
       .end(function (err, res) {
         expect(err).to.eql(null);
-        expect(res.body).to.eql({ msg: 'could not create user' });
+        expect(res.body.name).to.eql('Lerch');
+        done();
+    });
+  });
+
+  it('should get the character list', function (done) {
+    chai.request(routesBase)
+      .get('/character_list')
+      .send({"token": tempToken})
+      .end(function (err, res) {
+        expect(err).to.eql(null);
+        expect(res.body.length).to.eql(2);
         done();
       });
   });
