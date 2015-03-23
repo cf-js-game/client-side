@@ -9,12 +9,14 @@ var UserStore = Fluxxor.createStore({
   initialize: function() {
     this.eat = Cookies.get('eat') || '';
 
+    console.log("UserStore this.bindActions");
     this.bindActions(
       constants.LOGIN, this.onLogin,
       constants.CREATE_USER, this.onCreateUser,
       constants.DISPLAY_CREATE_USER, this.onDisplayCreateUser,
       constants.DISPLAY_LOGIN, this.onDisplayLogin
     );
+    console.log("after UserStore this.bindActions");
   },
 
   onDisplayCreateUser: function(user) {
@@ -28,7 +30,6 @@ var UserStore = Fluxxor.createStore({
   onCreateUser: function(user) {
     user.email = user.username;
 
-    '/api/v1/create_user'
     request
       .post('/api/v1/create_user')
       .send(user)
@@ -39,10 +40,11 @@ var UserStore = Fluxxor.createStore({
         Cookies.set('eat', this.eat);
         this.emit('change');
       }.bind(this));
-    this.emit('change');
+
   },
 
   onLogin: function(user) {
+    console.log("onLogin");
     request
       .get('/api/v1/sign_in')
       .auth(user.username, user.password)
@@ -54,7 +56,6 @@ var UserStore = Fluxxor.createStore({
         this.emit('change');
       }.bind(this));
 
-    this.emit('change');
   },
 
   getState: function() {

@@ -22,6 +22,11 @@ var UserStore = require('./users/user_store');
 var CreateUser = require('./users/components/create_user');
 var Login = require('./users/components/login');
 
+//characters
+var CharStore = require('./characters/char_store');
+var CharList = require('./characters/components/char_list');
+var CharDetails = require('./characters/components/char_details');
+
 var actions = {
   login: function(user) {
     this.dispatch(constants.LOGIN, user);
@@ -41,11 +46,17 @@ var actions = {
 
   displayLogin: function() {
     this.dispatch(constants.DISPLAY_LOGIN);
+  },
+
+  selectChar: function(charId) {
+     this.dispatch(constants.SELECT_CHAR, charId);
   }
+
 };
 
 var stores = {
-  UserStore: new UserStore()
+  UserStore: new UserStore(),
+  CharStore: new CharStore()
 };
 
 var flux = new Fluxxor.Flux(stores, actions);
@@ -55,17 +66,59 @@ var StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var createUserClicked = false;
 var loginClicked = false;
+var submitClickedOnLogin = false;
+var showCharacterDetails = false;
 
 var App = React.createClass({
-  mixins: [FluxMixin, StoreWatchMixin('UserStore')],
+  state: {},
+
+  mixins: [
+    FluxMixin,
+    StoreWatchMixin('UserStore', 'CharStore')
+  ],
 
 
   getStateFromFlux: function() {
     var flux = this.getFlux();
-    return {
-      userData: flux.store('UserStore').getState()
+    var charStoreState = flux.store('CharStore').getState();
+
+    var results = {
+      userData: flux.store('UserStore').getState(),
+      charList: charStoreState.characters,
+      selectedCharId: charStoreState.selectedCharId
+    };
+
+    console.log("getStateFromFlux");
+
+    console.log("charStoreState");
+    console.log(charStoreState);
+    console.log("this.state");
+    console.log(this.state);
+    return results;
+
+    // State --
+    // {
+    //   userData:  { eat: this.eat }
+    // }
+  },
+
+  setFlag: function(flag) {
+    console.log("App component setFlag");
+    switch(flag) {
+    case "submitClickedOnLogin":
+        submitClickedOnLogin = true;
+        break;
+    case "showCharacterDetails":
+        console.log("set showCharacterDetails to true");
+        showCharacterDetails = true;
+
+        break;
+    default:
+        submitClickedOnLogin = true;
+        break;
     };
   },
+
   handleCreateUserButton: function(e) {
     e.preventDefault();
     this.getFlux().actions.displayCreateUser();
@@ -78,15 +131,28 @@ var App = React.createClass({
   },
 
   render: function() {
+    console.log("App component render");
     //var createUser = <a href onClick={this.handleCreateUserButton}>Create User</a>;
     //var createUser = <button onClick={this.handleCreateUserButton}>Create</button>;
-    var login = <div><button onClick={this.handleCreateUserButton}>Create</button><button onClick={this.handleLoginButton}>Login</button></div>;
+    var homePageCenterPanel = <div><button onClick={this.handleCreateUserButton}>Create</button><button onClick={this.handleLoginButton}>Login</button></div>;
 
     //var login = <button onClick={this.handleLoginButton}>Login</button>;
 
-    var homePageCenterPanel = login;
-    if (createUserClicked) homePageCenterPanel = <CreateUser />
-    if (loginClicked) homePageCenterPanel = <Login />
+    console.log("this.state");
+    console.log(this.state);
+    console.log("this.state.selectedCharId");
+    console.log(this.state.selectedCharId);
+
+    // should these be state variables?
+    console.log("createUserClicked = " + createUserClicked);
+    console.log("loginClicked = " + loginClicked);
+    console.log("submitClickedOnLogin = " + submitClickedOnLogin);
+    console.log("showCharacterDetails = " + showCharacterDetails);
+
+    if (createUserClicked) homePageCenterPanel = <CreateUser />;
+    if (loginClicked) homePageCenterPanel = <Login setFlag={this.setFlag}/>;
+    if (submitClickedOnLogin) homePageCenterPanel = <CharList data={this.state} setFlag={this.setFlag}/>;
+    if (showCharacterDetails) homePageCenterPanel = <div><CharList data={this.state} setFlag={this.setFlag}/><CharDetails data={this.state.charList[this.state.selectedCharId - 1]} setFlag={this.setFlag}/></div>;
     return (
       <main>
         {homePageCenterPanel}
