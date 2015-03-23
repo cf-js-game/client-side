@@ -49,6 +49,21 @@ Game.start = function () {
 		          }
 		        }	
 	      	}
+	      }
+	    }
+
+	    var max_items = 200;
+	    for (var x = 20; x < Game.map_grid.width-20; x++) {
+	      for (var y = 20; y < Game.map_grid.height-20; y++) {
+	      	if (TileMap.tileMap[x][y] === 1) {
+	      		if (Math.random() < 0.01) {
+		          Crafty.e('StaticSprite').at(x, y);
+		 
+		          if (Crafty('StaticSprite').length >= max_items) {
+		            return;
+		          }
+		        }	
+	      	}
 	        
 	      }
 	    }

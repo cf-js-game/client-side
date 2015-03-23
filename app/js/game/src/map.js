@@ -52,7 +52,7 @@ module.exports = {
 		console.log('starting map generation');
 		this.initMap();
 
-		var iterations = Game.map_grid.iterations();
+		var iterations = Game.map_grid.iterations() || 16000;
 		var curPos = {x: this.w / 2, y: this.h / 2};
 
 		while (iterations--) {
@@ -83,7 +83,7 @@ module.exports = {
 			}
 		}
 
-		//check
+		// check/clean
 		for (var y = 1; y < this.h-1; y++) {
 			for (var x = 1; x < this.w-1; x++) {
 				if ((this.tileMap[y][x] === 0  || this.tileMap[y][x] === -1)

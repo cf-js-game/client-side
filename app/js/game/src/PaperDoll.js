@@ -11,6 +11,7 @@ function PaperDoll() {
 
 	this.mainHand = '';
 	this.OffHand = '';
+	this.twoHand = '';
 }
 
 module.exports = PaperDoll;
