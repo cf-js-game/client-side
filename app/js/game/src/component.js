@@ -18,7 +18,6 @@ var directions = {
   }
 };
 
-
 Crafty.sprite(32, 'js/game/assets/rock.png', {
   rock: [0, 0]
 });
@@ -52,10 +51,10 @@ Crafty.c('Actor', {
 
 Crafty.c('PlayerCharacter', {
   init: function() {
-    this.requires('Hero, Actor, Fourway, Color, Collision, Animate')
+    this.requires('Actor, Fourway, Color, Collision, Animate')
       .attr({w: 16, h: 16,})
       .color('#1122ff')
-      .fourway(4)
+      .fourway(6)
       .collision()
       .bind('Moved', function(old) {
         if (this.hit('Solid')) {
@@ -64,7 +63,11 @@ Crafty.c('PlayerCharacter', {
         }
       })
       .onHit('Item', this.visitItem)
-      .onHit('EnemyNPC', this.hitEnemy);
+      .onHit('EnemyNPC', this.hitEnemy)
+      .onHit('ExitPoint', function() {
+        Crafty.scene('main');
+      });
+
   },
   visitItem: function(data) {
     var item = data[0].obj;
@@ -73,9 +76,11 @@ Crafty.c('PlayerCharacter', {
   },
   hitEnemy: function(data) {
     var enemy = data[0].obj;
+    this.details.enemiesKilled++;
+    console.log('Enemies Killed: ' + this.details.enemiesKilled);
     enemy.kill();
-    console.log('Killed enemy.');
-  }
+  },
+  details: Game.player
 });
 
 Crafty.c('EnemyNPC', {
@@ -100,6 +105,13 @@ Crafty.c('FollowAI', {
   }
 });
 
+Crafty.c('CharInfo', {
+  init: function() {
+    this.requires('2D, Canvas, PlayerCharacter, HTML')
+      .attr({w: 100, h: 100})
+      .append('<div>Enemies Killed: ' + this.details.enemiesKilled + '</div>');
+  }
+});
 
 Crafty.c('AI', {
 
@@ -114,7 +126,7 @@ Crafty.c('Rock', {
 
 Crafty.c('ExitPoint', {
   init: function() {
-    this.requires('Actor, Color, Solid')
+    this.requires('Actor, Color')
       .color('#8B00AD');
   }
 });

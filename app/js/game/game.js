@@ -1,5 +1,7 @@
 'use stict';
 
+var Character = require('./src/Character');
+
 var Game = {
 	map_grid: {
 		width: 500,
@@ -17,7 +19,8 @@ var Game = {
 	},
 	height: function () {
 		return this.map_grid.height * this.map_grid.tile.height
-	}
+	},
+	player: new Character()
 }
 
 module.exports = Game;

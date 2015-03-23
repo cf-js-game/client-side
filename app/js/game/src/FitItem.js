@@ -9,3 +9,9 @@ function FitItem() {
 	this.vit = 1;
 	this.ene = 1;
 }
+
+FitItem.prototype.rInit = function() {
+	// Add RNG init function here
+};
+
+module.exports = FitItem;

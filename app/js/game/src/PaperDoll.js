@@ -1,5 +1,7 @@
 'use strict';
 
+require('./FitItem')
+
 function PaperDoll() {
 	this.helmet = ''; // Head
 	this.pauldrons = ''; // Shoulders
