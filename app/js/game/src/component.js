@@ -19,7 +19,7 @@ var directions = {
 };
 
 
-Crafty.sprite(32, 'assets/rock.png', {
+Crafty.sprite(32, 'js/game/assets/rock.png', {
   rock: [0, 0]
 });
 // The Grid component allows an element to be located
