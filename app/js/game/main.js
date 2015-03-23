@@ -54,21 +54,22 @@ Game.start = function () {
 	    }
 	    console.log('items placed');
 
-	    // var max_items = 400;
-	    // for (var x = 20; x < Game.map_grid.width-20; x++) {
-	    //   for (var y = 20; y < Game.map_grid.height-20; y++) {
-	    //   	if (TileMap.tileMap[x][y] === 1) {
-	    //   		if (Math.random() < 0.01) {
-		   //        Crafty.e('StaticSprite').at(x, y);
+
+
+	    for (var x = 20; x < Game.map_grid.width-20; x++) {
+	      for (var y = 20; y < Game.map_grid.height-20; y++) {
+	      	if (TileMap.tileMap[x][y] === 1) {
+	      		if (Math.random() < 0.01) {
+		          Crafty.e('EnemyNPC').at(x, y);
 		 
-		   //        if (Crafty('StaticSprite').length >= max_items) {
-		   //          return;
-		   //        }
-		   //      }	
-	    //   	}
-	        
-	    //   }
-	    // }
+		        }	
+	      	}
+	      }
+	    }
+
+	    // Place Exit
+	    Crafty.e('ExitPoint').at(TileMap.farthestFromOrigin[0], TileMap.farthestFromOrigin[1]);
+
 		var hero = Crafty.e('PlayerCharacter').at(250, 250); 
 	    Crafty.viewport.follow(hero, 0, 0);
 	});

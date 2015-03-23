@@ -47,6 +47,7 @@ module.exports = {
 			y: 0
 		}
 	},
+	farthestFromOrigin: [],
 	generateBlob: function () {
 		console.log('starting map generation');
 		this.initMap();
@@ -98,6 +99,35 @@ module.exports = {
 			}
 		}
 
+		function cartDist(x1, x2, y1, y2) {
+			return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+		}
+
+		// Determine farthest point in map from origin
+		var coordsOfMap = [];
+		var origin = [250, 250];
+		var farthestPoint = [250, 250];
+		for (var y = 0; y < this.h; y++) {
+			for (var x = 0; x < this.w; x++) {
+				if (this.tileMap[y][x] === 1) {
+					coordsOfMap.push([y, x]);
+				}
+			}
+		}
+
+		for (var i = 0; i < coordsOfMap.length; i++) {
+			if (cartDist(origin[0], origin[1], coordsOfMap[i][0], coordsOfMap[i][1])
+				> cartDist(origin[0], origin[1], farthestPoint[0], farthestPoint[1])) {
+
+				farthestPoint[0] = coordsOfMap[i][0];
+				farthestPoint[1] = coordsOfMap[i][1];
+			}
+		}
+		this.farthestFromOrigin[0] = farthestPoint[0];
+		this.farthestFromOrigin[1] = farthestPoint[1];
+
+
+		// Starting Point
 		this.tileMap[this.h / 2][this.w / 2] = 1;
 		console.log('Map gen complete');
 	}

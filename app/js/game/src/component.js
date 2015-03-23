@@ -55,7 +55,7 @@ Crafty.c('PlayerCharacter', {
     this.requires('Hero, Actor, Fourway, Color, Collision, Animate')
       .attr({w: 16, h: 16,})
       .color('#1122ff')
-      .fourway(2)
+      .fourway(4)
       .collision()
       .bind('Moved', function(old) {
         if (this.hit('Solid')) {
@@ -109,6 +109,13 @@ Crafty.c('Rock', {
   init: function() {
     this.requires('Actor, Color, Solid')
       .color('#808080');
+  }
+});
+
+Crafty.c('ExitPoint', {
+  init: function() {
+    this.requires('Actor, Color, Solid')
+      .color('#8B00AD');
   }
 });
 
