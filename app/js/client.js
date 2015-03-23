@@ -1,16 +1,10 @@
 'use strict';
 
-// require('craftyjs');
 
-// // Crafty Specifics
-// Crafty.init(500, 500, document.getElementById('game'));
+var GameStart = require('./game/main');
+require('craftyjs');
 
-// Crafty.background('#000000');
-
-// Crafty.e('2D, Canvas, Color, Fourway')
-// 	.attr({x: 10, y: 10, w: 20, h: 20})
-// 	.color('#00ff00')
-// 	.fourway(4);
+window.addEventListener('load', GameStart);
 
 var React = require('react');
 var Fluxxor = require('fluxxor');
