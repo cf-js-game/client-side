@@ -20,7 +20,10 @@ var Game = {
 	height: function () {
 		return this.map_grid.height * this.map_grid.tile.height
 	},
-	player: new Character()
+	player: new Character(),
+	createNPC: function() {
+		return new Character();
+	}
 }
 
 module.exports = Game;

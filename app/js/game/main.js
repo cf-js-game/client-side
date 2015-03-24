@@ -10,6 +10,24 @@ var viewport = {
 	h: 800
 };
 
+var directions = {
+  card: [
+    'n',
+    'ne',
+    'e',
+    'se',
+    's',
+    'sw',
+    'w',
+    'nw',
+    'stop'
+  ],
+  roll: function() {
+    return Math.floor(Math.random() * 9);
+  }
+};
+
+
 Game.start = function () {
 
 	Crafty.init();
@@ -25,6 +43,7 @@ Game.start = function () {
 		//Generate Map
 		TileMap.generateBlob();
 		
+    var enemies = [];
 		// Place All Entities
 		for (var y = 0; y < Game.map_grid.width; y++) {
 			for (var x= 0; x < Game.map_grid.height; x++) {
@@ -41,21 +60,44 @@ Game.start = function () {
 					Crafty.e('StaticSprite').at(x, y);
 				} else if (TileMap.tileMap[x][y] === 3) {
 					Crafty.e('Floor').at(x, y);
-					Crafty.e('EnemyNPC').at(x, y);
+					enemies.push(Crafty.e('EnemyNPC').at(x, y));
+				} else if (TileMap.tileMap[x][y] === 5) {
+					Crafty.e('Water').at(x, y);
 				}
 			}
 		}
+
+		// Movement on Enter Frame
+		enemies.forEach(function(e) {
+			e.bind('EnterFrame', function() {
+				this.move('n', 0.2);
+				// var that = this;
+				// function loop() {
+		  //     var time = Math.floor(Math.random() * (5000 - 2000) + 2000);
+		  //     setTimeout(function() {
+		  //       var dirS = 'n';
+		  //       that.direction = 'n';
+		  //       if (dirS === 'stop') {
+		  //         that.speed = 0;
+		  //       } else {
+		  //         that.direction = dirS;
+		  //         that.speed = 0.2;
+		  //       }
+		  //       that.move(that.direction, that.speed);
+		  //     }, 2000);
+		  //     loop();
+			 //  }
+			});
+		});
 
     // Place Exit
     Crafty.e('ExitPoint').at(TileMap.farthestFromOrigin[0], TileMap.farthestFromOrigin[1]);
 
     // Create Player Entity 
     var hero = Crafty.e('PlayerCharacter').at(250, 250);
-
-    //hero.attach(stats);
     Crafty.viewport.follow(hero, 0, 0);
 
-    
+    console.log(Crafty.frame());
   });
 
 	Crafty.defineScene('init', function() {

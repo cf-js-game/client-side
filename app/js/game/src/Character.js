@@ -11,6 +11,7 @@ function Character (owner, name) {
 	this.equipped = new PaperDoll();
 	this.baseHP = 10;
 	this.baseMana = 10;
+	this.speed = 6;
 
 	this.class = new Class();
 	this.xp = 1;

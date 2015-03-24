@@ -11,7 +11,8 @@ var directions = {
     's',
     'sw',
     'w',
-    'nw'
+    'nw',
+    'stop'
   ],
   roll: function() {
     return Math.floor(Math.random() * 8);
@@ -54,7 +55,7 @@ Crafty.c('PlayerCharacter', {
     this.requires('Actor, Fourway, Color, Collision, Animate')
       .attr({w: 16, h: 16,})
       .color('#1122ff')
-      .fourway(6)
+      .fourway(this.details.speed)
       .collision()
       .bind('Moved', function(old) {
         if (this.hit('Solid')) {
@@ -67,7 +68,6 @@ Crafty.c('PlayerCharacter', {
       .onHit('ExitPoint', function() {
         Crafty.scene('main');
       });
-
   },
   visitItem: function(data) {
     var item = data[0].obj;
@@ -84,14 +84,29 @@ Crafty.c('PlayerCharacter', {
 });
 
 Crafty.c('EnemyNPC', {
+  speed: 0.2,
+  direction: directions.card[directions.roll()],
   init: function() {
-    this.requires('Actor, Color, Collision')
+    this.requires('Actor, Color, Collision, Delay')
       .attr({w: 16, h: 16})
-      .color('#ff0000')
-      .collision();
+      .color('#A31E00')
+      .collision()
+      .bind('Moved', function(old) {
+        if (this.hit('Rock')) {
+          this.movement = false;
+          this.speed = false;
+          this.x = old.x;
+          this.y = old.y;
+        }
+      });
   },
   kill: function() {
     this.destroy();
+  },
+  changeDirection: function() {
+  },
+  moveSome: function() {
+    this.move(this.direction, 0.2);
   }
 });
 
@@ -99,17 +114,9 @@ Crafty.c('FollowAI', {
   followAI: function(obj) {
     this.bind('EnterFrame', function(obj) {
       if ((this.x < (obj.x + 100)) || (this.y < (obj.y + 100))) {
-        this.x += this._speed;
+        this.x += this.speed;
       }
     });
-  }
-});
-
-Crafty.c('CharInfo', {
-  init: function() {
-    this.requires('2D, Canvas, PlayerCharacter, HTML')
-      .attr({w: 100, h: 100})
-      .append('<div>Enemies Killed: ' + this.details.enemiesKilled + '</div>');
   }
 });
 
@@ -123,6 +130,7 @@ Crafty.c('Rock', {
       .color('#808080');
   }
 });
+
 
 Crafty.c('ExitPoint', {
   init: function() {
@@ -141,6 +149,20 @@ Crafty.c('Floor', {
   init: function() {
     this.requires('Actor, Color')
       .color('#222222');
+  }
+});
+
+Crafty.c('Water', {
+  init: function() {
+    this.requires('Actor, Color, Collision')
+      .color('#0209C7');
+  }
+});
+
+Crafty.c('Chest', {
+  init: function() {
+    this.requires('Actor, Color, Collision')
+      .color('#D49013');
   }
 });
 
