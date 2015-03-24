@@ -58,16 +58,18 @@ var CharStore = Fluxxor.createStore({
     console.log("token");
     console.log( Cookies.get('token'));
 
-    function myTimer() {
-        var token = Cookies.get('token');
-        console.log("token");
-        console.log(token);
+    // function myTimer() {
+    //     var token = Cookies.get('token');
+    //     console.log("token");
+    //     console.log(token);
 
-        if (token) clearInterval(timerId);
-    }
+    //     if (token) clearInterval(timerId);
+    // }
 
     // 1000 is one second
-    var timerId = setInterval(function(){ myTimer() }, 1000);
+    //var timerId = setInterval(function(){ myTimer() }, 1000);
+
+    setTimeout(function(){ var doNothing = 1; }, 3000);
 
     request
       .get(baseUrl + '/character_list')

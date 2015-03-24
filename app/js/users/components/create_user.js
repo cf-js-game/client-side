@@ -24,9 +24,18 @@ var CreateUser = React.createClass({
 
   },
   handleSubmit: function(event) {
+    console.log(this.state.user);
     event.preventDefault();
 
+    this.props.setFlag("submitClickedOnCreateUser");
+    // createUser() does not do this.emit(change)
+    // "getUsersCharacters"  does  this.emit(change)
     this.getFlux().actions.createUser(this.state.newUser);
+
+    // "getUsersCharacters" must be called after "login"
+    //  ... because it assumes the cookie has the token
+    // "getUsersCharacters"  does  this.emit(change)
+    this.getFlux().actions.getUsersCharacters(this.state.newUser);
 
   },
   render: function() {

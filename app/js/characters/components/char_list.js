@@ -5,6 +5,16 @@ var Fluxxor = require('fluxxor')
 var FluxMixin = Fluxxor.FluxMixin(React);
 var StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
+//  if (submitClickedOnLogin)
+//    homePageCenterPanel = <CharList data={this.state} setFlag={this.setFlag}/>;
+//
+//  where this.props.data =
+//  {
+//    userData: flux.store('UserStore').getState(),
+//    charList: charStoreState.characters,
+//    selectedCharId: charStoreState.selectedCharId
+//  };
+
 var Character = React.createClass({
   mixins: [FluxMixin],
   getInitialState: function() {
@@ -25,6 +35,8 @@ var Character = React.createClass({
 
     this.props.setFlag("showCharacterDetails");
 
+    // this function call needs changing to something else
+    // &&&
     this.getFlux().actions.selectChar(charId);
   },
 
@@ -34,13 +46,22 @@ var Character = React.createClass({
 
 });
 
+
 var CharList = React.createClass({
   mixins: [FluxMixin],
   getInitialState: function() {
-    return {characters: [
-      { _id: '1', type: 'Rat', damage: '1', melee: 'true', hp: '2'},
-      { _id: '2', type: 'Snake', damage: '2', melee: 'true', hp: '3'}
-    ]};
+    return { };
+  },
+
+  handleSubmit: function(event) {
+    event.preventDefault();
+
+    this.props.setFlag("startGame");
+
+    //this.emit('change');
+    // &&& need call to new function in char_store
+    // ... that only calls emit ?
+    this.getFlux().actions.displayCreateUser();
   },
 
   render: function() {
@@ -60,6 +81,17 @@ var CharList = React.createClass({
     characters = this.props.data.charList.map(function(character) {
       return <Character data={character} key={character._id} setFlag={setFlag}/>;
     });
+
+    var submitButton;
+    if (this.props.data.selectedCharId)
+      submitButton = <button type="submit">Start Game</button>;
+    else
+      submitButton = <button type="submit" disabled>Start Game</button>;
+
+    // if user selected character from the char_list
+    // ... enable the Start Game button
+    // ... otherwise disable Start Game button
+    // this.data.selectedCharId <> null
     return (
       <div>
       <h2>Characters</h2>
@@ -67,8 +99,9 @@ var CharList = React.createClass({
           {characters}
         </ul>
         <form name="startGameForm" onSubmit={this.handleSubmit}>
-          <button type="submit" >Start Game</button>
+          {submitButton}
         </form>
+        <br></br>
       </div>
     )
   }

@@ -27,7 +27,6 @@ var CharDetails = React.createClass({
     console.log("CharDetails render");
     console.log("this.props");
     console.log(this.props);
-   //this.getInitialState({ _id: this.state.charDetails._id });
 
     return <div><h2>Character Detail</h2>
              <br></br>{this.props.data.name}
@@ -41,20 +40,8 @@ var CharDetails = React.createClass({
              <br></br> Dex: {this.props.data.baseDex}
              <br></br> Vitality: {this.props.data.baseVit}
              <br></br> Energy: {this.props.data.baseEne}
+             <br></br>
           </div>
-
-
-    // owner: {type: String, required: true},
-    // name: {type: String, required: true},
-    // invArray: {type: Array, default: []},
-    // paperDoll: {type: String, default: equiped},
-    // baseHP: {type: Number, default: 50},
-    // baseMana: {type: Number, default: 50},
-    // baseStr: {type: Number, default: 10},
-    // baseDex: {type: Number, default: 10},
-    // baseVit: {type: Number, default: 10},
-    // baseEne: {type: Number, default: 10}
-
   }
 
 });

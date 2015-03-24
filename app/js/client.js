@@ -1,8 +1,8 @@
 'use strict';
 
 
-var GameStart = require('./game/main');
-require('craftyjs');
+// var GameStart = require('./game/main');
+// require('craftyjs');
 
 //window.addEventListener('load', GameStart);
 
@@ -21,6 +21,8 @@ var CharStore = require('./characters/char_store');
 var CharList = require('./characters/components/char_list');
 var CharDetails = require('./characters/components/char_details');
 
+// react-game
+var GameComponent = require('./react_game/components/react_game');
 var actions = {
   login: function(user) {
     this.dispatch(constants.LOGIN, user);
@@ -66,6 +68,7 @@ var createUserClicked = false;
 var loginClicked = false;
 var submitClickedOnLogin = false;
 var showCharacterDetails = false;
+var startGame = false;
 
 var App = React.createClass({
   state: {},
@@ -109,7 +112,10 @@ var App = React.createClass({
     case "showCharacterDetails":
         console.log("set showCharacterDetails to true");
         showCharacterDetails = true;
-
+        break;
+    case "startGame":
+        startGame = true;
+        console.log("set startGame to true");
         break;
     default:
         submitClickedOnLogin = true;
@@ -146,8 +152,9 @@ var App = React.createClass({
     console.log("loginClicked = " + loginClicked);
     console.log("submitClickedOnLogin = " + submitClickedOnLogin);
     console.log("showCharacterDetails = " + showCharacterDetails);
+    console.log("startGame = " + startGame);
 
-    if (createUserClicked) homePageCenterPanel = <CreateUser />;
+    if (createUserClicked) homePageCenterPanel = <CreateUser setFlag={this.setFlag}/>;
     if (loginClicked) homePageCenterPanel = <Login setFlag={this.setFlag}/>;
     if (submitClickedOnLogin) homePageCenterPanel = <CharList data={this.state} setFlag={this.setFlag}/>;
     if (showCharacterDetails) {
@@ -162,6 +169,8 @@ var App = React.createClass({
       console.log("selectedCharIndex = " + selectedCharIndex);
       homePageCenterPanel = <div><CharList data={this.state} setFlag={this.setFlag}/><CharDetails data={this.state.charList[selectedCharIndex]} setFlag={this.setFlag}/></div>;
     }
+
+    if (startGame) homePageCenterPanel = <div><CharDetails data={this.state.charList[selectedCharIndex]} setFlag={this.setFlag}/><GameComponent data={this.state} setFlag={this.setFlag}/></div>;
 
     return (
       <main>
