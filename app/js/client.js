@@ -4,7 +4,7 @@
 var GameStart = require('./game/main');
 require('craftyjs');
 
-window.addEventListener('load', GameStart);
+//window.addEventListener('load', GameStart);
 
 var React = require('react');
 var Fluxxor = require('fluxxor');
@@ -44,6 +44,10 @@ var actions = {
 
   selectChar: function(charId) {
      this.dispatch(constants.SELECT_CHAR, charId);
+  },
+
+  getUsersCharacters: function(user) {
+     this.dispatch(constants.GET_USER_CHARS, user);
   }
 
 };
@@ -92,7 +96,7 @@ var App = React.createClass({
 
     // State --
     // {
-    //   userData:  { eat: this.eat }
+    //   userData:  { token: this.token }
     // }
   },
 
@@ -146,7 +150,19 @@ var App = React.createClass({
     if (createUserClicked) homePageCenterPanel = <CreateUser />;
     if (loginClicked) homePageCenterPanel = <Login setFlag={this.setFlag}/>;
     if (submitClickedOnLogin) homePageCenterPanel = <CharList data={this.state} setFlag={this.setFlag}/>;
-    if (showCharacterDetails) homePageCenterPanel = <div><CharList data={this.state} setFlag={this.setFlag}/><CharDetails data={this.state.charList[this.state.selectedCharId - 1]} setFlag={this.setFlag}/></div>;
+    if (showCharacterDetails) {
+      // loop thru the array looking for selectedCharId
+      var selectedCharIndex = 0;
+      for (var i=0; i<this.state.charList.length; i++) {
+        if (this.state.selectedCharId === this.state.charList[i]._id) {
+          selectedCharIndex = i;
+        }
+      }
+
+      console.log("selectedCharIndex = " + selectedCharIndex);
+      homePageCenterPanel = <div><CharList data={this.state} setFlag={this.setFlag}/><CharDetails data={this.state.charList[selectedCharIndex]} setFlag={this.setFlag}/></div>;
+    }
+
     return (
       <main>
         {homePageCenterPanel}

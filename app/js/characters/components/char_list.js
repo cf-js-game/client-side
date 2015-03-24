@@ -29,7 +29,7 @@ var Character = React.createClass({
   },
 
   render: function() {
-    return <li><a href id={this.props.data._id} onClick={this.charLinkClick}>{this.props.data.type} _id: {this.props.data._id} damage: {this.props.data.damage} melee: {this.props.data.melee} hp: {this.props.data.hp}  </a></li>
+    return <li><a href id={this.props.data._id} onClick={this.charLinkClick}>{this.props.data.name} _id: {this.props.data._id} owner: {this.props.data.owner} </a></li>
   }
 
 });
@@ -66,6 +66,9 @@ var CharList = React.createClass({
         <ul>
           {characters}
         </ul>
+        <form name="startGameForm" onSubmit={this.handleSubmit}>
+          <button type="submit" >Start Game</button>
+        </form>
       </div>
     )
   }
