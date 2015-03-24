@@ -1,6 +1,5 @@
 'use strict';
 
-
 var GameStart = require('./game/main');
 require('craftyjs');
 

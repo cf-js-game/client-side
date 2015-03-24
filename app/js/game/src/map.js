@@ -7,7 +7,8 @@ var Game = require('../game');
 // 1: Passable area
 // 2: Rocks
 // 3: Monster Locations
-// 
+// 4: Mob Spawn
+// 5: Water
 
 
 // 1 N
@@ -129,27 +130,17 @@ var map = {
 		this.farthestFromOrigin[0] = farthestPoint[0];
 		this.farthestFromOrigin[1] = farthestPoint[1];
 
-		function checkSurrounding(y, x, tileType) {
-			
-			if ((map.tileMap[y+1][x] === tileType)
-					&& (map.tileMap[y-1][x] === tileType)
-					&& (map.tileMap[y+1][x+1] === tileType)
-					&& (map.tileMap[y][x+1] === tileType)
-					&& (map.tileMap[y-1][x+1] === tileType)
-					&& (map.tileMap[y-1][x-1] === tileType)
-					&& (map.tileMap[y][x-1] === tileType)
-					&& (map.tileMap[y+1][x-1] === tileType)) {
-				return true;
-			}
+		// Monster Spawn : 3
+		chanceApplyToCoord(coordsOfMap, this.tileMap, 0.01, 3);
 
-			return false;
-		};
+		//Rock Locations : 2
+		checkAndChanceApply(coordsOfMap, this.tileMap, 0.07, 1, 2);
 
-		//Rock Locations
-		for ( var i = 0; i < coordsOfMap.length; i++ ) {
-			if (rand() < 0.03) {
-				if (checkSurrounding(coordsOfMap[i][0], coordsOfMap[i][1], 1)) {
-					this.tileMap[coordsOfMap[i][0]][coordsOfMap[i][1]] = 2;
+		// Water Locations
+		for (var i = 0; i < coordsOfMap.length; i++) {
+			if (rand() < 0.02) {
+				if (checkSurroundingLoose(coordsOfMap[i][0], coordsOfMap[i][0], this.tileMap, -1)) {
+					this.tileMap[coordsOfMap[i][0]][coordsOfMap[i][1]] = 5;
 				}
 			}
 		}
@@ -166,6 +157,54 @@ function cardRand() {
 
 function rand() {
 	return Math.random();
+}
+
+function checkAndChanceApply(mapCoords, applyToTileMap, chance, checkTile, applyTile) {
+	for ( var i = 0; i < mapCoords.length; i++ ) {
+		if (rand() < chance) {
+			if(checkSurrounding(mapCoords[i][0], mapCoords[i][1], applyToTileMap, checkTile)) {
+				applyToTileMap[mapCoords[i][0]][mapCoords[i][1]] = applyTile;
+			}
+		}
+	}
+}
+
+function chanceApplyToCoord(mapCoords, applyToTileMap, chance, applyTile) {
+	for ( var i = 0; i < mapCoords.length; i++ ) {
+		if (rand() < chance) {
+				applyToTileMap[mapCoords[i][0]][mapCoords[i][1]] = applyTile;
+		}
+	}
+}
+
+function checkSurrounding(y, x, tileMap, tileType) {
+			
+	if ((tileMap[y+1][x] === tileType)
+			&& (tileMap[y-1][x] === tileType)
+			&& (tileMap[y+1][x+1] === tileType)
+			&& (tileMap[y][x+1] === tileType)
+			&& (tileMap[y-1][x+1] === tileType)
+			&& (tileMap[y-1][x-1] === tileType)
+			&& (tileMap[y][x-1] === tileType)
+			&& (tileMap[y+1][x-1] === tileType)) {
+		return true;
+	}
+	return false;
+}
+
+function checkSurroundingLoose(y, x, tileMap, tileType) {
+			
+	if ((tileMap[y+1][x] === tileType)
+			|| (tileMap[y-1][x] === tileType)
+			|| (tileMap[y+1][x+1] === tileType)
+			|| (tileMap[y][x+1] === tileType)
+			|| (tileMap[y-1][x+1] === tileType)
+			|| (tileMap[y-1][x-1] === tileType)
+			|| (tileMap[y][x-1] === tileType)
+			|| (tileMap[y+1][x-1] === tileType)) {
+		return true;
+	}
+	return false;
 }
 
 module.exports = map;
