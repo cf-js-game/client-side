@@ -10,6 +10,8 @@ var characterRoutes = require('./routes/character_routes');
 var app = express();
 var port = process.env.PORT || 3000;
 
+console.log('in server');
+
 app.use(express.static(__dirname + '/build'));
 
 mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/jsgame_dev');

@@ -28,7 +28,14 @@ var Login = React.createClass({
 
     console.log(this.state.user);
     this.props.setFlag("submitClickedOnLogin");
+    // login does not do this.emit(change)
+    // "getUsersCharacters"  does  this.emit(change)
     this.getFlux().actions.login(this.state.user);
+    // "getUsersCharacters" must be called after "login"
+    //  ... because it assumes the cookie has the token
+    // "getUsersCharacters"  does  this.emit(change)
+    this.getFlux().actions.getUsersCharacters(this.state.user);
+
   },
   render: function() {
 

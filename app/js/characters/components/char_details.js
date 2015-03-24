@@ -29,7 +29,32 @@ var CharDetails = React.createClass({
     console.log(this.props);
    //this.getInitialState({ _id: this.state.charDetails._id });
 
-    return <div><h2>Character Detail</h2> <br></br>{this.props.data.type} <br></br>_id: {this.props.data._id}<br></br> damage: {this.props.data.damage}<br></br> melee: {this.props.data.melee}<br></br> hp: {this.props.data.hp}</div>
+    return <div><h2>Character Detail</h2>
+             <br></br>{this.props.data.name}
+             <br></br> Id: {this.props.data._id}
+             <br></br> Owner: {this.props.data.owner}
+             <br></br> Inventory: {this.props.data.invArray}
+             <br></br> Paper Doll: {this.props.data.paperDoll}
+             <br></br> Hit Point: {this.props.data.baseHP}
+             <br></br> Mana: {this.props.data.baseMana}
+             <br></br> Strength: {this.props.data.baseStr}
+             <br></br> Dex: {this.props.data.baseDex}
+             <br></br> Vitality: {this.props.data.baseVit}
+             <br></br> Energy: {this.props.data.baseEne}
+          </div>
+
+
+    // owner: {type: String, required: true},
+    // name: {type: String, required: true},
+    // invArray: {type: Array, default: []},
+    // paperDoll: {type: String, default: equiped},
+    // baseHP: {type: Number, default: 50},
+    // baseMana: {type: Number, default: 50},
+    // baseStr: {type: Number, default: 10},
+    // baseDex: {type: Number, default: 10},
+    // baseVit: {type: Number, default: 10},
+    // baseEne: {type: Number, default: 10}
+
   }
 
 });

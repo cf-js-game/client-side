@@ -7,6 +7,8 @@ module.exports = function(app, passport, appSecret) {
   app.use(bodyparser.json());
 
   app.get('/character_list', eatAuth(appSecret), function(req, res) {
+    console.log("server character_routes req.user._id");
+    console.log(req.user._id);
     Character.find({"owner": req.user._id}, function(err, data) {
       if (err) return res.status(500).send({'msg': 'could not retrieve character(s)'});
 
