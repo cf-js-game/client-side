@@ -3,7 +3,7 @@
 var GameStart = require('./game/main');
 require('craftyjs');
 
-//window.addEventListener('load', GameStart);
+window.addEventListener('load', GameStart);
 
 var React = require('react');
 var Fluxxor = require('fluxxor');

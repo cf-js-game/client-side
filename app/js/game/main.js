@@ -27,7 +27,6 @@ var directions = {
   }
 };
 
-
 Game.start = function () {
 
 	Crafty.init();
@@ -46,7 +45,7 @@ Game.start = function () {
     var enemies = [];
 		// Place All Entities
 		for (var y = 0; y < Game.map_grid.width; y++) {
-			for (var x= 0; x < Game.map_grid.height; x++) {
+			for (var x = 0; x < Game.map_grid.height; x++) {
 				var at_edge = x == 0 || x == Game.map_grid.width - 1 || y == 0 || y == Game.map_grid.height - 1;
 
 				if (at_edge) {
@@ -55,40 +54,58 @@ Game.start = function () {
 					Crafty.e('Rock').at(x, y);
 				} else if (TileMap.tileMap[x][y] === 1) {
 					Crafty.e('Floor').at(x, y);
-				} else if (TileMap.tileMap[x][y] === 2) {
+				}
+			}
+		}
+
+		// Place Layer 2
+		for (var y = 0; y < Game.map_grid.width; y++) {
+			for (var x = 0; x < Game.map_grid.height; x++) {
+				if (TileMap.tileMap[x][y] === 2) {
 					Crafty.e('Floor').at(x, y);
 					Crafty.e('StaticSprite').at(x, y);
-				} else if (TileMap.tileMap[x][y] === 3) {
-					Crafty.e('Floor').at(x, y);
-					enemies.push(Crafty.e('EnemyNPC').at(x, y));
 				} else if (TileMap.tileMap[x][y] === 5) {
 					Crafty.e('Water').at(x, y);
 				}
 			}
 		}
 
-		// Movement on Enter Frame
-		enemies.forEach(function(e) {
-			e.bind('EnterFrame', function() {
-				this.move('n', 0.2);
-				// var that = this;
-				// function loop() {
-		  //     var time = Math.floor(Math.random() * (5000 - 2000) + 2000);
-		  //     setTimeout(function() {
-		  //       var dirS = 'n';
-		  //       that.direction = 'n';
-		  //       if (dirS === 'stop') {
-		  //         that.speed = 0;
-		  //       } else {
-		  //         that.direction = dirS;
-		  //         that.speed = 0.2;
-		  //       }
-		  //       that.move(that.direction, that.speed);
-		  //     }, 2000);
-		  //     loop();
-			 //  }
-			});
-		});
+		for (var y = 0; y < Game.map_grid.width; y++) {
+			for (var x = 0; x < Game.map_grid.height; x++) {
+				if (TileMap.tileMap[x][y] === 6) {
+					Crafty.e('Floor').at(x, y);
+					Crafty.e('Chest').at(x, y);
+				}
+			}
+		}
+		var levelItems = [];
+		for (var y = 0; y < Game.map_grid.width; y++) {
+			for (var x = 0; x < Game.map_grid.height; x++) {
+				if (TileMap.tileMap[x][y] === 3) {
+					Crafty.e('Floor').at(x, y);
+					enemies.push(
+						Crafty.e('EnemyNPC').at(x, y)
+							.bind('NPCDeath', function() {
+								var nItems = Crafty.rInt(0, 4);
+							    for (var i = 0; i < nItems; i++) {
+							      levelItems.push(
+							      	Crafty.e('cItem')
+							      		.at((this.x + Crafty.rInt(-32, 32))/32 + Crafty.rInt(-1, 1), (this.y + Crafty.rInt(-32, 32))/32 + Crafty.rInt(-1, 1))
+							      );
+							      levelItems[levelItems.length-1].initStats(this.killedBy, 10);
+							    }
+
+							   	hero.details.xp++;
+							    console.log('hero xp: ' + hero.details.xp);
+							    console.log('hero level: ' + hero.details.getLevel());
+							})
+							.bind('EnterFrame', function() {								
+								// this.move(this.direction, this.speed);
+							})
+						);
+				}
+			}
+		}
 
     // Place Exit
     Crafty.e('ExitPoint').at(TileMap.farthestFromOrigin[0], TileMap.farthestFromOrigin[1]);
@@ -96,8 +113,6 @@ Game.start = function () {
     // Create Player Entity 
     var hero = Crafty.e('PlayerCharacter').at(250, 250);
     Crafty.viewport.follow(hero, 0, 0);
-
-    console.log(Crafty.frame());
   });
 
 	Crafty.defineScene('init', function() {
