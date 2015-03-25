@@ -1,6 +1,7 @@
+![build status](https://travis-ci.org/profile/cf-js-game/js-game)
 # JS Game
 
-A top-down hack and slash multilayer role playing game
+A top-down hack and slash role playing game
 
 
 ##Contributers
