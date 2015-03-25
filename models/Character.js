@@ -38,7 +38,7 @@ characterSchema.methods.dequip = function(slot) {
 characterSchema.methods.equip = function(item) {
   this.dequip(item.slot);
 
-  if (item.slot === 'mainHand' || 'offHand') {
+  if (item.slot === 'mainHand' || item.slot === 'offHand') {
     this.dequip('twoHand');
     this.paperDoll[item.slot] = item;
 
