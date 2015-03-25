@@ -1,6 +1,7 @@
 'use strict';
 
 var Game = require('../game');
+var Item = require('./item')();
 
 var directions = {
   card: [
@@ -19,8 +20,21 @@ var directions = {
   }
 };
 
+Crafty.extend({
+    randChance: function(a, b) {
+        return Crafty.randRange(0, b) > b - a;
+    },
+    rInt: function(min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+    }
+});
+
 Crafty.sprite(32, 'js/game/assets/rock.png', {
   rock: [0, 0]
+});
+
+Crafty.sprite(32, 'js/game/assets/single_chest.png', {
+  spChest: [0, 0]
 });
 // The Grid component allows an element to be located
 //  on a grid of tiles
@@ -67,20 +81,25 @@ Crafty.c('PlayerCharacter', {
       .onHit('Rat', this.hitEnemy)
       .onHit('Skeleton', this.hitEnemy)
       .onHit('Slime', this.hitEnemy)
+      .onHit('cItem', this.visitItem)
+      .onHit('EnemyNPC', this.hitEnemy)
       .onHit('ExitPoint', function() {
         Crafty.scene('main');
       });
   },
   visitItem: function(data) {
     var item = data[0].obj;
+    var stats = item.stats;
+    //console.log(stats);
+    this.details.inventory.push(stats);
     item.collect();
-    console.log('Item Visited: ' + data);
+    console.log('You have picked up ' + stats.name);
+    console.log('Inventory size: ' + this.details.inventory.length);
   },
   hitEnemy: function(data) {
     var enemy = data[0].obj;
     this.details.enemiesKilled++;
-    console.log('Enemies Killed: ' + this.details.enemiesKilled);
-    enemy.kill();
+    enemy.kill(this.details.level);
   },
   details: Game.player
 });
@@ -102,7 +121,9 @@ Crafty.c('Rat', {
         }
       });
   },
-  kill: function() {
+  kill: function(charLevel) {
+    this.killedBy = charLevel;
+    this.trigger('NPCDeath');
     this.destroy();
   },
   changeDirection: function() {
@@ -129,7 +150,9 @@ Crafty.c('Skeleton', {
         }
       });
   },
-  kill: function() {
+  kill: function(charLevel) {
+    this.killedBy = charLevel;
+    this.trigger('NPCDeath');
     this.destroy();
   },
   changeDirection: function() {
@@ -156,7 +179,9 @@ Crafty.c('Slime', {
         }
       });
   },
-  kill: function() {
+  kill: function(charLevel) {
+    this.killedBy = charLevel;
+    this.trigger('NPCDeath');
     this.destroy();
   },
   changeDirection: function() {
@@ -170,20 +195,20 @@ Crafty.c('EnemyNPC', {
   speed: 0.2,
   direction: directions.card[directions.roll()],
   init: function() {
-    this.requires('Actor, Color, Collision, Delay')
+    this.requires('Actor, Color, Collision, Custom, Animate')
       .attr({w: 16, h: 16})
       .color('#A31E00')
       .collision()
       .bind('Moved', function(old) {
         if (this.hit('Rock')) {
-          this.movement = false;
-          this.speed = false;
           this.x = old.x;
           this.y = old.y;
         }
       });
   },
-  kill: function() {
+  kill: function(charLevel) {
+    this.killedBy = charLevel;
+    this.trigger('NPCDeath');
     this.destroy();
   },
   changeDirection: function() {
@@ -191,6 +216,10 @@ Crafty.c('EnemyNPC', {
   moveSome: function() {
     this.move(this.direction, 0.2);
   }
+});
+
+Crafty.c('MovementStrategyManager', {
+
 });
 
 Crafty.c('FollowAI', {
@@ -213,7 +242,6 @@ Crafty.c('Rock', {
       .color('#808080');
   }
 });
-
 
 Crafty.c('ExitPoint', {
   init: function() {
@@ -238,18 +266,18 @@ Crafty.c('Floor', {
 Crafty.c('Water', {
   init: function() {
     this.requires('Actor, Color, Collision')
-      .color('#0209C7');
+      .color('#000D96');
   }
 });
 
 Crafty.c('Chest', {
   init: function() {
-    this.requires('Actor, Color, Collision')
-      .color('#D49013');
+    this.requires('Actor, Color, Solid, spChest');
   }
 });
 
-Crafty.c('Item', {
+Crafty.c('cItem', {
+  stats: '',
   init: function() {
     this.requires('Actor, Color')
       .attr({w: 4, h: 4,})
@@ -258,6 +286,11 @@ Crafty.c('Item', {
  
   collect: function() {
     this.destroy();
+  },
+  initStats: function(charLevel, mod) {
+
+    this.stats = Item.spawn(charLevel, mod);
+
   }
 });
 

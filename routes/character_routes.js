@@ -7,8 +7,6 @@ module.exports = function(app, passport, appSecret) {
   app.use(bodyparser.json());
 
   app.get('/character_list', eatAuth(appSecret), function(req, res) {
-    console.log("server character_routes req.user._id");
-    console.log(req.user._id);
     Character.find({"owner": req.user._id}, function(err, data) {
       if (err) return res.status(500).send({'msg': 'could not retrieve character(s)'});
 
@@ -33,6 +31,16 @@ module.exports = function(app, passport, appSecret) {
       if (err) return res.status(500).send({'msg': 'could not update character'});
 
       res.json(req.body);
+    });
+  });
+
+  app.delete('/character_list/:id', eatAuth(appSecret), function (req, res) {
+    Character.remove({_id: req.params.id}, function (err) {
+      if (err) {
+        return res.status(500).send({'msg': 'could not delete character'});
+      }
+
+      res.json({msg: 'Character with id: ' + req.params.id + ' deleted'});
     });
   });
 };

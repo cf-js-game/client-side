@@ -9,6 +9,7 @@ var Game = require('../game');
 // 3: Monster Locations
 // 4: Mob Spawn
 // 5: Water
+// 6: Chest
 
 
 // 1 N
@@ -24,9 +25,9 @@ var map = {
 
 	tileMap: [],
 	initMap: function() {
-		for (var i = 0; i < this.w; i++) {
+		for (var i = 0; i < this.h; i++) {
 			this.tileMap[i] = [];
-			for ( var j = 0; j < this.h; j++) {
+			for ( var j = 0; j < this.w; j++) {
 				this.tileMap[i][j] = 0;
 			}
 		}
@@ -133,14 +134,43 @@ var map = {
 		// Monster Spawn : 3
 		chanceApplyToCoord(coordsOfMap, this.tileMap, 0.01, 3);
 
-		//Rock Locations : 2
-		checkAndChanceApply(coordsOfMap, this.tileMap, 0.07, 1, 2);
+		// Chest Locations : 6
+		chanceApplyToCoord(coordsOfMap, this.tileMap, 0.0006, 6);
 
-		// Water Locations
+		//Rock Locations : 2
+		checkAndChanceApply(coordsOfMap, this.tileMap, 0.03, 1, 2);
+
+		// Water Locations : 5
 		for (var i = 0; i < coordsOfMap.length; i++) {
-			if (rand() < 0.02) {
-				if (checkSurroundingLoose(coordsOfMap[i][0], coordsOfMap[i][0], this.tileMap, -1)) {
-					this.tileMap[coordsOfMap[i][0]][coordsOfMap[i][1]] = 5;
+			if (rand() < 0.009) {
+
+				this.tileMap[coordsOfMap[i][0]][coordsOfMap[i][1]] = 5;
+				var curPos = {y: coordsOfMap[i][0], x: coordsOfMap[i][1]};
+				var iterations = Math.floor(Math.random() * (111 - 50) + 50);
+				while (iterations--) {
+					if (this.tileMap[curPos.y-1][curPos.x] !== 1) {
+						iterations = 0;
+					}
+					this.tileMap[curPos.y][curPos.x] = 5;
+					var nextDir = cardRand();
+					if (nextDir === 1) {
+						curPos.y += this.directions.N.y;
+						curPos.x += this.directions.N.x;
+					}
+					if (nextDir === 2) {
+						curPos.y += this.directions.E.y;
+						curPos.x += this.directions.E.x;
+					}
+					if (nextDir === 3) {
+						curPos.y += this.directions.S.y;
+						curPos.x += this.directions.S.x;
+					}
+					if (nextDir === 4) {
+						curPos.y += this.directions.W.y;
+						curPos.x += this.directions.W.x;
+					}
+
+					
 				}
 			}
 		}

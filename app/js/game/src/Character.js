@@ -10,12 +10,14 @@ function Character (owner, name) {
 	this.inventory = [];
 	this.equipped = new PaperDoll();
 	this.baseHP = 10;
+	this.regenHP = 0.1;
 	this.baseMana = 10;
+	this.regenMana = 0.4;
 	this.speed = 6;
 
 	this.class = new Class();
 	this.xp = 1;
-	this.level = 1;
+	this.level = this.xp/5;
 
 	this.enemiesKilled = 0;
 }
@@ -32,6 +34,10 @@ Character.prototype.fitItem = function (item, type) {
 	if (typeof item === 'FitItem') {
 		this.equipped[type] = item;
 	}
+};
+
+Character.prototype.getLevel = function() {
+	return this.xp/5;
 };
 
 module.exports = Character;
