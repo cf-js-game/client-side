@@ -10,7 +10,9 @@ function Character (owner, name) {
 	this.inventory = [];
 	this.equipped = new PaperDoll();
 	this.baseHP = 10;
+	this.regenHP = 0.1;
 	this.baseMana = 10;
+	this.regenMana = 0.4;
 	this.speed = 6;
 
 	this.class = new Class();

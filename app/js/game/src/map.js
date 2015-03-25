@@ -9,6 +9,7 @@ var Game = require('../game');
 // 3: Monster Locations
 // 4: Mob Spawn
 // 5: Water
+// 6: Chest
 
 
 // 1 N
@@ -133,17 +134,50 @@ var map = {
 		// Monster Spawn : 3
 		chanceApplyToCoord(coordsOfMap, this.tileMap, 0.01, 3);
 
-		//Rock Locations : 2
-		checkAndChanceApply(coordsOfMap, this.tileMap, 0.07, 1, 2);
+		// Chest Locations : 6
+		chanceApplyToCoord(coordsOfMap, this.tileMap, 0.0006, 6);
 
-		// Water Locations
+		//Rock Locations : 2
+		checkAndChanceApply(coordsOfMap, this.tileMap, 0.04, 1, 2);
+
+		// Water Locations : 5
 		for (var i = 0; i < coordsOfMap.length; i++) {
-			if (rand() < 0.02) {
-				if (checkSurroundingLoose(coordsOfMap[i][0], coordsOfMap[i][0], this.tileMap, -1)) {
-					this.tileMap[coordsOfMap[i][0]][coordsOfMap[i][1]] = 5;
+			if (rand() < 0.009) {
+
+				this.tileMap[coordsOfMap[i][0]][coordsOfMap[i][1]] = 5;
+				var curPos = {x: coordsOfMap[i][0], y: coordsOfMap[i][1]};
+				var iterations = Math.floor(Math.random() * (50 - 15) + 15);
+				while (iterations--) {
+
+					if (this.tileMap[curPos.y][curPos.x] !== 1) {
+						break;
+					}
+
+					this.tileMap[curPos.y][curPos.x] = 5;
+					var nextDir = cardRand();
+					if (nextDir === 1) {
+						curPos.y += this.directions.N.y;
+						curPos.x += this.directions.N.x;
+					}
+					if (nextDir === 2) {
+						curPos.y += this.directions.E.y;
+						curPos.x += this.directions.E.x;
+					}
+					if (nextDir === 3) {
+						curPos.y += this.directions.S.y;
+						curPos.x += this.directions.S.x;
+					}
+					if (nextDir === 4) {
+						curPos.y += this.directions.W.y;
+						curPos.x += this.directions.W.x;
+					}
 				}
 			}
 		}
+
+		
+
+
 
 		// Starting Point
 		this.tileMap[this.h / 2][this.w / 2] = 1;
