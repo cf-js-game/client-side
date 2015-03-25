@@ -12,6 +12,7 @@ var UserStore = Fluxxor.createStore({
     console.log("UserStore this.bindActions");
     this.bindActions(
       constants.LOGIN, this.onLogin,
+      constants.LOGOUT, this.onLogout,
       constants.CREATE_USER, this.onCreateUser,
       constants.DISPLAY_CREATE_USER, this.onDisplayCreateUser,
       constants.DISPLAY_LOGIN, this.onDisplayLogin
@@ -61,9 +62,15 @@ var UserStore = Fluxxor.createStore({
         Cookies.set('token', this.token);
         // commented this out because
         // .. in login.js need to call getUsersCharacters first
-        //this.emit('change');
+        this.emit('change');
       }.bind(this));
 
+  },
+
+  onLogout: function() {
+    Cookies.set('token', '');
+    this.token = '';
+    this.emit('change');
   },
 
   getState: function() {

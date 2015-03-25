@@ -15,7 +15,7 @@ var CharDetails = React.createClass({
 
   //   var characters = this.getFlux().actions.getState();
 
-  //   return characters[charIdentifier._id - 1];
+  //   return characters[index];
   //   // return {charDetails:
   //   //   { _id: '1', type: 'Rat', damage: '1', melee: 'true', hp: '2'}
   //   // };

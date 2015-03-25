@@ -18,9 +18,28 @@ var CharStore = Fluxxor.createStore({
 
     this.bindActions(
       constants.SELECT_CHAR, this.onSelectChar,
-      constants.GET_USER_CHARS, this.getUsersCharacters
+      constants.GET_USER_CHARS, this.getUsersCharacters,
+      constants.ADD_NEW_CHAR, this.onAddNewCharacter
     );
 
+  },
+
+  onAddNewCharacter: function(newCharacter) {
+    console.log("char_store onAddNewCharacter");
+    console.log("token");
+    console.log( Cookies.get('token'));
+
+    request
+      .post (baseUrl + '/character_list')
+      .send({"name": newCharacter.name, "token": Cookies.get('token')})
+      .end(function(err, res) {
+        if (err) return console.log(err);
+
+        console.log("char_store onAddNewCharacter");
+        console.log(res.body);
+        this.characters.push(res.body);
+        this.emit('change');
+      }.bind(this));
   },
 
   getAllCharacters: function() {
@@ -53,7 +72,7 @@ var CharStore = Fluxxor.createStore({
     this.emit('change');
   },
 
-  getUsersCharacters: function(user) {
+  getUsersCharacters: function() {
     console.log("char_store getUsersCharacters");
     console.log("token");
     console.log( Cookies.get('token'));
@@ -69,7 +88,10 @@ var CharStore = Fluxxor.createStore({
     // 1000 is one second
     //var timerId = setInterval(function(){ myTimer() }, 1000);
 
-    setTimeout(function(){ var doNothing = 1; }, 3000);
+    // this doesn't work
+    // while (!Cookies.get('token')) {
+    //   setTimeout(function(){ var doNothing = 1; }, 3000);
+    // }
 
     request
       .get(baseUrl + '/character_list')
@@ -80,7 +102,7 @@ var CharStore = Fluxxor.createStore({
         console.log("char_store initialize  res.body");
         console.log(res.body);
         this.characters = res.body;
-        this.emit('change');
+        //this.emit('change');
       }.bind(this));
 
   }

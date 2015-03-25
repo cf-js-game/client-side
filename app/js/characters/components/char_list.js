@@ -65,6 +65,7 @@ var CharList = React.createClass({
   },
 
   render: function() {
+    this.getFlux().actions.getUsersCharacters();
 
     // this.props.data --
     // userData: flux.store('UserStore').getState(),

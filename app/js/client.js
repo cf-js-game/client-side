@@ -20,6 +20,7 @@ var Login = require('./users/components/login');
 var CharStore = require('./characters/char_store');
 var CharList = require('./characters/components/char_list');
 var CharDetails = require('./characters/components/char_details');
+var CharForm = require('./characters/components/char_form');
 
 // react-game
 var GameComponent = require('./react_game/components/react_game');
@@ -48,8 +49,12 @@ var actions = {
      this.dispatch(constants.SELECT_CHAR, charId);
   },
 
-  getUsersCharacters: function(user) {
-     this.dispatch(constants.GET_USER_CHARS, user);
+  getUsersCharacters: function() {
+     this.dispatch(constants.GET_USER_CHARS);
+  },
+
+  addCharacter: function(newCharacter) {
+     this.dispatch(constants.ADD_NEW_CHAR, newCharacter);
   }
 
 };
@@ -133,6 +138,17 @@ var App = React.createClass({
     this.getFlux().actions.displayLogin();
     loginClicked = true;
   },
+  handleLogout: function(e) {
+    e.preventDefault();
+
+    createUserClicked = false;
+    loginClicked = false;
+    submitClickedOnLogin = false;
+    showCharacterDetails = false;
+    startGame = false;
+
+    this.getFlux().actions.logout();
+  },
 
   render: function() {
     console.log("App component render");
@@ -154,9 +170,10 @@ var App = React.createClass({
     console.log("showCharacterDetails = " + showCharacterDetails);
     console.log("startGame = " + startGame);
 
+    var logout = <div><a href onClick={this.handleLogout}>Log Out</a><br></br></div>;
     if (createUserClicked) homePageCenterPanel = <CreateUser setFlag={this.setFlag}/>;
     if (loginClicked) homePageCenterPanel = <Login setFlag={this.setFlag}/>;
-    if (submitClickedOnLogin) homePageCenterPanel = <CharList data={this.state} setFlag={this.setFlag}/>;
+    if (submitClickedOnLogin) homePageCenterPanel = <div>{logout}<CharForm /><CharList data={this.state} setFlag={this.setFlag}/></div>;
     if (showCharacterDetails) {
       // loop thru the array looking for selectedCharId
       var selectedCharIndex = 0;
@@ -167,10 +184,10 @@ var App = React.createClass({
       }
 
       console.log("selectedCharIndex = " + selectedCharIndex);
-      homePageCenterPanel = <div><CharList data={this.state} setFlag={this.setFlag}/><CharDetails data={this.state.charList[selectedCharIndex]} setFlag={this.setFlag}/></div>;
+      homePageCenterPanel = <div>{logout}<CharForm /><CharList data={this.state} setFlag={this.setFlag}/><CharDetails data={this.state.charList[selectedCharIndex]} setFlag={this.setFlag}/></div>;
     }
 
-    if (startGame) homePageCenterPanel = <div><CharDetails data={this.state.charList[selectedCharIndex]} setFlag={this.setFlag}/><GameComponent data={this.state} setFlag={this.setFlag}/></div>;
+    if (startGame) homePageCenterPanel = <div>{logout}<CharDetails data={this.state.charList[selectedCharIndex]} setFlag={this.setFlag}/><GameComponent data={this.state} setFlag={this.setFlag}/></div>;
 
     return (
       <main>

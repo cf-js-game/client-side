@@ -34,7 +34,7 @@ var Login = React.createClass({
     // "getUsersCharacters" must be called after "login"
     //  ... because it assumes the cookie has the token
     // "getUsersCharacters"  does  this.emit(change)
-    this.getFlux().actions.getUsersCharacters(this.state.user);
+    //this.getFlux().actions.getUsersCharacters();
 
   },
   render: function() {
