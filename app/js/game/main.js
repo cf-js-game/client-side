@@ -78,6 +78,7 @@ Game.start = function () {
 				}
 			}
 		}
+		var levelItems = [];
 		for (var y = 0; y < Game.map_grid.width; y++) {
 			for (var x = 0; x < Game.map_grid.height; x++) {
 				if (TileMap.tileMap[x][y] === 3) {
@@ -85,11 +86,18 @@ Game.start = function () {
 					enemies.push(
 						Crafty.e('EnemyNPC').at(x, y)
 							.bind('NPCDeath', function() {
-								var nItems = Crafty.rInt(2, 4);
-						    for (var i = 0; i < nItems; i++) {
-						      Crafty.e('Item').at((this.x + 2)/32 + 1, (this.y + 5)/32 - 1)
-						      console.log('itemCreated');
-						    }
+								var nItems = Crafty.rInt(0, 4);
+							    for (var i = 0; i < nItems; i++) {
+							      levelItems.push(
+							      	Crafty.e('cItem')
+							      		.at((this.x + Crafty.rInt(-32, 32))/32 + Crafty.rInt(-1, 1), (this.y + Crafty.rInt(-32, 32))/32 + Crafty.rInt(-1, 1))
+							      );
+							      levelItems[levelItems.length-1].initStats(this.killedBy, 10);
+							    }
+
+							   	hero.details.xp++;
+							    console.log('hero xp: ' + hero.details.xp);
+							    console.log('hero level: ' + hero.details.getLevel());
 							})
 							.bind('EnterFrame', function() {								
 								// this.move(this.direction, this.speed);

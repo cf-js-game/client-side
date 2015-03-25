@@ -1,6 +1,7 @@
 'use strict';
 
 var Game = require('../game');
+var Item = require('./item')();
 
 var directions = {
   card: [
@@ -76,7 +77,7 @@ Crafty.c('PlayerCharacter', {
           this.y = old.y;
         }
       })
-      .onHit('Item', this.visitItem)
+      .onHit('cItem', this.visitItem)
       .onHit('EnemyNPC', this.hitEnemy)
       .onHit('ExitPoint', function() {
         Crafty.scene('main');
@@ -84,14 +85,17 @@ Crafty.c('PlayerCharacter', {
   },
   visitItem: function(data) {
     var item = data[0].obj;
+    var stats = item.stats;
+    //console.log(stats);
+    this.details.inventory.push(stats);
     item.collect();
-    console.log('Item Visited: ' + data);
+    console.log('You have picked up ' + stats.name);
+    console.log('Inventory size: ' + this.details.inventory.length);
   },
   hitEnemy: function(data) {
     var enemy = data[0].obj;
     this.details.enemiesKilled++;
-    console.log('Enemies Killed: ' + this.details.enemiesKilled);
-    enemy.kill();
+    enemy.kill(this.details.level);
   },
   details: Game.player
 });
@@ -111,7 +115,8 @@ Crafty.c('EnemyNPC', {
         }
       });
   },
-  kill: function() {
+  kill: function(charLevel) {
+    this.killedBy = charLevel;
     this.trigger('NPCDeath');
     this.destroy();
   },
@@ -180,7 +185,8 @@ Crafty.c('Chest', {
   }
 });
 
-Crafty.c('Item', {
+Crafty.c('cItem', {
+  stats: '',
   init: function() {
     this.requires('Actor, Color')
       .attr({w: 4, h: 4,})
@@ -189,6 +195,11 @@ Crafty.c('Item', {
  
   collect: function() {
     this.destroy();
+  },
+  initStats: function(charLevel, mod) {
+
+    this.stats = Item.spawn(charLevel, mod);
+
   }
 });
 

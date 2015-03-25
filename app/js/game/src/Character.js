@@ -17,7 +17,7 @@ function Character (owner, name) {
 
 	this.class = new Class();
 	this.xp = 1;
-	this.level = 1;
+	this.level = this.xp/5;
 
 	this.enemiesKilled = 0;
 }
@@ -34,6 +34,10 @@ Character.prototype.fitItem = function (item, type) {
 	if (typeof item === 'FitItem') {
 		this.equipped[type] = item;
 	}
+};
+
+Character.prototype.getLevel = function() {
+	return this.xp/5;
 };
 
 module.exports = Character;
