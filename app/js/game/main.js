@@ -60,7 +60,6 @@ Game.start = function () {
 					Crafty.e('Floor').at(x, y);
 					Crafty.e('StaticSprite').at(x, y);
 				} else if (TileMap.tileMap[x][y] === 3) {
-          console.log(enemy._switch());
 					Crafty.e('Floor').at(x, y);
 					enemies.push(Crafty.e(enemy._switch()).at(x, y));
 				} else if (TileMap.tileMap[x][y] === 5) {
