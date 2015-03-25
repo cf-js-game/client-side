@@ -19,8 +19,21 @@ var directions = {
   }
 };
 
+Crafty.extend({
+    randChance: function(a, b) {
+        return Crafty.randRange(0, b) > b - a;
+    },
+    rInt: function(min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+    }
+});
+
 Crafty.sprite(32, 'js/game/assets/rock.png', {
   rock: [0, 0]
+});
+
+Crafty.sprite(32, 'js/game/assets/single_chest.png', {
+  spChest: [0, 0]
 });
 // The Grid component allows an element to be located
 //  on a grid of tiles
@@ -87,20 +100,19 @@ Crafty.c('EnemyNPC', {
   speed: 0.2,
   direction: directions.card[directions.roll()],
   init: function() {
-    this.requires('Actor, Color, Collision, Delay')
+    this.requires('Actor, Color, Collision, Custom, Animate')
       .attr({w: 16, h: 16})
       .color('#A31E00')
       .collision()
       .bind('Moved', function(old) {
         if (this.hit('Rock')) {
-          this.movement = false;
-          this.speed = false;
           this.x = old.x;
           this.y = old.y;
         }
       });
   },
   kill: function() {
+    this.trigger('NPCDeath');
     this.destroy();
   },
   changeDirection: function() {
@@ -108,6 +120,10 @@ Crafty.c('EnemyNPC', {
   moveSome: function() {
     this.move(this.direction, 0.2);
   }
+});
+
+Crafty.c('MovementStrategyManager', {
+
 });
 
 Crafty.c('FollowAI', {
@@ -130,7 +146,6 @@ Crafty.c('Rock', {
       .color('#808080');
   }
 });
-
 
 Crafty.c('ExitPoint', {
   init: function() {
@@ -155,14 +170,13 @@ Crafty.c('Floor', {
 Crafty.c('Water', {
   init: function() {
     this.requires('Actor, Color, Collision')
-      .color('#0209C7');
+      .color('#000D96');
   }
 });
 
 Crafty.c('Chest', {
   init: function() {
-    this.requires('Actor, Color, Collision')
-      .color('#D49013');
+    this.requires('Actor, Color, Solid, spChest');
   }
 });
 
