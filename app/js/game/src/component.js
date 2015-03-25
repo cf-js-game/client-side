@@ -36,8 +36,7 @@ Crafty.sprite(32, 'js/game/assets/rock.png', {
 Crafty.sprite(32, 'js/game/assets/single_chest.png', {
   spChest: [0, 0]
 });
-// The Grid component allows an element to be located
-//  on a grid of tiles
+
 Crafty.c('Grid', {
   init: function() {
     this.attr({
@@ -85,11 +84,9 @@ Crafty.c('PlayerCharacter', {
   },
   visitItem: function(data) {
     var item = data[0].obj;
-    var stats = item.stats;
-    //console.log(stats);
-    this.details.inventory.push(stats);
+    this.details.pickupItem(item.stats);
     item.collect();
-    console.log('You have picked up ' + stats.name);
+    console.log('You have picked up ' + item.stats.name);
     console.log('Inventory size: ' + this.details.inventory.length);
   },
   hitEnemy: function(data) {
@@ -127,10 +124,6 @@ Crafty.c('EnemyNPC', {
   }
 });
 
-Crafty.c('MovementStrategyManager', {
-
-});
-
 Crafty.c('FollowAI', {
   followAI: function(obj) {
     this.bind('EnterFrame', function(obj) {
@@ -141,11 +134,7 @@ Crafty.c('FollowAI', {
   }
 });
 
-Crafty.c('AI', {
-
-});
-
-Crafty.c('Rock', {
+Crafty.c('LevelBounds', {
   init: function() {
     this.requires('Actor, Color, Solid')
       .color('#808080');
@@ -192,14 +181,11 @@ Crafty.c('cItem', {
       .attr({w: 4, h: 4,})
       .color('#ff0033');
   },
- 
   collect: function() {
     this.destroy();
   },
   initStats: function(charLevel, mod) {
-
     this.stats = Item.spawn(charLevel, mod);
-
   }
 });
 
