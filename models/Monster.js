@@ -9,9 +9,4 @@ var monsterSchema = new mongoose.Schema({
   hp: {type: String, default: '1'}
 });
 
-var monsterQSchema = new mongoose.Schema({
-  hp: {type: String, default: '1'}
-});
-
 module.exports = mongoose.model('Monster', monsterSchema);
-module.exports = mongoose.module('MonsterQ', monsterQSchema);
