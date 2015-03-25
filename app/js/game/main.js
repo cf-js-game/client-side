@@ -1,7 +1,8 @@
 'use strict';
 
 require('craftyjs');
-var Game = require('./game')
+var enemy = require('./src/Enemy');
+var Game = require('./game');
 var TileMap = require('./src/map');
 require('./src/component');
 
@@ -84,7 +85,7 @@ Game.start = function () {
 				if (TileMap.tileMap[x][y] === 3) {
 					Crafty.e('Floor').at(x, y);
 					enemies.push(
-						Crafty.e('EnemyNPC').at(x, y)
+						Crafty.e(enemy._switch()).at(x, y)
 							.bind('NPCDeath', function() {
 								var nItems = Crafty.rInt(0, 4);
 							    for (var i = 0; i < nItems; i++) {
