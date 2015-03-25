@@ -1,7 +1,8 @@
 'use strict';
 
 require('craftyjs');
-var Game = require('./game')
+var enemy = require('./src/Enemy');
+var Game = require('./game');
 var TileMap = require('./src/map');
 require('./src/component');
 
@@ -59,8 +60,9 @@ Game.start = function () {
 					Crafty.e('Floor').at(x, y);
 					Crafty.e('StaticSprite').at(x, y);
 				} else if (TileMap.tileMap[x][y] === 3) {
+          console.log(enemy._switch());
 					Crafty.e('Floor').at(x, y);
-					enemies.push(Crafty.e('EnemyNPC').at(x, y));
+					enemies.push(Crafty.e(enemy._switch()).at(x, y));
 				} else if (TileMap.tileMap[x][y] === 5) {
 					Crafty.e('Water').at(x, y);
 				}

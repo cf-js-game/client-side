@@ -64,7 +64,9 @@ Crafty.c('PlayerCharacter', {
         }
       })
       .onHit('Item', this.visitItem)
-      .onHit('EnemyNPC', this.hitEnemy)
+      .onHit('Rat', this.hitEnemy)
+      .onHit('Skeleton', this.hitEnemy)
+      .onHit('Slime', this.hitEnemy)
       .onHit('ExitPoint', function() {
         Crafty.scene('main');
       });
@@ -81,6 +83,87 @@ Crafty.c('PlayerCharacter', {
     enemy.kill();
   },
   details: Game.player
+});
+
+Crafty.c('Rat', {
+  speed: 0.2,
+  direction: directions.card[directions.roll()],
+  init: function() {
+    this.requires('Actor, Color, Collision, Delay')
+      .attr({w: 16, h: 16})
+      .color('#A31E00')
+      .collision()
+      .bind('Moved', function(old) {
+        if (this.hit('Rock')) {
+          this.movement = false;
+          this.speed = false;
+          this.x = old.x;
+          this.y = old.y;
+        }
+      });
+  },
+  kill: function() {
+    this.destroy();
+  },
+  changeDirection: function() {
+  },
+  moveSome: function() {
+    this.move(this.direction, 0.2);
+  }
+});
+
+Crafty.c('Skeleton', {
+  speed: 0.1,
+  direction: directions.card[directions.roll()],
+  init: function() {
+    this.requires('Actor, Color, Collision, Delay')
+      .attr({w: 16, h: 16})
+      .color('#E6E6E6')
+      .collision()
+      .bind('Moved', function(old) {
+        if (this.hit('Rock')) {
+          this.movement = false;
+          this.speed = false;
+          this.x = old.x;
+          this.y = old.y;
+        }
+      });
+  },
+  kill: function() {
+    this.destroy();
+  },
+  changeDirection: function() {
+  },
+  moveSome: function() {
+    this.move(this.direction, 0.2);
+  }
+});
+
+Crafty.c('Slime', {
+  speed: 0.2,
+  direction: directions.card[directions.roll()],
+  init: function() {
+    this.requires('Actor, Color, Collision, Delay')
+      .attr({w: 16, h: 16})
+      .color('#19A347')
+      .collision()
+      .bind('Moved', function(old) {
+        if (this.hit('Rock')) {
+          this.movement = false;
+          this.speed = false;
+          this.x = old.x;
+          this.y = old.y;
+        }
+      });
+  },
+  kill: function() {
+    this.destroy();
+  },
+  changeDirection: function() {
+  },
+  moveSome: function() {
+    this.move(this.direction, 0.2);
+  }
 });
 
 Crafty.c('EnemyNPC', {
