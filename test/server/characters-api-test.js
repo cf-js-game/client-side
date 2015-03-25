@@ -94,4 +94,16 @@ describe('character endpoints', function () {
         done();
       });
   });
+
+  it('should be able to delete a character', function (done) {
+    chai.request(routesBase)
+      .delete('/character_list/' + tempCharId)
+      .send({"token": tempToken})
+      .end(function (err, res) {
+        expect(err).to.eql(null);
+        expect(res.status).to.eql(200);
+        expect(res.body.msg).to.eql('Character with id: ' + tempCharId + ' deleted');
+        done();
+      });
+  });
 });

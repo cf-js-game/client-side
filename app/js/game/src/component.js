@@ -1,6 +1,7 @@
 'use strict';
 
 var Game = require('../game');
+var Item = require('./item')();
 
 var directions = {
   card: [
@@ -11,19 +12,31 @@ var directions = {
     's',
     'sw',
     'w',
-    'nw'
+    'nw',
+    'stop'
   ],
   roll: function() {
     return Math.floor(Math.random() * 8);
   }
 };
 
+Crafty.extend({
+    randChance: function(a, b) {
+        return Crafty.randRange(0, b) > b - a;
+    },
+    rInt: function(min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+    }
+});
 
 Crafty.sprite(32, 'js/game/assets/rock.png', {
   rock: [0, 0]
 });
-// The Grid component allows an element to be located
-//  on a grid of tiles
+
+Crafty.sprite(32, 'js/game/assets/single_chest.png', {
+  spChest: [0, 0]
+});
+
 Crafty.c('Grid', {
   init: function() {
     this.attr({
@@ -52,10 +65,10 @@ Crafty.c('Actor', {
 
 Crafty.c('PlayerCharacter', {
   init: function() {
-    this.requires('Hero, Actor, Fourway, Color, Collision, Animate')
+    this.requires('Actor, Fourway, Color, Collision, Animate')
       .attr({w: 16, h: 16,})
       .color('#1122ff')
-      .fourway(4)
+      .fourway(this.details.speed)
       .collision()
       .bind('Moved', function(old) {
         if (this.hit('Solid')) {
@@ -64,29 +77,141 @@ Crafty.c('PlayerCharacter', {
         }
       })
       .onHit('Item', this.visitItem)
-      .onHit('EnemyNPC', this.hitEnemy);
+      .onHit('Rat', this.hitEnemy)
+      .onHit('Skeleton', this.hitEnemy)
+      .onHit('Slime', this.hitEnemy)
+      .onHit('cItem', this.visitItem)
+      .onHit('EnemyNPC', this.hitEnemy)
+      .onHit('ExitPoint', function() {
+        Crafty.scene('main');
+      });
   },
   visitItem: function(data) {
     var item = data[0].obj;
+    this.details.pickupItem(item.stats);
     item.collect();
-    console.log('Item Visited: ' + data);
+    console.log('You have picked up ' + item.stats.name);
+    console.log('Inventory size: ' + this.details.inventory.length);
   },
   hitEnemy: function(data) {
     var enemy = data[0].obj;
-    enemy.kill();
-    console.log('Killed enemy.');
+    this.details.enemiesKilled++;
+    enemy.kill(this.details.level);
+  },
+  details: Game.player
+});
+
+Crafty.c('Rat', {
+  speed: 0.2,
+  direction: directions.card[directions.roll()],
+  init: function() {
+    this.requires('Actor, Color, Collision, Delay')
+      .attr({w: 16, h: 16})
+      .color('#A31E00')
+      .collision()
+      .bind('Moved', function(old) {
+        if (this.hit('Rock')) {
+          this.movement = false;
+          this.speed = false;
+          this.x = old.x;
+          this.y = old.y;
+        }
+      });
+  },
+  kill: function(charLevel) {
+    this.killedBy = charLevel;
+    this.trigger('NPCDeath');
+    this.destroy();
+  },
+  changeDirection: function() {
+  },
+  moveSome: function() {
+    this.move(this.direction, 0.2);
+  }
+});
+
+Crafty.c('Skeleton', {
+  speed: 0.1,
+  direction: directions.card[directions.roll()],
+  init: function() {
+    this.requires('Actor, Color, Collision, Delay')
+      .attr({w: 16, h: 16})
+      .color('#E6E6E6')
+      .collision()
+      .bind('Moved', function(old) {
+        if (this.hit('Rock')) {
+          this.movement = false;
+          this.speed = false;
+          this.x = old.x;
+          this.y = old.y;
+        }
+      });
+  },
+  kill: function(charLevel) {
+    this.killedBy = charLevel;
+    this.trigger('NPCDeath');
+    this.destroy();
+  },
+  changeDirection: function() {
+  },
+  moveSome: function() {
+    this.move(this.direction, 0.2);
+  }
+});
+
+Crafty.c('Slime', {
+  speed: 0.2,
+  direction: directions.card[directions.roll()],
+  init: function() {
+    this.requires('Actor, Color, Collision, Delay')
+      .attr({w: 16, h: 16})
+      .color('#19A347')
+      .collision()
+      .bind('Moved', function(old) {
+        if (this.hit('Rock')) {
+          this.movement = false;
+          this.speed = false;
+          this.x = old.x;
+          this.y = old.y;
+        }
+      });
+  },
+  kill: function(charLevel) {
+    this.killedBy = charLevel;
+    this.trigger('NPCDeath');
+    this.destroy();
+  },
+  changeDirection: function() {
+  },
+  moveSome: function() {
+    this.move(this.direction, 0.2);
   }
 });
 
 Crafty.c('EnemyNPC', {
+  speed: 0.2,
+  direction: directions.card[directions.roll()],
   init: function() {
-    this.requires('Actor, Color, Collision')
+    this.requires('Actor, Color, Collision, Custom, Animate')
       .attr({w: 16, h: 16})
-      .color('#ff0000')
-      .collision();
+      .color('#A31E00')
+      .collision()
+      .bind('Moved', function(old) {
+        if (this.hit('Rock')) {
+          this.x = old.x;
+          this.y = old.y;
+        }
+      });
   },
-  kill: function() {
+  kill: function(charLevel) {
+    this.killedBy = charLevel;
+    this.trigger('NPCDeath');
     this.destroy();
+  },
+  changeDirection: function() {
+  },
+  moveSome: function() {
+    this.move(this.direction, 0.2);
   }
 });
 
@@ -94,18 +219,13 @@ Crafty.c('FollowAI', {
   followAI: function(obj) {
     this.bind('EnterFrame', function(obj) {
       if ((this.x < (obj.x + 100)) || (this.y < (obj.y + 100))) {
-        this.x += this._speed;
+        this.x += this.speed;
       }
     });
   }
 });
 
-
-Crafty.c('AI', {
-
-});
-
-Crafty.c('Rock', {
+Crafty.c('LevelBounds', {
   init: function() {
     this.requires('Actor, Color, Solid')
       .color('#808080');
@@ -114,7 +234,7 @@ Crafty.c('Rock', {
 
 Crafty.c('ExitPoint', {
   init: function() {
-    this.requires('Actor, Color, Solid')
+    this.requires('Actor, Color')
       .color('#8B00AD');
   }
 });
@@ -132,15 +252,31 @@ Crafty.c('Floor', {
   }
 });
 
-Crafty.c('Item', {
+Crafty.c('Water', {
+  init: function() {
+    this.requires('Actor, Color, Collision')
+      .color('#000D96');
+  }
+});
+
+Crafty.c('Chest', {
+  init: function() {
+    this.requires('Actor, Color, Solid, spChest');
+  }
+});
+
+Crafty.c('cItem', {
+  stats: '',
   init: function() {
     this.requires('Actor, Color')
       .attr({w: 4, h: 4,})
       .color('#ff0033');
   },
- 
   collect: function() {
     this.destroy();
+  },
+  initStats: function(charLevel, mod) {
+    this.stats = Item.spawn(charLevel, mod);
   }
 });
 

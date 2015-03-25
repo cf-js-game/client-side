@@ -7,7 +7,9 @@ var Game = require('../game');
 // 1: Passable area
 // 2: Rocks
 // 3: Monster Locations
-// 
+// 4: Mob Spawn
+// 5: Water
+// 6: Chest
 
 
 // 1 N
@@ -23,9 +25,9 @@ var map = {
 
 	tileMap: [],
 	initMap: function() {
-		for (var i = 0; i < this.w; i++) {
+		for (var i = 0; i < this.h; i++) {
 			this.tileMap[i] = [];
-			for ( var j = 0; j < this.h; j++) {
+			for ( var j = 0; j < this.w; j++) {
 				this.tileMap[i][j] = 0;
 			}
 		}
@@ -102,10 +104,6 @@ var map = {
 			}
 		}
 
-		function cartDist(x1, x2, y1, y2) {
-			return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
-		}
-
 		// Determine farthest point in map from origin
 		var coordsOfMap = [];
 		var origin = [250, 250];
@@ -129,36 +127,57 @@ var map = {
 		this.farthestFromOrigin[0] = farthestPoint[0];
 		this.farthestFromOrigin[1] = farthestPoint[1];
 
-		function checkSurrounding(y, x, tileType) {
-			
-			if ((map.tileMap[y+1][x] === tileType)
-					&& (map.tileMap[y-1][x] === tileType)
-					&& (map.tileMap[y+1][x+1] === tileType)
-					&& (map.tileMap[y][x+1] === tileType)
-					&& (map.tileMap[y-1][x+1] === tileType)
-					&& (map.tileMap[y-1][x-1] === tileType)
-					&& (map.tileMap[y][x-1] === tileType)
-					&& (map.tileMap[y+1][x-1] === tileType)) {
-				return true;
-			}
+		// Monster Spawn : 3
+		chanceApplyToCoord(coordsOfMap, this.tileMap, 0.01, 3);
 
-			return false;
-		};
+		// Chest Locations : 6
+		chanceApplyToCoord(coordsOfMap, this.tileMap, 0.0006, 6);
 
-		//Rock Locations
-		for ( var i = 0; i < coordsOfMap.length; i++ ) {
-			if (rand() < 0.03) {
-				if (checkSurrounding(coordsOfMap[i][0], coordsOfMap[i][1], 1)) {
-					this.tileMap[coordsOfMap[i][0]][coordsOfMap[i][1]] = 2;
+		//Rock Locations : 2
+		checkAndChanceApply(coordsOfMap, this.tileMap, 0.03, 1, 2);
+
+		// Water Locations : 5
+		for (var i = 0; i < coordsOfMap.length; i++) {
+			if (rand() < 0.009) {
+
+				this.tileMap[coordsOfMap[i][0]][coordsOfMap[i][1]] = 5;
+				var curPos = {y: coordsOfMap[i][0], x: coordsOfMap[i][1]};
+				var iterations = Math.floor(Math.random() * (111 - 50) + 50);
+				while (iterations--) {
+					this.tileMap[curPos.y][curPos.x] = 5;
+					var nextDir = cardRand();
+					if (nextDir === 1) {
+						curPos.y += this.directions.N.y;
+						curPos.x += this.directions.N.x;
+					}
+					if (nextDir === 2) {
+						curPos.y += this.directions.E.y;
+						curPos.x += this.directions.E.x;
+					}
+					if (nextDir === 3) {
+						curPos.y += this.directions.S.y;
+						curPos.x += this.directions.S.x;
+					}
+					if (nextDir === 4) {
+						curPos.y += this.directions.W.y;
+						curPos.x += this.directions.W.x;
+					}
+
+					if (this.tileMap[curPos.y][curPos.x] !== 1) {
+						iterations = 0;
+					}
 				}
 			}
 		}
 
 		// Starting Point
 		this.tileMap[this.h / 2][this.w / 2] = 1;
-		console.log('Map gen complete');
 	}
 };
+
+function cartDist(x1, x2, y1, y2) {
+	return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+}
 
 function cardRand() {
 	return Math.floor((Math.random() * 4) + 1);
@@ -166,6 +185,54 @@ function cardRand() {
 
 function rand() {
 	return Math.random();
+}
+
+function checkAndChanceApply(mapCoords, applyToTileMap, chance, checkTile, applyTile) {
+	for ( var i = 0; i < mapCoords.length; i++ ) {
+		if (rand() < chance) {
+			if(checkSurrounding(mapCoords[i][0], mapCoords[i][1], applyToTileMap, checkTile)) {
+				applyToTileMap[mapCoords[i][0]][mapCoords[i][1]] = applyTile;
+			}
+		}
+	}
+}
+
+function chanceApplyToCoord(mapCoords, applyToTileMap, chance, applyTile) {
+	for ( var i = 0; i < mapCoords.length; i++ ) {
+		if (rand() < chance) {
+				applyToTileMap[mapCoords[i][0]][mapCoords[i][1]] = applyTile;
+		}
+	}
+}
+
+function checkSurrounding(y, x, tileMap, tileType) {
+			
+	if ((tileMap[y+1][x] === tileType)
+			&& (tileMap[y-1][x] === tileType)
+			&& (tileMap[y+1][x+1] === tileType)
+			&& (tileMap[y][x+1] === tileType)
+			&& (tileMap[y-1][x+1] === tileType)
+			&& (tileMap[y-1][x-1] === tileType)
+			&& (tileMap[y][x-1] === tileType)
+			&& (tileMap[y+1][x-1] === tileType)) {
+		return true;
+	}
+	return false;
+}
+
+function checkSurroundingLoose(y, x, tileMap, tileType) {
+			
+	if ((tileMap[y+1][x] === tileType)
+			|| (tileMap[y-1][x] === tileType)
+			|| (tileMap[y+1][x+1] === tileType)
+			|| (tileMap[y][x+1] === tileType)
+			|| (tileMap[y-1][x+1] === tileType)
+			|| (tileMap[y-1][x-1] === tileType)
+			|| (tileMap[y][x-1] === tileType)
+			|| (tileMap[y+1][x-1] === tileType)) {
+		return true;
+	}
+	return false;
 }
 
 module.exports = map;
