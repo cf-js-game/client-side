@@ -26,6 +26,17 @@ Crafty.extend({
     },
     rInt: function(min, max) {
       return Math.floor(Math.random() * (max - min) + min);
+    },
+    rFlt: function(min, max) {
+      return Math.random() * (max - min) + min;
+    },
+    rSign: function(){
+      console.log(this.rInt(0,1));
+      if(this.rInt(0,1) === 1){
+        return 1;
+      }else{
+        return -1;
+      }
     }
 });
 
@@ -102,20 +113,25 @@ Crafty.c('PlayerCharacter', {
 });
 
 Crafty.c('Rat', {
-  speed: 0.2,
   direction: directions.card[directions.roll()],
   init: function() {
     this.requires('Actor, Color, Collision, Delay')
-      .attr({w: 16, h: 16})
+      .attr({
+        w: 16,
+        h: 16,
+        dx: Crafty.rFlt(0.5, 1)*Crafty.rSign(),
+        dy: Crafty.rFlt(0.5, 1)*Crafty.rSign()
+      })
       .color('#A31E00')
       .collision()
-      .bind('Moved', function(old) {
-        if (this.hit('Rock')) {
-          this.movement = false;
-          this.speed = false;
-          this.x = old.x;
-          this.y = old.y;
+      .bind('EnterFrame', function(){
+        if (this.hit('Solid')) {
+          console.log(Crafty.rSign());
+          this.dx *= Crafty.rFlt(0.9,1.1)*Crafty.rSign();
+          this.dy *= Crafty.rFlt(0.9,1.1)*Crafty.rSign();
         }
+        this.x += this.dx;
+        this.y += this.dy;
       });
   },
   kill: function(charLevel) {
@@ -138,7 +154,7 @@ Crafty.c('Skeleton', {
       .attr({w: 16, h: 16})
       .color('#E6E6E6')
       .collision()
-      .bind('Moved', function(old) {
+      .bind('Move', function(old) {
         if (this.hit('Rock')) {
           this.movement = false;
           this.speed = false;
