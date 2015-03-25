@@ -25,9 +25,6 @@ var CharStore = Fluxxor.createStore({
   },
 
   onAddNewCharacter: function(newCharacter) {
-    console.log("char_store onAddNewCharacter");
-    console.log("token");
-    console.log( Cookies.get('token'));
 
     request
       .post (baseUrl + '/character_list')
@@ -35,8 +32,6 @@ var CharStore = Fluxxor.createStore({
       .end(function(err, res) {
         if (err) return console.log(err);
 
-        console.log("char_store onAddNewCharacter");
-        console.log(res.body);
         this.characters.push(res.body);
         this.emit('change');
       }.bind(this));
@@ -58,7 +53,6 @@ var CharStore = Fluxxor.createStore({
   },
 
   getState: function() {
-    console.log("char_store getState()");
     return {
       characters: this.characters,
       selectedCharId: this.selectedCharId
@@ -66,21 +60,14 @@ var CharStore = Fluxxor.createStore({
   },
 
   onSelectChar: function(charId) {
-    console.log("char_store   onRefreshCharDetail");
-    console.log("this.emit(change)");
     this.selectedCharId = charId;
     this.emit('change');
   },
 
   getUsersCharacters: function() {
-    console.log("char_store getUsersCharacters");
-    console.log("token");
-    console.log( Cookies.get('token'));
 
     // function myTimer() {
     //     var token = Cookies.get('token');
-    //     console.log("token");
-    //     console.log(token);
 
     //     if (token) clearInterval(timerId);
     // }
@@ -93,16 +80,18 @@ var CharStore = Fluxxor.createStore({
     //   setTimeout(function(){ var doNothing = 1; }, 3000);
     // }
 
+    console.log("char_store send request to server getUsersCharacters()");
     request
       .get(baseUrl + '/character_list')
       .set('token', Cookies.get('token'))
       .end(function(err, res) {
         if (err) return console.log(err);
 
-        console.log("char_store initialize  res.body");
-        console.log(res.body);
         this.characters = res.body;
-        //this.emit('change');
+        console.log("successful getUsersCharacters");
+        console.log("characters");
+        console.log(characters);
+        this.emit('change');
       }.bind(this));
 
   }

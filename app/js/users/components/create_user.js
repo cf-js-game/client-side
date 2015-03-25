@@ -24,7 +24,7 @@ var CreateUser = React.createClass({
 
   },
   handleSubmit: function(event) {
-    console.log(this.state.user);
+
     event.preventDefault();
 
     this.props.setFlag("submitClickedOnCreateUser");

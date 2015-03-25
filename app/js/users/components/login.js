@@ -26,7 +26,6 @@ var Login = React.createClass({
   handleSubmit: function(event) {
     event.preventDefault();
 
-    console.log(this.state.user);
     this.props.setFlag("submitClickedOnLogin");
     // login does not do this.emit(change)
     // "getUsersCharacters"  does  this.emit(change)

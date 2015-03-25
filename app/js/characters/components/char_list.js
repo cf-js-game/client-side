@@ -27,8 +27,6 @@ var Character = React.createClass({
   charLinkClick: function(event) {
     event.preventDefault();
 
-    console.log("this.props.data._id");
-    console.log(this.props.data._id);
     var charId = this.props.data._id;
     //set flag to control look
     //call action to run CharStore
@@ -65,19 +63,14 @@ var CharList = React.createClass({
   },
 
   render: function() {
-    this.getFlux().actions.getUsersCharacters();
 
     // this.props.data --
     // userData: flux.store('UserStore').getState(),
     // charList: charStoreState.characters,
     // selectedCharId: charStoreState.selectedCharId
-    console.log("char_list render");
-    console.log("this.props.data");
-    console.log(this.props.data);
 
     var characters = this.props.data.charList;
-    console.log("char_list  characters");
-    console.log(characters);
+
     var setFlag = this.props.setFlag;
     characters = this.props.data.charList.map(function(character) {
       return <Character data={character} key={character._id} setFlag={setFlag}/>;

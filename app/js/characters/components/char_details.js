@@ -9,9 +9,6 @@ var CharDetails = React.createClass({
   mixins: [FluxMixin],
   // getInitialState: function(charIdentifier) {
   //   // pcharIdentifier = { _id: "1" }
-  //   console.log("char_details getInitialState");
-  //   console.log("charIdentifier");
-  //   console.log(charIdentifier);
 
   //   var characters = this.getFlux().actions.getState();
 
@@ -24,9 +21,6 @@ var CharDetails = React.createClass({
   render: function() {
     //  data={"1"} is passed in
     //<CharDetails data={this.state} setFlag={this.setFlag}/>
-    console.log("CharDetails render");
-    console.log("this.props");
-    console.log(this.props);
 
     return <div><h2>Character Detail</h2>
              <br></br>{this.props.data.name}
