@@ -1,5 +1,6 @@
 'use strict';
 
+
 var newMonster = function(){
   return {
     _random: function() {
@@ -13,3 +14,12 @@ var newMonster = function(){
 };
 
 module.exports = newMonster();
+
+function Enemy() {
+	this.hp;
+}
+
+Enemy.prototype.init = function(playerLevel) {
+	this.hp = playerLevel * 0.7;
+};
+

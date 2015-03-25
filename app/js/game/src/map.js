@@ -104,10 +104,6 @@ var map = {
 			}
 		}
 
-		function cartDist(x1, x2, y1, y2) {
-			return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
-		}
-
 		// Determine farthest point in map from origin
 		var coordsOfMap = [];
 		var origin = [250, 250];
@@ -148,9 +144,6 @@ var map = {
 				var curPos = {y: coordsOfMap[i][0], x: coordsOfMap[i][1]};
 				var iterations = Math.floor(Math.random() * (111 - 50) + 50);
 				while (iterations--) {
-					if (this.tileMap[curPos.y-1][curPos.x] !== 1) {
-						iterations = 0;
-					}
 					this.tileMap[curPos.y][curPos.x] = 5;
 					var nextDir = cardRand();
 					if (nextDir === 1) {
@@ -170,16 +163,21 @@ var map = {
 						curPos.x += this.directions.W.x;
 					}
 
-					
+					if (this.tileMap[curPos.y][curPos.x] !== 1) {
+						iterations = 0;
+					}
 				}
 			}
 		}
 
 		// Starting Point
 		this.tileMap[this.h / 2][this.w / 2] = 1;
-		console.log('Map gen complete');
 	}
 };
+
+function cartDist(x1, x2, y1, y2) {
+	return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+}
 
 function cardRand() {
 	return Math.floor((Math.random() * 4) + 1);
