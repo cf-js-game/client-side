@@ -5,24 +5,29 @@ var Fluxxor = require('fluxxor');
 var request = require('superagent');
 var constants = require('./constants');
 
-//users and session
+// Global
+var Header = require('./global/header');
+
+// Users and session
 var UserStore = require('./users/user_store');
 var CreateUser = require('./users/components/create_user');
 var Login = require('./users/components/login');
 
-//characters
+// Characters
 var CharList = require('./characters/components/char_list');
 var CharDetails = require('./characters/components/char_details');
 var CharForm = require('./characters/components/char_form');
 
-// react-game
+// React-game
 var GameComponent = require('./react_game/components/react_game');
+
 var actions = {
   login: function(user, callback) {
     this.dispatch(constants.LOGIN, user);
   },
 
   logout: function() {
+    //document.getElementById('crafty-stage');
     this.dispatch(constants.LOGOUT);
   },
 
@@ -131,17 +136,19 @@ var App = React.createClass({
     submitClickedOnLogin = false;
     showCharacterDetails = false;
     startGame = false;
-
     this.getFlux().actions.logout();
+    // var game = document.getElementById('cr-stage');
+    // game.parentNode.removeChild(game);
+    
   },
 
   render: function() {
 
     //var createUser = <a href onClick={this.handleCreateUserButton}>Create User</a>;
     //var createUser = <button onClick={this.handleCreateUserButton}>Create</button>;
-    var homePageCenterPanel = <div><button onClick={this.handleCreateUserButton}>Create</button><button onClick={this.handleLoginButton}>Login</button></div>;
+    var homePageCenterPanel = <div id='mainAction'><button onClick={this.handleCreateUserButton}>Create</button><button onClick={this.handleLoginButton}>Login</button></div>;
 
-    var logout = <div><a href onClick={this.handleLogout}>Log Out</a><br></br></div>;
+    var logout = <div><a href onClick={this.handleLogout}>Log Out</a></div>;
     if (createUserClicked) homePageCenterPanel = <CreateUser setFlag={this.setFlag}/>;
     if (loginClicked) homePageCenterPanel = <Login setFlag={this.setFlag}/>;
     if (submitClickedOnLogin) homePageCenterPanel = <div>{logout}<CharForm /><CharList data={this.state} setFlag={this.setFlag}/></div>;
@@ -161,7 +168,13 @@ var App = React.createClass({
 
     return (
       <main>
-        {homePageCenterPanel}
+        <Header/>
+        <div id='landing'>
+          <h3>
+            Explore infinite, procedurally generated dungeons. Get loot.
+          </h3>
+          {homePageCenterPanel}
+        </div>
       </main>
     )
   }

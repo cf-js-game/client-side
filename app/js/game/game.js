@@ -18,12 +18,12 @@ var Game = {
 		return this.map_grid.width * this.map_grid.tile.width;
 	},
 	height: function () {
-		return this.map_grid.height * this.map_grid.tile.height
+		return this.map_grid.height * this.map_grid.tile.height;
 	},
 	player: new Character(),
 	createNPC: function() {
 		return new Character();
 	}
-}
+};
 
 module.exports = Game;

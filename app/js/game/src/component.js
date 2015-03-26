@@ -2,6 +2,7 @@
 
 var Game = require('../game');
 var Item = require('./item')();
+var util = require('./util')
 
 var directions = {
   card: [
@@ -31,7 +32,6 @@ Crafty.extend({
       return Math.random() * (max - min) + min;
     },
     rSign: function(){
-      console.log(this.rInt(0,1));
       if(this.rInt(0,1) === 1){
         return 1;
       }else{
@@ -94,6 +94,7 @@ Crafty.c('PlayerCharacter', {
       .onHit('cItem', this.visitItem)
       .onHit('EnemyNPC', this.hitEnemy)
       .onHit('ExitPoint', function() {
+        util.gameLogUpdate('You go deeper.');
         Crafty.scene('main');
       });
   },
@@ -101,13 +102,15 @@ Crafty.c('PlayerCharacter', {
     var item = data[0].obj;
     this.details.pickupItem(item.stats);
     item.collect();
-    console.log('You have picked up ' + item.stats.name);
+    //console.log('You have picked up ' + item.stats.name);
     console.log('Inventory size: ' + this.details.inventory.length);
+    util.gameLogUpdate('You have picked up ' + item.stats.name);
   },
   hitEnemy: function(data) {
     var enemy = data[0].obj;
     this.details.enemiesKilled++;
     enemy.kill(this.details.level);
+    util.gameLogUpdate('They didn\'t suffer.');
   },
   details: Game.player
 });
@@ -126,7 +129,6 @@ Crafty.c('Rat', {
       .collision()
       .bind('EnterFrame', function(){
         if (this.hit('Solid')) {
-          console.log(Crafty.rSign());
           this.dx *= Crafty.rFlt(0.9,1.1)*Crafty.rSign();
           this.dy *= Crafty.rFlt(0.9,1.1)*Crafty.rSign();
         }
