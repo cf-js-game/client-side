@@ -8,7 +8,7 @@
  */
 
 var slots = {
-  armor: ['helmet', 'pauldrons', 'cuirass', 'greaves', 'boots'],
+  armor: ['helmet', 'pauldrons', 'cuirass', 'gauntlets', 'greaves', 'boots'],
   jewelry: ['amulet', 'ring'],
   weapon: ['mainHand', 'offHand', 'twoHand']
 };
