@@ -8,9 +8,9 @@
  */
 
 var slots = {
-  armor: ['helmet', 'pauldrons', 'cuirass', 'gauntlets', 'greaves', 'boots'],
-  jewelry: ['amulet', 'ring'],
-  weapon: ['mainHand', 'offHand', 'twoHand']
+  armor: ["helmet", "pauldrons", "cuirass", "gauntlets", "greaves", "boots"],
+  jewelry: ["amulet", "ring"],
+  weapon: ["mainHand", "offHand", "twoHand"]
 };
 
 var subType = {
@@ -136,14 +136,14 @@ var Item = function() {
       // armor: 0 to 49     | 50%
       // jewelry: 50 to 64  | 15%
       // weapon: 65 to 99   | 35%
-      if (rng < 50) {type = 'armor';}
-      else if (rng < 65) {type = 'jewelry';}
-      else if (rng < 100) {type = 'weapon';}
+      if (rng < 50) {type = "armor";}
+      else if (rng < 65) {type = "jewelry";}
+      else if (rng < 100) {type = "weapon";}
 
       var slot = slots[type][this.random(0, slots[type].length - 1)];
       var subtype;
 
-      if (type === 'weapon') {
+      if (type === "weapon") {
         subtype = subType[slot][this.random(0,subType[slot].length - 1)];
       } else {
         subtype = slot;
@@ -172,29 +172,29 @@ var Item = function() {
       var maxTier = op ? 9 : Math.floor((charLvl + mod) / 10);
       var minTier = Math.floor((maxTier / 1.5));
 
-      // Don't refactor the 1-10 rng rolls, if they run concurrently node is so
+      // Don"t refactor the 1-10 rng rolls, if they run concurrently node is so
       // fast you have a high chance of getting the same cpu seed for random
-      if (kind.type === 'armor') {
+      if (kind.type === "armor") {
         prefix = affix.pre.armor[this.random(minTier, maxTier)];
 
         suffixRNG = this.random(0, affix.suf.armor.length - 1);
         suffix = affix.suf.armor[suffixRNG][this.random(minTier, maxTier)];
       }
-      if (kind.type === 'jewelry') {
+      if (kind.type === "jewelry") {
         prefix = affix.pre.jewelry[this.random(minTier, maxTier)];
 
         suffixRNG = this.random(0, affix.suf.jewelry.length - 1);
         suffix = affix.suf.jewelry[suffixRNG][this.random(minTier, maxTier)];
       }
-      if (kind.type === 'weapon') {
-        if (kind.slot === 'mainHand') {
+      if (kind.type === "weapon") {
+        if (kind.slot === "mainHand") {
           prefix = affix.pre.weapon[this.random(minTier, maxTier)];
 
           suffixRNG = this.random(0, affix.suf.melee.length - 1);
           suffix = affix.suf.melee[suffixRNG][this.random(minTier, maxTier)];
         }
-        if (kind.slot === 'offHand') {
-          if (kind.subType === 'shield') {
+        if (kind.slot === "offHand") {
+          if (kind.subType === "shield") {
             prefix = affix.pre.armor[this.random(minTier, maxTier)];
 
             suffixRNG = this.random(0, affix.suf.melee.length - 1);
@@ -206,14 +206,14 @@ var Item = function() {
             suffix = affix.suf.melee[suffixRNG][this.random(minTier, maxTier)];
           }
         }
-        if (kind.slot === 'twoHand') {
-          if (kind.subType === 'staff') {
+        if (kind.slot === "twoHand") {
+          if (kind.subType === "staff") {
             prefix = affix.pre.weapon2h[this.random(minTier, maxTier)];
 
             suffixRNG = this.random(0, affix.suf.magic.length - 1);
             suffix = affix.suf.magic[suffixRNG][this.random(minTier, maxTier)];
           }
-          if (kind.subType === 'bow') {
+          if (kind.subType === "bow") {
             prefix = affix.pre.weapon2h[this.random(minTier, maxTier)];
 
             suffixRNG = this.random(0, affix.suf.range.length - 1);
@@ -242,33 +242,33 @@ var Item = function() {
 
       var key;
       for (key in affixes.prefix) {
-        if (key !== 'name') {
+        if (key !== "name") {
           affixStats[key] = affixes.prefix[key];
         }
       }
 
       for (key in affixes.suffix) {
-        if (key !== 'name') {
+        if (key !== "name") {
           affixStats[key] = affixes.suffix[key];
         }
       }
 
       // weapon range
       switch (kind.subType) {
-        case 'sword':
-        case 'axe':
-        case 'maul':
+        case "sword":
+        case "axe":
+        case "maul":
           affixStats.range = 1;
           break;
-        case 'great sword':
-        case 'great axe':
-        case 'great maul':
+        case "great sword":
+        case "great axe":
+        case "great maul":
           affixStats.range = 2;
           break;
-        case 'staff':
+        case "staff":
           affixStats.range = 3;
           break;
-        case 'bow':
+        case "bow":
           affixStats.range = 6;
           break;
       }

@@ -33,8 +33,11 @@ var statCalc = function(char) {
 
   // Item Stat Calculations
   for (var key in char.paperDoll) {
-    for (var atribute in char.paperDoll[key].stats){
-      stat[atribute] += parseInt(char.paperDoll[key].stats[atribute], 10);
+    if (char.paperDoll[key]) {
+      var itemJSON = JSON.parse(char.paperDoll[key]);
+      for (var atribute in itemJSON.stats){
+        stat[atribute] += parseInt(itemJSON.stats[atribute], 10);
+      }
     }
   }
 
