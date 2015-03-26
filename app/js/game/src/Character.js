@@ -30,7 +30,7 @@ Character.prototype.dropItem = function(itemIndex) {
 	return this.inventory.splice(itemIndex, 1)[0];
 };
 
-Character.prototype.fitItem = function (item, type) {
+Character.prototype.equipItem = function (item, type) {
 	if (typeof item === 'FitItem') {
 		this.equipped[type] = item;
 	}

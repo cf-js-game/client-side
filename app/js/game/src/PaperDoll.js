@@ -1,6 +1,6 @@
 'use strict';
 
-require('./FitItem')
+require('./FitItem');
 
 function PaperDoll() {
 	this.helmet = ''; // Head
