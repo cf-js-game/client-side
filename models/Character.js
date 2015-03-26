@@ -53,7 +53,7 @@ characterSchema.methods.equip = function(item) {
     return;
   }
 
-  this.paperdoll[item.slot] = item;
+  this.paperDoll[item.slot] = item;
 };
 
 module.exports = mongoose.model('Character', characterSchema);
