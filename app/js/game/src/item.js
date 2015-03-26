@@ -159,6 +159,14 @@ var Item = function() {
       var suffix;
       var suffixRNG;
 
+      // luck
+      var luck = this.random(1, 100);
+      if (luck === 100) {
+        mod += 20;
+      } else if (luck >= 98) {
+        mod += 10;
+      }
+
       // min/max tier loot
       var op = Math.floor((charLvl + mod) / 10) > 9; // Over Powered
       var maxTier = op ? 9 : Math.floor((charLvl + mod) / 10);
