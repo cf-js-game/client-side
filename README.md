@@ -1,14 +1,31 @@
-# JS Game
+#WAGOGE
 
-A top-down hack and slash role playing game
+####Wicked Awesome Game Of Greater Employment
+
+A top-down hack and slash role playing game leveraging:
+
+###Front-End:
+* React / JSX
+* Flux Architecture
+* HTML5: Canvas
+* Crafty.js
+* Browserify
+* JavaScript
+
+###Back-End
+* Node.js
+* Express
+* Auth/Auth
+* JavaScript
+* Mocha/Chai
 
 
 ##Contributers
 
-Ian McCunn<br>
-Rory Sterley<br>
-Daniel Nofziger<br>
-Stephanie Beaton
+* Ian McCunn
+* Rory Sterley
+* Daniel Nofziger
+* Stephanie Beaton
 
 
 ##MongoDB Setup and Use
@@ -19,13 +36,6 @@ Start mongod from the project root directory:
 ```
     mongod --dbpath=./db --smallfiles
 ```
-
-##Code Conventions
-
-- URLs use "_" to separate words.
-- File Names use "-" to separate words.
-- All lowercase for file names.
-- All lowercase for URLs.
 
 ##License
 
