@@ -13,20 +13,14 @@ var viewport = {
 };
 
 var directions = {
-  card: [
-    'n',
-    'ne',
-    'e',
-    'se',
-    's',
-    'sw',
-    'w',
-    'nw',
-    'stop'
-  ],
-  roll: function() {
-    return Math.floor(Math.random() * 9);
-  }
+  n:0,
+  ne:45,
+  e:90,
+  se:135,
+  s:180,
+  sw:225,
+  w:270,
+  nw:315
 };
 
 Game.loadCharacter = function(char) {};
@@ -154,7 +148,7 @@ Game.initMapAndEntities = function() {
 						   	Game.Hero.details.xp++;
 						})
 						.bind('EnterFrame', function() {
-							if(detectDistance([pTA(this.x),pTA(this.y)], heroArr())< 8){
+							if(detectDistance([pTA(this.x),pTA(this.y)], heroArr()) < 8){
 								if(!this.path){
 									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr())[1];
 									if(this.path){
@@ -164,15 +158,27 @@ Game.initMapAndEntities = function() {
 								if(this.countdown <= 0){
 									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr())[1];
 									if(!this.path){
+										var pathy = this.last;
+										console.log(pathy);
+										//this.rotation = directions.pathy;
 										this.move(this.last, 2);
 									}else if(this.path[0]){
+										var pathy = this.path[0];
+										console.log(pathy);
+										//this.rotation = directions.pathy;
 										this.move(this.path[0], 2);
 									}
 									this.countdown = 16;
 								}else{
 									if(!this.path){
+										var pathy = this.last;
+										console.log(pathy);
+										//this.rotation = directions.pathy;
 										this.move(this.last, 2);
 									}else if(this.path[0]){
+										var pathy = this.path[0]
+										console.log(pathy);
+										//this.rotation = directions.pathy;
 										this.move(this.path[0], 2);
 									}
 									this.countdown -= 1;

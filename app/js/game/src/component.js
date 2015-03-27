@@ -93,8 +93,9 @@ Crafty.c('Actor', {
 
 Crafty.c('PlayerCharacter', {
   init: function() {
-    this.requires('Actor, Fourway, Color, Collision, Animate, playerSprite')
-      .attr({w: 16, h: 16})
+    this.requires('Actor, Multiway, Color, Collision, Animate, playerSprite')
+      .attr()
+      .origin('center')
       .collision()
       .multiway(this.details.speed, {W: 270, S: 90, D: 0, A: 180})
       .bind('Moved', function(old) {
@@ -105,10 +106,32 @@ Crafty.c('PlayerCharacter', {
       })
       .bind('NewDirection', function(direction){
         var now = direction
-        if(!(direction.x === 0 && direction.y === 0)){
-          this.dir = now;
+        if(direction.x === 0){
+          if(direction.y === 0){
+            return;
+          }else if(direction.y > 0){
+            this.rotation = 180;
+          }else if(direction.y < 0){
+            this.rotation = 0;
+          }
+
+        }else if(direction.x > 0){
+          if(direction.y === 0){
+            this.rotation = 90;
+          }else if(direction.y > 0){
+            this.rotation = 135;
+          }else if(direction.y < 0){
+            this.rotation = 45;
+          }
+        }else if(direction.x < 0){
+          if(direction.y === 0){
+            this.rotation = 270;
+          }else if(direction.y > 0){
+            this.rotation = 225;
+          }else if(direction.y < 0){
+            this.rotation = 315;
+          }
         }
-        console.log(this.dir);
       })
       .onHit('Item', this.visitItem)
       .onHit('Rat', this.hitEnemy)
@@ -178,6 +201,7 @@ Crafty.c('Skeleton', {
   init: function() {
     this.requires('Actor, Color, Collision, Delay')
       .attr({w: 16, h: 16})
+      .origin('center')
       .color('#E6E6E6')
       .collision()
       .bind('Moved', function(old) {
@@ -206,6 +230,7 @@ Crafty.c('Slime', {
   init: function() {
     this.requires('Actor, Color, Collision, Delay')
       .attr({w: 16, h: 16})
+      .origin('center')
       .color('#19A347')
       .collision()
       .bind('Moved', function(old) {
