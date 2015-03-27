@@ -164,12 +164,10 @@ Game.initMapAndEntities = function() {
 									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr())[1];
 									if(!this.path){
 										var pathy = this.last;
-										console.log(pathy);
 										//this.rotation = directions.pathy;
 										this.move(this.last, 2);
 									}else if(this.path[0]){
 										var pathy = this.path[0];
-										console.log(pathy);
 										//this.rotation = directions.pathy;
 										this.move(this.path[0], 2);
 									}
@@ -177,12 +175,10 @@ Game.initMapAndEntities = function() {
 								}else{
 									if(!this.path){
 										var pathy = this.last;
-										console.log(pathy);
 										//this.rotation = directions.pathy;
 										this.move(this.last, 2);
 									}else if(this.path[0]){
 										var pathy = this.path[0]
-										console.log(pathy);
 										//this.rotation = directions.pathy;
 										this.move(this.path[0], 2);
 									}
