@@ -31,7 +31,7 @@ header {
 	border-bottom: 1px solid #ddd;
 }
 
-header h5 {
+header h4 {
 	padding-left: 5%;
 }
 
@@ -80,10 +80,9 @@ header nav ul li a:hover {
 }
 
 #landing {
-	max-width: 80%;
 	margin-top: 100px;
 	margin: auto;
-	padding: 1% 5.333333333% 5.333333333% 5.333333333%;
+	padding: 1% 1.333333333% 1.333333333% 1.333333333%;
 }
 
 #landing h3 {
@@ -130,18 +129,32 @@ header nav ul li a:hover {
 	float: left;
 }
 
+#char-list form {
+	text-align: right;
+}
+
 #char-list li {
 	padding: 15px;
 	list-style-type: none;
 }
+
 #char-list li a {
+	/*border: 1px solid #fff;*/
+	border-radius: 5px;
+	width: inherit;
 	padding: 10px;
 	text-decoration: none;
 }
+
 #char-list li a:hover {
 	color: #222;
 	background-color: #fff;
 }
+
+#char-create-select {
+
+}
+
 #char-list li a * {
 	display: inline;
 	padding-right: 10px;
@@ -159,12 +172,29 @@ header nav ul li a:hover {
 }
 
 #char-form {
+	margin: 0 10px 10px 10px;
+	float:left;
 	border: 1px #fff solid;
 	padding: 20px;
 }
 
 #char-form * {
 	display: block;
-	padding: 5px;
+	margin: 5px;
 }
 
+#create-user {
+	display: block;
+	padding: 25px;
+
+}
+
+#login-form {
+	max-width: 500px;
+	margin: auto;
+}
+
+#login-form * {
+	padding: 5px;
+	margin: auto;
+}
