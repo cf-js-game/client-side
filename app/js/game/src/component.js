@@ -327,7 +327,7 @@ Crafty.c('Water', {
 
 Crafty.c('Chest', {
   init: function() {
-    this.requires('Actor, spChest');
+    this.requires('Actor, Solid, spChest');
   }
 });
 
