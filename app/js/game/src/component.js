@@ -2,6 +2,7 @@
 
 var Game = require('../game');
 var Item = require('./item')();
+var Map = require('./map');
 var util = require('./util')
 
 var directions = {
@@ -77,10 +78,10 @@ Crafty.c('Actor', {
 Crafty.c('PlayerCharacter', {
   init: function() {
     this.requires('Actor, Fourway, Color, Collision, Animate')
-      .attr({w: 16, h: 16,})
+      .attr({w: 16, h: 16})
       .color('#1122ff')
-      .fourway(this.details.speed)
       .collision()
+      .fourway(this.details.speed)
       .bind('Moved', function(old) {
         if (this.hit('Solid')) {
           this.x = old.x;
@@ -92,7 +93,6 @@ Crafty.c('PlayerCharacter', {
       .onHit('Skeleton', this.hitEnemy)
       .onHit('Slime', this.hitEnemy)
       .onHit('cItem', this.visitItem)
-      .onHit('EnemyNPC', this.hitEnemy)
       .onHit('ExitPoint', function() {
         util.gameLogUpdate('You go deeper.');
         Crafty.scene('main');
@@ -112,6 +112,9 @@ Crafty.c('PlayerCharacter', {
     enemy.kill(this.details.level);
     util.gameLogUpdate('They didn\'t suffer.');
   },
+  currPos: function(){
+    return ([pTA(curr._x), pTA(curr._y)]);
+  },
   details: Game.player
 });
 
@@ -122,8 +125,7 @@ Crafty.c('Rat', {
       .attr({
         w: 16,
         h: 16,
-        dx: Crafty.rFlt(0.5, 1)*Crafty.rSign(),
-        dy: Crafty.rFlt(0.5, 1)*Crafty.rSign()
+        cooldown: 100
       })
       .color('#A31E00')
       .collision()
@@ -145,6 +147,9 @@ Crafty.c('Rat', {
   },
   moveSome: function() {
     this.move(this.direction, 0.2);
+  },
+  track: function(){
+
   }
 });
 
@@ -153,11 +158,11 @@ Crafty.c('Skeleton', {
   direction: directions.card[directions.roll()],
   init: function() {
     this.requires('Actor, Color, Collision, Delay')
-      .attr({w: 16, h: 16})
+      .attr({w: 16, h: 16, cooldown: 100})
       .color('#E6E6E6')
       .collision()
       .bind('Move', function(old) {
-        if (this.hit('Rock')) {
+        if (this.hit('Solid')) {
           this.movement = false;
           this.speed = false;
           this.x = old.x;
@@ -182,11 +187,11 @@ Crafty.c('Slime', {
   direction: directions.card[directions.roll()],
   init: function() {
     this.requires('Actor, Color, Collision, Delay')
-      .attr({w: 16, h: 16})
+      .attr({w: 16, h: 16, cooldown: 100})
       .color('#19A347')
       .collision()
       .bind('Moved', function(old) {
-        if (this.hit('Rock')) {
+        if (this.hit('Solid')) {
           this.movement = false;
           this.speed = false;
           this.x = old.x;
@@ -236,10 +241,8 @@ Crafty.c('EnemyNPC', {
 Crafty.c('FollowAI', {
   followAI: function(obj) {
     this.bind('EnterFrame', function(obj) {
-      if ((this.x < (obj.x + 100)) || (this.y < (obj.y + 100))) {
-        this.x += this.speed;
-      }
-    });
+      Pathing(Map.tileMap, [this.x, this.y], [heroArr]);
+    })
   }
 });
 
