@@ -7,12 +7,8 @@ var passportStrat = require('./lib/passport_strat');
 var userRoutes = require('./routes/user_routes');
 var characterRoutes = require('./routes/character_routes');
 
-
 var app = express();
 var port = process.env.PORT || 3000;
-
-
-console.log('in server');
 
 app.use(express.static(__dirname + '/build'));
 
@@ -38,14 +34,12 @@ app.listen(port, function() {
   console.log('Server listening on port ' + port + '.');
 });
 
-
 // -------------------
 //  add socket io
 // -------------------
 ////var app = require('express')();  // leave commented out
 // var http = require('http').Server(app);
 // var io = require('socket.io')(http);
-
 
 // io.on('connection', function(socket){
 //   console.log('a user connected');
