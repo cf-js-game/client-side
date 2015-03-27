@@ -6,6 +6,7 @@ var Class = require('./CharClass');
 var statCalc = require('./statCalc');
 
 function Character (owner, name) {
+  this._id = '';
   this.owner = owner;
   this.name = name;
   this.inventory = [];

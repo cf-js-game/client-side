@@ -11,11 +11,25 @@ var GameStart = require('../../game/main');
 var GameComponent = React.createClass({
   mixins: [FluxMixin],
   getInitialState: function() {
-    return {};
+    return {
+
+    };
   },
 
   componentDidMount: function() {
-    GameStart();
+    var selectedCharIndex = 0;
+    for (var i=0; i < this.props.data.charList.length; i++) {
+      if (this.props.data.selectedCharId === this.props.data.charList[i]._id) {
+        selectedCharIndex = i;
+      }
+    }
+    var pObj = this.props.data.charList[selectedCharIndex];
+    console.log('about to start game with: ');
+    for ( var k in pObj) {
+      console.log(k, pObj[k]);
+    }
+    GameStart(this.props.data.charList[selectedCharIndex]);
+
   },
 
   render: function() {
