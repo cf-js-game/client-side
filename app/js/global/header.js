@@ -16,9 +16,7 @@ var Header = React.createClass({
 				</div>
 				<nav>
 					<ul className='navList'>
-						<li><a href='#'>About</a></li>
-						<li><a href='#'>Github</a></li>
-						<li><a href='#'>Play</a></li>
+						<li><a href='https://github.com/cf-js-game/js-game'>Github</a></li>
 					</ul>
 				</nav>
 			</header>

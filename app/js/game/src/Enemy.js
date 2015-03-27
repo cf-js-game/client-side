@@ -15,7 +15,7 @@ var Monster = {
     monster.atributes = {
       "damage": Math.floor(2 + lvl * 0.636363),
       "speed": 2 + lvl * 0.020202,
-      "hp": Math.floor(30 + lvl * 6.262626),
+      "hp": Math.floor(10 + lvl * 2.262626),
       "range": 1
     };
 
