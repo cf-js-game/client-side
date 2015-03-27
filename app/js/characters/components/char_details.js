@@ -5,7 +5,10 @@ var Fluxxor = require('fluxxor');
 var FluxMixin = Fluxxor.FluxMixin(React);
 var StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
+//var io = require('socket.io');
+
 var charUpdate = require('../../game/game').charUpdate;
+
 
 var CharDetails = React.createClass({
   mixins: [FluxMixin],
@@ -15,6 +18,47 @@ var CharDetails = React.createClass({
     charUpdate.on('characterUpdate', function (obj) {
       that.getFlux().actions.updateCharacter(obj);
     });
+  },
+
+//  componentDidMount: function(){
+
+      // -------------------
+      //  add socket io
+      // -------------------
+      // from http://socket.io/get-started/chat/
+      // Notice that I’m not specifying any URL when I call
+      // ...io(), since it defaults to trying to connect to the
+      // ...host that serves the page.
+
+      //var socket = io();
+
+      // send message to server
+
+      //socket.emit('char stats', 'Godzilla hp = 200');
+
+      // $('form').submit(function(){
+      //   socket.emit('chat message', $('#m').val());
+      //   $('#m').val('');
+      //   return false;
+      // });
+
+      // receive message sent from server
+      // socket.on('char stats2', function(msg){
+      //   console.log("msg = " + msg);
+      //   var abc = document.getElementById('steph');
+      //   abc.innerHTML += msg;
+      // });
+
+      // -------end of add socket io------------
+
+ // },
+
+  handleSubmit: function(event) {
+    event.preventDefault();
+
+    // JSON.stringify(this.state.character?)
+    //socket.emit('char stats', 'Godzilla hp = 200');
+
   },
 
   render: function() {
@@ -45,6 +89,8 @@ var CharDetails = React.createClass({
                 <tr><td>enemiesKilled:</td> <td>{this.props.data.enemiesKilled}</td></tr>
               </table>
               <div id='status-updates'>
+              </div>
+              <div id='steph'>
               </div>
           </div>
         );
