@@ -53,13 +53,12 @@ Game.defineScenes = function() {
 		Crafty.viewport.init(viewport.w, viewport.h);
 
 		Crafty.background('#000');
-		
+
 		Crafty.viewport._clamp();
 		Crafty.viewport.clampToEntities = false;
-		
+
 		Game.initMapAndEntities();
 		Game.initPlayer();
-    	
 	});
 
 	Crafty.defineScene('init', function() {
@@ -72,7 +71,7 @@ Game.defineScenes = function() {
 			.bind('Click', function() {
 				Crafty.scene('main');
 			});
-	});	
+	});
 };
 
 var pTA = function(pixel){
@@ -85,6 +84,11 @@ var heroArr = function(){
   return([pTA(curr._x), pTA(curr._y)]);
 };
 
+var heroStat = function(){
+	var stat = Game.Hero;
+	return stat;
+}
+
 var detectDistance = function(pointA, pointB){
 	return Math.sqrt(Math.pow(pointB[0]-pointA[0], 2)+Math.pow(pointB[1]-pointA[1], 2));
 };
@@ -95,7 +99,7 @@ Game.initMapAndEntities = function() {
 
 	//Generate Map
 	TileMap.generateBlob();
-	
+
 	// Place All Entities
 	for (var y = 0; y < Game.map_grid.width; y++) {
 		for (var x = 0; x < Game.map_grid.height; x++) {
@@ -140,7 +144,8 @@ Game.initMapAndEntities = function() {
 			if (TileMap.tileMap[x][y] === 3) {
 				Crafty.e('Floor').at(x, y);
 				enemies.push(
-					Crafty.e(enemy._switch()).at(x, y)
+					Crafty.e(enemy._getName()).at(x, y)
+						.attr(enemy.spawn(Game.player.level).attributes)
 						.attr({countdown: 1})
 						.bind('NPCDeath', function() {
 							var nItems = Crafty.rInt(0, 4);
@@ -156,14 +161,25 @@ Game.initMapAndEntities = function() {
 						.bind('EnterFrame', function() {
 							if(detectDistance([pTA(this.x),pTA(this.y)], heroArr())< 8){
 								if(!this.path){
-									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr());
+									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr())[1];
+									if(this.path){
+										this.last = this.path[0];
+									}
 								}
-								if(this.countdown === 0){
-									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr());
-									this.move(this.path, 2);
-									this.countdown = 15;
+								if(this.countdown <= 0){
+									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr())[1];
+									if(!this.path){
+										this.move(this.last, 2);
+									}else if(this.path[0]){
+										this.move(this.path[0], 2);
+									}
+									this.countdown = 16;
 								}else{
-									this.move(this.path, 2);
+									if(!this.path){
+										this.move(this.last, 2);
+									}else if(this.path[0]){
+										this.move(this.path[0], 2);
+									}
 									this.countdown -= 1;
 								}
 							}
