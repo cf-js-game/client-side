@@ -135,6 +135,7 @@ Game.initMapAndEntities = function() {
 				Crafty.e('Floor').at(x, y);
 				enemies.push(
 					Crafty.e(enemy._switch()).at(x, y)
+						.attr()
 						.attr({countdown: 1})
 						.bind('NPCDeath', function() {
 							var nItems = Crafty.rInt(0, 4);
@@ -150,14 +151,26 @@ Game.initMapAndEntities = function() {
 						.bind('EnterFrame', function() {
 							if(detectDistance([pTA(this.x),pTA(this.y)], heroArr())< 8){
 								if(!this.path){
-									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr());
+									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr())[1];
+									if(this.path){
+										this.last = this.path[0];
+									}
 								}
-								if(this.countdown === 0){
-									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr());
-									this.move(this.path, 2);
-									this.countdown = 15;
+								if(this.countdown <= 0){
+									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr())[1];
+									console.log(this.path);
+									if(!this.path){
+										this.move(this.last, 2);
+									}else if(this.path[0]){
+										this.move(this.path[0], 2);
+									}
+									this.countdown = 16;
 								}else{
-									this.move(this.path, 2);
+									if(!this.path){
+										this.move(this.last, 2);
+									}else if(this.path[0]){
+										this.move(this.path[0], 2);
+									}
 									this.countdown -= 1;
 								}
 							}

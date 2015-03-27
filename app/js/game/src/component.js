@@ -81,7 +81,7 @@ Crafty.c('PlayerCharacter', {
       .attr({w: 16, h: 16})
       .color('#1122ff')
       .collision()
-      .fourway(this.details.speed)
+      .multiway(this.details.speed, {W: -90, S: 90, D: 0, A: 180})
       .bind('Moved', function(old) {
         if (this.hit('Solid')) {
           this.x = old.x;
@@ -125,17 +125,16 @@ Crafty.c('Rat', {
       .attr({
         w: 16,
         h: 16,
-        cooldown: 100
       })
       .color('#A31E00')
       .collision()
-      .bind('EnterFrame', function(){
+      .bind('Moved', function(old){
         if (this.hit('Solid')) {
-          this.dx *= Crafty.rFlt(0.9,1.1)*Crafty.rSign();
-          this.dy *= Crafty.rFlt(0.9,1.1)*Crafty.rSign();
+          his.movement = false;
+          this.speed = false;
+          this.x = old.x;
+          this.y = old.y;
         }
-        this.x += this.dx;
-        this.y += this.dy;
       });
   },
   kill: function(charLevel) {
@@ -158,7 +157,7 @@ Crafty.c('Skeleton', {
   direction: directions.card[directions.roll()],
   init: function() {
     this.requires('Actor, Color, Collision, Delay')
-      .attr({w: 16, h: 16, cooldown: 100})
+      .attr({w: 16, h: 16})
       .color('#E6E6E6')
       .collision()
       .bind('Moved', function(old) {
@@ -187,7 +186,7 @@ Crafty.c('Slime', {
   direction: directions.card[directions.roll()],
   init: function() {
     this.requires('Actor, Color, Collision, Delay')
-      .attr({w: 16, h: 16, cooldown: 100})
+      .attr({w: 16, h: 16})
       .color('#19A347')
       .collision()
       .bind('Moved', function(old) {
@@ -238,8 +237,8 @@ Crafty.c('EnemyNPC', {
   }
 });
 
-Crafty.c('FollowAI', {
-  followAI: function(obj) {
+Crafty.c('Attack', {
+  melee: function(range) {
     this.bind('EnterFrame', function(obj) {
       Pathing(Map.tileMap, [this.x, this.y], [heroArr]);
     })

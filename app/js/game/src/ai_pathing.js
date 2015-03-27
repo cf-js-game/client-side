@@ -193,11 +193,7 @@ function findPath(world, pathStart, pathEnd) {
   // actually calculate the a-star path!
   // this returns an array of coordinates
   // that is empty if no path is possible
-  if(calculatePath()[1]) {
-    return calculatePath()[1][0];
-  }else{
-    return 'ne';
-  }
+    return calculatePath();
 
 } // end of findPath() function
 
