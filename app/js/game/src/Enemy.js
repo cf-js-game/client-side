@@ -1,16 +1,15 @@
 'use strict';
 
-var Monster = function() {
-  this._random = function() {
+var Monster = {
+  _random: function() {
     return Math.floor(Math.random() * 3);
-  };
-  this._getName = function(){
+  },
+  _getName: function(){
     var random = this._random();
     return random === 0 ? 'Rat': random === 1 ? 'Skeleton' : 'Slime';
-  };
-  this.spawn = function(lvl) {
+  },
+  spawn: function(lvl) {
     var monster = {};
-
     monster.name = this._getName();
     monster.level = lvl;
     monster.atributes = {
@@ -21,7 +20,7 @@ var Monster = function() {
     };
 
     return monster;
-  };
+  }
 };
 
 module.exports = Monster;
