@@ -157,10 +157,10 @@ Game.initMapAndEntities = function() {
 								}
 								if(this.countdown === 0){
 									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr());
-									//this.move(this.path, 2);
+									this.move(this.path, 2);
 									this.countdown = 15;
 								}else{
-									//this.move(this.path, 2);
+									this.move(this.path, 2);
 									this.countdown -= 1;
 								}
 							}
