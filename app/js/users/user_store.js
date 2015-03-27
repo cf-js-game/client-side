@@ -144,7 +144,11 @@ var UserStore = Fluxxor.createStore({
         selectedCharIndex = i;
       }
     }
-    this.characters[i] = propsToUpdate;
+    for (var k in playerObject) {
+      if (typeof this.characters[selectedCharIndex][k] !== 'function') {
+        this.characters[selectedCharIndex][k] = playerObject[k];
+      }
+    }
     this.emit('change');
   },
 

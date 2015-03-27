@@ -18,12 +18,17 @@ var GameComponent = React.createClass({
 
   componentDidMount: function() {
     var selectedCharIndex = 0;
-    for (var i=0; i < this.props.charList.length; i++) {
-      if (this.props.selectedCharId === this.props.charList[i]._id) {
+    for (var i=0; i < this.props.data.charList.length; i++) {
+      if (this.props.data.selectedCharId === this.props.data.charList[i]._id) {
         selectedCharIndex = i;
       }
     }
-    GameStart(this.props.charList[selectedCharIndex]);
+    var pObj = this.props.data.charList[selectedCharIndex];
+    console.log('about to start game with: ');
+    for ( var k in pObj) {
+      console.log(k, pObj[k]);
+    }
+    GameStart(this.props.data.charList[selectedCharIndex]);
 
   },
 

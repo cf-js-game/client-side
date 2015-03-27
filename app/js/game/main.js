@@ -36,7 +36,11 @@ Game.saveCharacter = function(char) {};
 Game.emitCharStatChange = function() {};
 
 Game.start = function (initPlayerObj) {
-	this.player = initPlayerObj;
+
+	for (var k in initPlayerObj) {
+		Game.player[k] = initPlayerObj[k];
+	}
+	
 	Crafty.init();
 	Game.defineScenes();
 	Crafty.scene('init');

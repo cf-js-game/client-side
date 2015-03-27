@@ -105,23 +105,14 @@ Crafty.c('PlayerCharacter', {
     var item = data[0].obj;
     this.details.pickupItem(item.stats);
     item.collect();
-    //console.log('You have picked up ' + item.stats.name);
-    console.log('Inventory size: ' + this.details.inventory.length);
+    charUpdate.emit('characterUpdate', this.details);
     util.gameLogUpdate('You have picked up ' + item.stats.name);
   },
   hitEnemy: function(data) {
     var enemy = data[0].obj;
     this.details.enemiesKilled++;
-
-    var sendObj = {
-      enemiesKilled: 4,
-      invArray: ['thing', 'thing1', 'thing2'],
-
-    };
-
-    charUpdate.emit('characterUpdate', this.details);
-    console.log('hit enemy');
     enemy.kill(this.details.level);
+    charUpdate.emit('characterUpdate', this.details);
     util.gameLogUpdate('They didn\'t suffer.');
   },
   currPos: function(){

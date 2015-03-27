@@ -106,11 +106,11 @@ header nav ul li a:hover {
 }
 
 #status-updates {
-	padding: 12px;
-	font-size: 12px;
+	padding: 10px;
+	font-size: 14px;
 	color: #B54800;
-	line-height: 1em;
-	height: 100px;
+	line-height: 1.1em;
+	height: 150px;
 	border: 1px solid #fff;
 	overflow-y: scroll;
 }
@@ -125,6 +125,10 @@ header nav ul li a:hover {
 }
 
 #char-list li {
+	list-style-type: none;
+}
+
+#char-detail-list {
 	list-style-type: none;
 }
 
