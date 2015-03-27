@@ -30,7 +30,7 @@ function Character (owner, name) {
   this.ene = 0;
 
   this.damage = 1;
-  this.armore = 0;
+  this.armor = 0;
 
   this.xp = 0;
   this.level = 1;
