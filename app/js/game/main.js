@@ -8,8 +8,8 @@ require('./src/component');
 var Pathing = require('./src/ai_pathing');
 
 var viewport = {
-	w: 1200,
-	h: 800
+	w: 800,
+	h: 600
 };
 
 var directions = {
@@ -59,7 +59,7 @@ Game.defineScenes = function() {
 	Crafty.defineScene('init', function() {
 		Crafty.viewport.init(viewport.w, viewport.h);
 		Crafty.background('#000');
-		
+		console.log('init scene');
 		Crafty.e('2D, Canvas, Mouse, HTML')
 			.attr({x: viewport.w/2, y: viewport.h/2, h: 30, w: 100})
 			.append("<button>Enter the depths.</button>")
@@ -145,10 +145,7 @@ Game.initMapAndEntities = function() {
 						      );
 						      levelItems[levelItems.length-1].initStats(this.killedBy, 10);
 						    }
-
 						   	Game.Hero.details.xp++;
-						    console.log('hero xp: ' + Game.Hero.details.xp);
-						    console.log('hero level: ' + Game.Hero.details.getLevel());
 						})
 						.bind('EnterFrame', function() {
 							if(detectDistance([pTA(this.x),pTA(this.y)], heroArr())< 8){

@@ -3,6 +3,7 @@
 var Game = require('../game');
 var Item = require('./item')();
 var Map = require('./map');
+var util = require('./util')
 
 var directions = {
   card: [
@@ -32,7 +33,6 @@ Crafty.extend({
       return Math.random() * (max - min) + min;
     },
     rSign: function(){
-      console.log(this.rInt(0,1));
       if(this.rInt(0,1) === 1){
         return 1;
       }else{
@@ -94,6 +94,7 @@ Crafty.c('PlayerCharacter', {
       .onHit('Slime', this.hitEnemy)
       .onHit('cItem', this.visitItem)
       .onHit('ExitPoint', function() {
+        util.gameLogUpdate('You go deeper.');
         Crafty.scene('main');
       });
   },
@@ -101,13 +102,15 @@ Crafty.c('PlayerCharacter', {
     var item = data[0].obj;
     this.details.pickupItem(item.stats);
     item.collect();
-    console.log('You have picked up ' + item.stats.name);
+    //console.log('You have picked up ' + item.stats.name);
     console.log('Inventory size: ' + this.details.inventory.length);
+    util.gameLogUpdate('You have picked up ' + item.stats.name);
   },
   hitEnemy: function(data) {
     var enemy = data[0].obj;
     this.details.enemiesKilled++;
     enemy.kill(this.details.level);
+    util.gameLogUpdate('They didn\'t suffer.');
   },
   currPos: function(){
     return ([pTA(curr._x), pTA(curr._y)]);
@@ -126,7 +129,14 @@ Crafty.c('Rat', {
       })
       .color('#A31E00')
       .collision()
-      .onHit('Detect', this.track);
+      .bind('EnterFrame', function(){
+        if (this.hit('Solid')) {
+          this.dx *= Crafty.rFlt(0.9,1.1)*Crafty.rSign();
+          this.dy *= Crafty.rFlt(0.9,1.1)*Crafty.rSign();
+        }
+        this.x += this.dx;
+        this.y += this.dy;
+      });
   },
   kill: function(charLevel) {
     this.killedBy = charLevel;
@@ -152,7 +162,7 @@ Crafty.c('Skeleton', {
       .color('#E6E6E6')
       .collision()
       .bind('Move', function(old) {
-        if (this.hit('Rock')) {
+        if (this.hit('Solid')) {
           this.movement = false;
           this.speed = false;
           this.x = old.x;
@@ -181,7 +191,7 @@ Crafty.c('Slime', {
       .color('#19A347')
       .collision()
       .bind('Moved', function(old) {
-        if (this.hit('Rock')) {
+        if (this.hit('Solid')) {
           this.movement = false;
           this.speed = false;
           this.x = old.x;
