@@ -47,13 +47,13 @@ Game.defineScenes = function() {
 
 		Crafty.viewport.init(viewport.w, viewport.h);
 		Crafty.background('#000');
-		
+
 		Crafty.viewport._clamp();
 		Crafty.viewport.clampToEntities = false;
-		
+
 		Game.initMapAndEntities();
 		Game.initPlayer();
-    
+
 	});
 
 	Crafty.defineScene('init', function() {
@@ -66,7 +66,7 @@ Game.defineScenes = function() {
 			.bind('Click', function() {
 				Crafty.scene('main');
 			});
-	});	
+	});
 };
 
 var pTA = function(pixel){
@@ -94,7 +94,7 @@ Game.initMapAndEntities = function() {
 
 	//Generate Map
 	TileMap.generateBlob();
-	
+
 	// Place All Entities
 	for (var y = 0; y < Game.map_grid.width; y++) {
 		for (var x = 0; x < Game.map_grid.height; x++) {
@@ -139,8 +139,8 @@ Game.initMapAndEntities = function() {
 			if (TileMap.tileMap[x][y] === 3) {
 				Crafty.e('Floor').at(x, y);
 				enemies.push(
-					Crafty.e(enemy._switch()).at(x, y)
-						.attr()
+					Crafty.e(enemy._getName()).at(x, y)
+						.attr(enemy.spawn(Game.player.level).attributes)
 						.attr({countdown: 1})
 						.bind('NPCDeath', function() {
 							var nItems = Crafty.rInt(0, 4);
@@ -188,7 +188,7 @@ Game.initMapAndEntities = function() {
 };
 
 Game.initPlayer = function() {
-  // Create Player Entity 
+  // Create Player Entity
   Game.Hero = Crafty.e('PlayerCharacter').at(250, 250);
   Crafty.viewport.follow(Game.Hero, 0, 0);
 };
