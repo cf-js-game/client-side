@@ -49,6 +49,22 @@ Crafty.sprite(32, 'js/game/assets/single_chest.png', {
   spChest: [0, 0]
 });
 
+Crafty.sprite(16, 'js/game/assets/link.png', {
+  playerSprite: [0, 0]
+});
+
+Crafty.sprite(32, 'js/game/assets/boundary.png', {
+  boundary: [0, 0]
+});
+
+Crafty.sprite(32, 'js/game/assets/water.png', {
+  water: [0, 0]
+});
+
+Crafty.sprite(32, 'js/game/assets/dirt.png', {
+  dirt: [0, 0]
+});
+
 Crafty.c('Grid', {
   init: function() {
     this.attr({
@@ -77,16 +93,22 @@ Crafty.c('Actor', {
 
 Crafty.c('PlayerCharacter', {
   init: function() {
-    this.requires('Actor, Fourway, Color, Collision, Animate')
+    this.requires('Actor, Fourway, Color, Collision, Animate, playerSprite')
       .attr({w: 16, h: 16})
-      .color('#1122ff')
       .collision()
-      .multiway(this.details.speed, {W: -90, S: 90, D: 0, A: 180})
+      .multiway(this.details.speed, {W: 270, S: 90, D: 0, A: 180})
       .bind('Moved', function(old) {
         if (this.hit('Solid')) {
           this.x = old.x;
           this.y = old.y;
         }
+      })
+      .bind('NewDirection', function(direction){
+        var now = direction
+        if(!(direction.x === 0 && direction.y === 0)){
+          this.dir = now;
+        }
+        console.log(this.dir);
       })
       .onHit('Item', this.visitItem)
       .onHit('Rat', this.hitEnemy)
@@ -119,7 +141,6 @@ Crafty.c('PlayerCharacter', {
 });
 
 Crafty.c('Rat', {
-  direction: directions.card[directions.roll()],
   init: function() {
     this.requires('Actor, Color, Collision, Delay')
       .attr({
@@ -154,7 +175,6 @@ Crafty.c('Rat', {
 
 Crafty.c('Skeleton', {
   speed: 0.1,
-  direction: directions.card[directions.roll()],
   init: function() {
     this.requires('Actor, Color, Collision, Delay')
       .attr({w: 16, h: 16})
@@ -183,7 +203,6 @@ Crafty.c('Skeleton', {
 
 Crafty.c('Slime', {
   speed: 0.2,
-  direction: directions.card[directions.roll()],
   init: function() {
     this.requires('Actor, Color, Collision, Delay')
       .attr({w: 16, h: 16})
@@ -212,7 +231,6 @@ Crafty.c('Slime', {
 
 Crafty.c('EnemyNPC', {
   speed: 0.2,
-  direction: directions.card[directions.roll()],
   init: function() {
     this.requires('Actor, Color, Collision, Custom, Animate')
       .attr({w: 16, h: 16})
@@ -247,7 +265,7 @@ Crafty.c('Attack', {
 
 Crafty.c('LevelBounds', {
   init: function() {
-    this.requires('Actor, Color, Solid')
+    this.requires('Actor, Color, Solid, boundary')
       .color('#808080');
   }
 });
@@ -267,15 +285,15 @@ Crafty.c('StaticSprite', {
 
 Crafty.c('Floor', {
   init: function() {
-    this.requires('Actor, Color')
+    this.requires('Actor, Color, dirt')
       .color('#222222');
   }
 });
 
 Crafty.c('Water', {
   init: function() {
-    this.requires('Actor, Color, Collision')
-      .color('#000D96');
+    this.requires('Actor, Color, Collision, water')
+      .color('#222222');
   }
 });
 

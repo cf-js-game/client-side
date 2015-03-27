@@ -79,6 +79,11 @@ var heroArr = function(){
   return([pTA(curr._x), pTA(curr._y)]);
 };
 
+var heroStat = function(){
+	var stat = Game.Hero;
+	return stat;
+}
+
 var detectDistance = function(pointA, pointB){
 	return Math.sqrt(Math.pow(pointB[0]-pointA[0], 2)+Math.pow(pointB[1]-pointA[1], 2));
 };
@@ -158,7 +163,6 @@ Game.initMapAndEntities = function() {
 								}
 								if(this.countdown <= 0){
 									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr())[1];
-									console.log(this.path);
 									if(!this.path){
 										this.move(this.last, 2);
 									}else if(this.path[0]){
