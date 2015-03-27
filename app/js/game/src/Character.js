@@ -20,7 +20,7 @@ function Character (owner, name) {
   this.currentHP = 20;
   this.currentMP = 20;
 
-  this.speed = 1.5;
+  this.speed = 2;
   this.range = 1;
 
   this.str = 1;
@@ -111,6 +111,15 @@ Character.prototype.xpCalc = function() {
     statCalc(this);
     return;
   }
+};
+
+/**
+ * [takeDamage: Call when hit; pass in damage from monster. currentHP update]
+ * @param  {[Int]} dmg [monster damage]
+ */
+Character.prototype.takeDamage = function(dmg) {
+  // Balanced for levels 1 - 100
+  this.currentHP -= dmg - (dmg * ((this.armor / 3) / 100));
 };
 
 module.exports = Character;
