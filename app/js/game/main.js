@@ -79,6 +79,11 @@ var heroArr = function(){
   return([pTA(curr._x), pTA(curr._y)]);
 };
 
+var heroStat = function(){
+	var stat = Game.Hero;
+	return stat;
+}
+
 var detectDistance = function(pointA, pointB){
 	return Math.sqrt(Math.pow(pointB[0]-pointA[0], 2)+Math.pow(pointB[1]-pointA[1], 2));
 };
@@ -151,14 +156,25 @@ Game.initMapAndEntities = function() {
 						.bind('EnterFrame', function() {
 							if(detectDistance([pTA(this.x),pTA(this.y)], heroArr())< 8){
 								if(!this.path){
-									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr());
+									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr())[1];
+									if(this.path){
+										this.last = this.path[0];
+									}
 								}
-								if(this.countdown === 0){
-									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr());
-									this.move(this.path, 2);
-									this.countdown = 15;
+								if(this.countdown <= 0){
+									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr())[1];
+									if(!this.path){
+										this.move(this.last, 2);
+									}else if(this.path[0]){
+										this.move(this.path[0], 2);
+									}
+									this.countdown = 16;
 								}else{
-									this.move(this.path, 2);
+									if(!this.path){
+										this.move(this.last, 2);
+									}else if(this.path[0]){
+										this.move(this.path[0], 2);
+									}
 									this.countdown -= 1;
 								}
 							}
