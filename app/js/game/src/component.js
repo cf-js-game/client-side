@@ -2,7 +2,11 @@
 
 var Game = require('../game');
 var Item = require('./item')();
-var util = require('./util')
+var util = require('./util');
+var charUpdate = Game.charUpdate;
+
+var Map = require('./map');
+
 
 var directions = {
   card: [
@@ -48,6 +52,22 @@ Crafty.sprite(32, 'js/game/assets/single_chest.png', {
   spChest: [0, 0]
 });
 
+Crafty.sprite(16, 'js/game/assets/link.png', {
+  playerSprite: [0, 0]
+});
+
+Crafty.sprite(32, 'js/game/assets/boundary.png', {
+  boundary: [0, 0]
+});
+
+Crafty.sprite(32, 'js/game/assets/water.png', {
+  water: [0, 0]
+});
+
+Crafty.sprite(32, 'js/game/assets/dirt.png', {
+  dirt: [0, 0]
+});
+
 Crafty.c('Grid', {
   init: function() {
     this.attr({
@@ -76,23 +96,28 @@ Crafty.c('Actor', {
 
 Crafty.c('PlayerCharacter', {
   init: function() {
-    this.requires('Actor, Fourway, Color, Collision, Animate')
-      .attr({w: 16, h: 16,})
-      .color('#1122ff')
-      .fourway(this.details.speed)
+    this.requires('Actor, Fourway, Color, Collision, Animate, playerSprite')
+      .attr({w: 16, h: 16})
       .collision()
+      .multiway(this.details.speed, {W: 270, S: 90, D: 0, A: 180})
       .bind('Moved', function(old) {
         if (this.hit('Solid')) {
           this.x = old.x;
           this.y = old.y;
         }
       })
+      .bind('NewDirection', function(direction){
+        var now = direction
+        if(!(direction.x === 0 && direction.y === 0)){
+          this.dir = now;
+        }
+        console.log(this.dir);
+      })
       .onHit('Item', this.visitItem)
       .onHit('Rat', this.hitEnemy)
       .onHit('Skeleton', this.hitEnemy)
       .onHit('Slime', this.hitEnemy)
       .onHit('cItem', this.visitItem)
-      .onHit('EnemyNPC', this.hitEnemy)
       .onHit('ExitPoint', function() {
         util.gameLogUpdate('You go deeper.');
         Crafty.scene('main');
@@ -102,38 +127,38 @@ Crafty.c('PlayerCharacter', {
     var item = data[0].obj;
     this.details.pickupItem(item.stats);
     item.collect();
-    //console.log('You have picked up ' + item.stats.name);
-    console.log('Inventory size: ' + this.details.inventory.length);
+    charUpdate.emit('characterUpdate', this.details);
     util.gameLogUpdate('You have picked up ' + item.stats.name);
   },
   hitEnemy: function(data) {
     var enemy = data[0].obj;
     this.details.enemiesKilled++;
     enemy.kill(this.details.level);
+    charUpdate.emit('characterUpdate', this.details);
     util.gameLogUpdate('They didn\'t suffer.');
+  },
+  currPos: function(){
+    return ([pTA(curr._x), pTA(curr._y)]);
   },
   details: Game.player
 });
 
 Crafty.c('Rat', {
-  direction: directions.card[directions.roll()],
   init: function() {
     this.requires('Actor, Color, Collision, Delay')
       .attr({
         w: 16,
         h: 16,
-        dx: Crafty.rFlt(0.5, 1)*Crafty.rSign(),
-        dy: Crafty.rFlt(0.5, 1)*Crafty.rSign()
       })
       .color('#A31E00')
       .collision()
-      .bind('EnterFrame', function(){
+      .bind('Moved', function(old){
         if (this.hit('Solid')) {
-          this.dx *= Crafty.rFlt(0.9,1.1)*Crafty.rSign();
-          this.dy *= Crafty.rFlt(0.9,1.1)*Crafty.rSign();
+          his.movement = false;
+          this.speed = false;
+          this.x = old.x;
+          this.y = old.y;
         }
-        this.x += this.dx;
-        this.y += this.dy;
       });
   },
   kill: function(charLevel) {
@@ -145,19 +170,21 @@ Crafty.c('Rat', {
   },
   moveSome: function() {
     this.move(this.direction, 0.2);
+  },
+  track: function(){
+
   }
 });
 
 Crafty.c('Skeleton', {
   speed: 0.1,
-  direction: directions.card[directions.roll()],
   init: function() {
     this.requires('Actor, Color, Collision, Delay')
       .attr({w: 16, h: 16})
       .color('#E6E6E6')
       .collision()
-      .bind('Move', function(old) {
-        if (this.hit('Rock')) {
+      .bind('Moved', function(old) {
+        if (this.hit('Solid')) {
           this.movement = false;
           this.speed = false;
           this.x = old.x;
@@ -179,14 +206,13 @@ Crafty.c('Skeleton', {
 
 Crafty.c('Slime', {
   speed: 0.2,
-  direction: directions.card[directions.roll()],
   init: function() {
     this.requires('Actor, Color, Collision, Delay')
       .attr({w: 16, h: 16})
       .color('#19A347')
       .collision()
       .bind('Moved', function(old) {
-        if (this.hit('Rock')) {
+        if (this.hit('Solid')) {
           this.movement = false;
           this.speed = false;
           this.x = old.x;
@@ -208,7 +234,6 @@ Crafty.c('Slime', {
 
 Crafty.c('EnemyNPC', {
   speed: 0.2,
-  direction: directions.card[directions.roll()],
   init: function() {
     this.requires('Actor, Color, Collision, Custom, Animate')
       .attr({w: 16, h: 16})
@@ -233,19 +258,17 @@ Crafty.c('EnemyNPC', {
   }
 });
 
-Crafty.c('FollowAI', {
-  followAI: function(obj) {
+Crafty.c('Attack', {
+  melee: function(range) {
     this.bind('EnterFrame', function(obj) {
-      if ((this.x < (obj.x + 100)) || (this.y < (obj.y + 100))) {
-        this.x += this.speed;
-      }
-    });
+      Pathing(Map.tileMap, [this.x, this.y], [heroArr]);
+    })
   }
 });
 
 Crafty.c('LevelBounds', {
   init: function() {
-    this.requires('Actor, Color, Solid')
+    this.requires('Actor, Color, Solid, boundary')
       .color('#808080');
   }
 });
@@ -265,15 +288,15 @@ Crafty.c('StaticSprite', {
 
 Crafty.c('Floor', {
   init: function() {
-    this.requires('Actor, Color')
+    this.requires('Actor, Color, dirt')
       .color('#222222');
   }
 });
 
 Crafty.c('Water', {
   init: function() {
-    this.requires('Actor, Color, Collision')
-      .color('#000D96');
+    this.requires('Actor, Color, Collision, water')
+      .color('#222222');
   }
 });
 
