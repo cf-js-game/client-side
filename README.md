@@ -5,7 +5,7 @@
 A top-down hack and slash role playing game leveraging:
 
 ###Front-End:
-* React / JSX
+* React/JSX
 * Flux Architecture
 * HTML5: Canvas
 * Crafty.js
