@@ -66,7 +66,7 @@ Game.defineScenes = function() {
 		Crafty.background('#000');
 		console.log('init scene');
 		Crafty.e('2D, Canvas, Mouse, HTML')
-			.attr({x: viewport.w/2, y: viewport.h/2, h: 30, w: 100})
+			.attr({x: (viewport.w-100)/2, y: (viewport.h-30)/2, h: 30, w: 100})
 			.append("<button>Enter the depths.</button>")
 			.bind('Click', function() {
 				Crafty.scene('main');

@@ -96,7 +96,7 @@ header nav ul li a:hover {
 }
 
 #char-detail {
-	margin: 20px;
+	margin-right: 20px;
 	display: inline;
 	max-width: 300px;
 	float: left;
