@@ -161,7 +161,7 @@ Crafty.c('Skeleton', {
       .attr({w: 16, h: 16, cooldown: 100})
       .color('#E6E6E6')
       .collision()
-      .bind('Move', function(old) {
+      .bind('Moved', function(old) {
         if (this.hit('Solid')) {
           this.movement = false;
           this.speed = false;
