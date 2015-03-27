@@ -3,6 +3,7 @@
 var PaperDoll = require('./PaperDoll');
 var FitItem = require('./FitItem');
 var Class = require('./CharClass');
+var statCalc = require('./statCalc');
 
 function Character (owner, name) {
   this.owner = owner;
@@ -44,14 +45,72 @@ Character.prototype.dropItem = function(itemIndex) {
 	return this.inventory.splice(itemIndex, 1)[0];
 };
 
-Character.prototype.equipItem = function (item, type) {
-	if (typeof item === 'FitItem') {
-		this.paperDoll[type] = item;
-	}
+Character.prototype.dequip = function(slot) {
+  if (this.paperDoll[slot]) {
+    this.inventory.push(this.paperDoll[slot]);
+    this.paperDoll[slot] = "";
+    statCalc(this);
+  }
 };
 
-Character.prototype.getLevel = function() {
-	return this.xp/5;
+Character.prototype.equip = function(item) {
+   if (this.paperDoll[item.slot]) {
+    this.inventory.push(this.paperDoll[item.slot]);
+    this.paperDoll[item.slot] = "";
+  }
+
+  if (item.slot === 'mainHand' || item.slot === 'offHand') {
+    // Dequip twoHand
+    if (this.paperDoll.twoHand) {
+      this.inventory.push(this.paperDoll.twoHand);
+      this.paperDoll.twoHand = "";
+    }
+
+    this.paperDoll[item.slot] = item;
+    statCalc(this);
+
+    return;
+  }
+
+  if (item.slot === 'twoHand') {
+    // Dequip mainHand
+    if (this.paperDoll.mainHand) {
+      this.inventory.push(this.paperDoll.mainHand);
+      this.paperDoll.mainHand = "";
+    }
+
+    // Dequip offHand
+    if (this.paperDoll.offHand) {
+      this.inventory.push(this.paperDoll.offHand);
+      this.paperDoll.offHand = "";
+    }
+
+    this.paperDoll[item.slot] = item;
+    statCalc(this);
+
+    return;
+  }
+
+  this.paperDoll[item.slot] = item;
+  statCalc(this);
+};
+
+/**
+ * [xpCalc determines xp gained per kill and propagates level-ups]
+ */
+Character.prototype.xpCalc = function() {
+  var mxp = 1000000; // monster xp: 1,000,000
+
+  // Balanced for levels 1 - 100
+  this.xp += Math.floor(mxp / ((Math.sqrt(this.level) * this.level) / 5 + Math.sqrt(this.level) + Math.exp(this.level/22)));
+
+  // Level UP!
+  if (this.xp >= 2000000) {
+    this.xp = this.xp - 2000000;
+    this.level += 1;
+    statCalc(this);
+    return;
+  }
 };
 
 module.exports = Character;
