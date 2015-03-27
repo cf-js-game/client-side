@@ -20,7 +20,7 @@ var CharDetails = React.createClass({
     });
   },
 
-  componentDidMount: function(){
+//  componentDidMount: function(){
 
       // -------------------
       //  add socket io
@@ -51,7 +51,7 @@ var CharDetails = React.createClass({
 
       // -------end of add socket io------------
 
-  },
+ // },
 
   handleSubmit: function(event) {
     event.preventDefault();
