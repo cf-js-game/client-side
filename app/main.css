@@ -5,8 +5,17 @@ body {
 	margin: 0;
 }
 
+/*body * {
+	border: 1px solid #fff;
+}*/
+
 main {
+	display: block;
 	margin: 5px;
+}
+
+a {
+	color: #fff;
 }
 
 button {
@@ -54,7 +63,9 @@ header nav ul li a:hover {
 }
 
 #mainAction {
+	display: block;
 	margin: auto;
+	text-align: center;
 }
 #mainAction button {
 	margin: 20px;
@@ -69,9 +80,10 @@ header nav ul li a:hover {
 }
 
 #landing {
-	min-width: 500px;
+	max-width: 80%;
 	margin-top: 100px;
 	margin: auto;
+	padding: 1% 5.333333333% 5.333333333% 5.333333333%;
 }
 
 #landing h3 {
@@ -106,3 +118,27 @@ header nav ul li a:hover {
 #status-updates span {
 	display: block;
 }
+
+#char-list {
+	padding: 15px;
+	border: 1px #fff solid;
+}
+
+#char-list li {
+	list-style-type: none;
+}
+
+#logout-link {
+	float: right;
+
+}
+
+#char-form {
+	border: 1px #fff solid;
+}
+
+#char-form * {
+	display: block;
+	padding: 5px;
+}
+

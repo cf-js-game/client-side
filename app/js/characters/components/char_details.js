@@ -1,9 +1,11 @@
 'use strict';
 
 var React = require('react');
-var Fluxxor = require('fluxxor')
+var Fluxxor = require('fluxxor');
 var FluxMixin = Fluxxor.FluxMixin(React);
 var StoreWatchMixin = Fluxxor.StoreWatchMixin;
+
+var charUpdate = require('../../game/game').charUpdate;
 
 var CharDetails = React.createClass({
   mixins: [FluxMixin],
@@ -17,6 +19,12 @@ var CharDetails = React.createClass({
   //   //   { _id: '1', type: 'Rat', damage: '1', melee: 'true', hp: '2'}
   //   // };
   // },
+  componentDidMount: function() {
+    charUpdate.on('characterUpdate', function (obj) {
+      console.log('char update recieved: ' + obj);
+      this.getFlux().actions.updateCharacters(obj);
+    });
+  },
 
   render: function() {
     //  data={"1"} is passed in

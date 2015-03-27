@@ -34,7 +34,8 @@ Game.saveCharacter = function(char) {};
 
 Game.emitCharStatChange = function() {};
 
-Game.start = function () {
+Game.start = function (initPlayerObj) {
+	this.player = initPlayerObj;
 	Crafty.init();
 	Game.defineScenes();
 	Crafty.scene('init');
@@ -45,6 +46,7 @@ Game.defineScenes = function() {
 	Crafty.defineScene('main', function () {
 
 		Crafty.viewport.init(viewport.w, viewport.h);
+
 		Crafty.background('#000');
 		
 		Crafty.viewport._clamp();
@@ -52,7 +54,7 @@ Game.defineScenes = function() {
 		
 		Game.initMapAndEntities();
 		Game.initPlayer();
-    
+    	
 	});
 
 	Crafty.defineScene('init', function() {
@@ -141,9 +143,15 @@ Game.initMapAndEntities = function() {
 };
 
 Game.initPlayer = function() {
-  // Create Player Entity 
+  // Create Player Entity
   Game.Hero = Crafty.e('PlayerCharacter').at(250, 250);
+  Crafty.viewport.reload();
   Crafty.viewport.follow(Game.Hero, 0, 0);
+};
+
+Game.stop = function() {
+	console.log('game stop called');
+	Crafty.stop();
 };
 
 module.exports = Game.start;

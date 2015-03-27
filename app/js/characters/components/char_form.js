@@ -28,11 +28,9 @@ var CharForm = React.createClass({
   },
   render: function() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form id='char-form' onSubmit={this.handleSubmit}>
         <label htmlFor="new-character-name">New Character</label>
         <input id="new-character-name" type="text" value={this.state.newCharacter.name} onChange={this.handleChange} name="new-character-name"/>
-        <label htmlFor="new-character-hp">Hit Power:</label>
-        <input id="new-character-hp" type="text" value={this.state.newCharacter.hp} onChange={this.handleChange} name="new-character-hp" />
         <button type="submit">Create New Character</button>
       </form>
     )

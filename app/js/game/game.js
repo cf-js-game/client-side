@@ -2,6 +2,10 @@
 
 var Character = require('./src/Character');
 
+var EventEmitter = require('events').EventEmitter;
+
+var charUpdate = new EventEmitter();
+
 var Game = {
 	map_grid: {
 		width: 500,
@@ -23,7 +27,9 @@ var Game = {
 	player: new Character(),
 	createNPC: function() {
 		return new Character();
-	}
+	},
+	charUpdate: charUpdate
+	
 };
 
 module.exports = Game;

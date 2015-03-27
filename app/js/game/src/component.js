@@ -2,7 +2,9 @@
 
 var Game = require('../game');
 var Item = require('./item')();
-var util = require('./util')
+var util = require('./util');
+
+var charUpdate = Game.charUpdate;
 
 var directions = {
   card: [
@@ -109,6 +111,15 @@ Crafty.c('PlayerCharacter', {
   hitEnemy: function(data) {
     var enemy = data[0].obj;
     this.details.enemiesKilled++;
+
+    var sendObj = {
+      enemiesKilled: 4,
+      invArray: ['thing', 'thing1', 'thing2'],
+
+    };
+
+    charUpdate.emit('characterUpdate', this.details);
+    console.log('hit enemy');
     enemy.kill(this.details.level);
     util.gameLogUpdate('They didn\'t suffer.');
   },
