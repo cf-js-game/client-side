@@ -5,6 +5,7 @@ var enemy = require('./src/Enemy');
 var Game = require('./game');
 var TileMap = require('./src/map');
 require('./src/component');
+var Pathing = require('./src/ai_pathing');
 
 var viewport = {
 	w: 1200,
@@ -68,6 +69,22 @@ Game.defineScenes = function() {
 	});	
 };
 
+var pTA = function(pixel){
+	var tileSize = Game.map_grid.tile.width;
+	return Math.floor((pixel)/tileSize);
+};
+
+var heroArr = function(){
+  var curr = Game.Hero.pos();
+  return([pTA(curr._x), pTA(curr._y)]);
+};
+
+var detectDistance = function(pointA, pointB){
+	return Math.sqrt(Math.pow(pointB[0]-pointA[0], 2)+Math.pow(pointB[1]-pointA[1], 2));
+};
+
+var countdown = 1;
+
 Game.initMapAndEntities = function() {
 
 	//Generate Map
@@ -117,7 +134,8 @@ Game.initMapAndEntities = function() {
 			if (TileMap.tileMap[x][y] === 3) {
 				Crafty.e('Floor').at(x, y);
 				enemies.push(
-					Crafty.e('EnemyNPC').at(x, y)
+					Crafty.e(enemy._switch()).at(x, y)
+						.attr({countdown: 1})
 						.bind('NPCDeath', function() {
 							var nItems = Crafty.rInt(0, 4);
 						    for (var i = 0; i < nItems; i++) {
@@ -132,8 +150,20 @@ Game.initMapAndEntities = function() {
 						    console.log('hero xp: ' + Game.Hero.details.xp);
 						    console.log('hero level: ' + Game.Hero.details.getLevel());
 						})
-						.bind('EnterFrame', function() {					
-							// this.move(this.direction, this.speed);
+						.bind('EnterFrame', function() {
+							if(detectDistance([pTA(this.x),pTA(this.y)], heroArr())< 8){
+								if(!this.path){
+									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr());
+								}
+								if(this.countdown === 0){
+									this.path = Pathing(TileMap.tileMap, [pTA(this.x),pTA(this.y)], heroArr());
+									//this.move(this.path, 2);
+									this.countdown = 15;
+								}else{
+									//this.move(this.path, 2);
+									this.countdown -= 1;
+								}
+							}
 						})
 					);
 			}
