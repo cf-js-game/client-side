@@ -24,7 +24,8 @@ var UserStore = Fluxxor.createStore({
       constants.DISPLAY_LOGIN, this.onDisplayLogin,
       constants.SELECT_CHAR, this.onSelectChar,
       constants.GET_USER_CHARS, this.getUsersCharacters,
-      constants.ADD_NEW_CHAR, this.onAddNewCharacter
+      constants.ADD_NEW_CHAR, this.onAddNewCharacter,
+      constants.UPDATE_CHAR, this.onUpdateCharacter
     );
 
   },
@@ -134,6 +135,21 @@ var UserStore = Fluxxor.createStore({
         this.characters.push(res.body);
         this.emit('change');
       }.bind(this));
+  },
+
+  onUpdateCharacter: function(playerObject) {
+    var selectedCharIndex = 0;
+    for (var i = 0; i < this.characters.length; i++) {
+      if (this.characters[i]._id === playerObject._id) {
+        selectedCharIndex = i;
+      }
+    }
+    for (var k in playerObject) {
+      if (typeof this.characters[selectedCharIndex][k] !== 'function') {
+        this.characters[selectedCharIndex][k] = playerObject[k];
+      }
+    }
+    this.emit('change');
   },
 
   // *** fix this !! ***

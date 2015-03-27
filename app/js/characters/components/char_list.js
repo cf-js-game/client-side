@@ -39,7 +39,15 @@ var Character = React.createClass({
   },
 
   render: function() {
-    return <li><a href id={this.props.data._id} onClick={this.charLinkClick}>{this.props.data.name} _id: {this.props.data._id} owner: {this.props.data.owner} </a></li>
+    return (<li>
+              <a href id={this.props.data._id} onClick={this.charLinkClick}>
+                <ul>
+                  <li>{this.props.data.name}</li>
+                  <li>{this.props.data.level}</li>
+                </ul>
+              </a>
+            </li>
+          )
   }
 
 });
@@ -87,7 +95,7 @@ var CharList = React.createClass({
     // ... otherwise disable Start Game button
     // this.data.selectedCharId <> null
     return (
-      <div>
+      <div id='char-list'>
       <h2>Characters</h2>
         <ul>
           {characters}

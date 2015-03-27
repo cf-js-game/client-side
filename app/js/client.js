@@ -21,6 +21,8 @@ var CharForm = require('./characters/components/char_form');
 // React-game
 var GameComponent = require('./react_game/components/react_game');
 
+var GameAccess = require('./game/game');
+
 var actions = {
   login: function(user, callback) {
     this.dispatch(constants.LOGIN, user);
@@ -53,6 +55,9 @@ var actions = {
 
   addCharacter: function(newCharacter) {
      this.dispatch(constants.ADD_NEW_CHAR, newCharacter);
+  },
+  updateCharacter: function(playerObject) {
+    this.dispatch(constants.UPDATE_CHAR, playerObject);
   }
 
 };
@@ -137,18 +142,19 @@ var App = React.createClass({
     showCharacterDetails = false;
     startGame = false;
     this.getFlux().actions.logout();
+    GameAccess.stop();
+    GameAccess.player = null;
     // var game = document.getElementById('cr-stage');
     // game.parentNode.removeChild(game);
-    
   },
 
   render: function() {
 
     //var createUser = <a href onClick={this.handleCreateUserButton}>Create User</a>;
     //var createUser = <button onClick={this.handleCreateUserButton}>Create</button>;
-    var homePageCenterPanel = <div id='mainAction'><button onClick={this.handleCreateUserButton}>Create</button><button onClick={this.handleLoginButton}>Login</button></div>;
+    var homePageCenterPanel = <div id='mainAction'><button onClick={this.handleCreateUserButton}>Create Account</button><button onClick={this.handleLoginButton}>Login</button></div>;
 
-    var logout = <div><a href onClick={this.handleLogout}>Log Out</a></div>;
+    var logout = <div id='logout-link'><a href onClick={this.handleLogout}>Log Out</a></div>;
     if (createUserClicked) homePageCenterPanel = <CreateUser setFlag={this.setFlag}/>;
     if (loginClicked) homePageCenterPanel = <Login setFlag={this.setFlag}/>;
     if (submitClickedOnLogin) homePageCenterPanel = <div>{logout}<CharForm /><CharList data={this.state} setFlag={this.setFlag}/></div>;

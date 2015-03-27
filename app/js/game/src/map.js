@@ -65,7 +65,7 @@ var map = {
 			var at_edge = curPos.x == 0 || curPos.x == this.w - 1 || curPos.y == 0 || curPos.y == this.h - 1;
 			if (at_edge) {
 				curPos.x = this.w / 2;
-				curPos.y = this.h /2;
+				curPos.y = this.h / 2;
 			}
 
 			this.tileMap[curPos.y][curPos.x] = 1;

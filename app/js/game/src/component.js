@@ -2,8 +2,11 @@
 
 var Game = require('../game');
 var Item = require('./item')();
+var util = require('./util');
+var charUpdate = Game.charUpdate;
+
 var Map = require('./map');
-var util = require('./util')
+
 
 var directions = {
   card: [
@@ -147,14 +150,14 @@ Crafty.c('PlayerCharacter', {
     var item = data[0].obj;
     this.details.pickupItem(item.stats);
     item.collect();
-    //console.log('You have picked up ' + item.stats.name);
-    console.log('Inventory size: ' + this.details.inventory.length);
+    charUpdate.emit('characterUpdate', this.details);
     util.gameLogUpdate('You have picked up ' + item.stats.name);
   },
   hitEnemy: function(data) {
     var enemy = data[0].obj;
     this.details.enemiesKilled++;
     enemy.kill(this.details.level);
+    charUpdate.emit('characterUpdate', this.details);
     util.gameLogUpdate('They didn\'t suffer.');
   },
   currPos: function(){
