@@ -68,6 +68,10 @@ Crafty.sprite(32, 'js/game/assets/dirt.png', {
   dirt: [0, 0]
 });
 
+Crafty.sprite(32, 'js/game/assets/exit.png', {
+  exit: [0, 0]
+});
+
 Crafty.c('Grid', {
   init: function() {
     this.attr({
@@ -300,7 +304,7 @@ Crafty.c('LevelBounds', {
 
 Crafty.c('ExitPoint', {
   init: function() {
-    this.requires('Actor, Color')
+    this.requires('Actor, Color, exit')
       .color('#8B00AD');
   }
 });
