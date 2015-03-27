@@ -98,11 +98,15 @@ header nav ul li a:hover {
 #char-detail {
 	margin: 20px;
 	display: inline;
-	width: 300px;
+	max-width: 300px;
 	float: left;
-	padding: 20px;
-	margin-left: 10%;
+	padding: 10px;
+	margin-left: 2.3333%;
 	border: 4px solid #383838;
+}
+
+#char-detail h2 {
+	padding-left: 11px;
 }
 
 #status-updates {
@@ -122,14 +126,31 @@ header nav ul li a:hover {
 #char-list {
 	padding: 15px;
 	border: 1px #fff solid;
+	text-align: left;
+	float: left;
 }
 
 #char-list li {
+	padding: 15px;
 	list-style-type: none;
+}
+#char-list li a {
+	padding: 10px;
+	text-decoration: none;
+}
+#char-list li a:hover {
+	color: #222;
+	background-color: #fff;
+}
+#char-list li a * {
+	display: inline;
+	padding-right: 10px;
+	text-align: left;
 }
 
 #char-detail-list {
 	list-style-type: none;
+	padding-bottom: 5px;
 }
 
 #logout-link {
@@ -139,6 +160,7 @@ header nav ul li a:hover {
 
 #char-form {
 	border: 1px #fff solid;
+	padding: 20px;
 }
 
 #char-form * {

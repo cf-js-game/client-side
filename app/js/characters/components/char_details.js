@@ -22,7 +22,7 @@ var CharDetails = React.createClass({
     //<CharDetails data={this.state} setFlag={this.setFlag}/>
     //var invLength = this.props.data.inventory.length;
     return (<div id='char-detail'>
-              <h3>{this.props.data.name}</h3>
+              <h2>{this.props.data.name}</h2>
               <table id='char-detail-list'>
                 <tr><td>Inventory:</td> <td>{this.props.data.inventory.length}</td></tr>
                 <tr><td>paperDoll:</td> <td>{this.props.data.paperDoll}</td></tr>
@@ -35,7 +35,7 @@ var CharDetails = React.createClass({
                 <tr><td>regenHP:</td> <td>{this.props.data.regenHP}</td></tr>
                 <tr><td>regenMP:</td> <td>{this.props.data.regenMP}</td></tr>
                 <tr><td>range:</td> <td>{this.props.data.range}</td></tr>
-                <tr><td>damage:</td> <td>{this.props.data.damge}</td></tr>
+                <tr><td>damage:</td> <td>{this.props.data.damage}</td></tr>
                 <tr><td>armor:</td> <td>{this.props.data.armor}</td></tr>
                 <tr><td>speed:</td> <td>{this.props.data.speed}</td></tr>
                 <tr><td>xp:</td> <td>{this.props.data.xp}</td></tr>

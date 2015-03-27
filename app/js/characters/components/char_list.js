@@ -41,10 +41,8 @@ var Character = React.createClass({
   render: function() {
     return (<li>
               <a href id={this.props.data._id} onClick={this.charLinkClick}>
-                <ul>
-                  <li>{this.props.data.name}</li>
-                  <li>{this.props.data.level}</li>
-                </ul>
+                <h3>Name: {this.props.data.name}</h3>
+                <h4>Level: {this.props.data.level}</h4>
               </a>
             </li>
           )
