@@ -20,7 +20,7 @@ var statCalc = function(char) {
     range: 0,
     damage: 0,
     armor: 0,
-    speed: 1.5,
+    speed: 2,
     str: char.level,
     dex: char.level,
     vit: Math.floor(char.level / 2.5),
@@ -52,7 +52,7 @@ var statCalc = function(char) {
   // (damage formula: damageTaken = damage - (damage * ((armor / 3) / 100)))
   stat.armor += Math.floor(stat.str / 3);
 
-  // speed: lvl 1-100 possible range: 1.5 - 5.5
+  // speed: lvl 1-100 possible range: 2 - 6
   stat.speed += stat.dex / 50;
 
   // maxHP (@lvl100: Min: 296, Probable: 376, Max: 536)
