@@ -55,20 +55,34 @@ var CreateUser = React.createClass({
       submitButton = <button type="submit" >Create a new user</button>;
 
     return (
-      <div>
-      <h2>Create User</h2>
-      <form name="signupform" onSubmit={this.handleSubmit}>
-        <label htmlFor="username">User Name:</label>
-        {usernameError}
-        <input type="text" name="user-username" id="username" value={this.state.newUser.username} onChange={this.handleChange} />
-        <label htmlFor="email">Email:</label>
-        {emailError}
-        <input type="text" name="user-email" id="email" value={this.state.newUser.email} onChange={this.handleChange} />
-        <label htmlFor="password">Password:</label>
-        {passwordError}
-        <input type="password" name="user-password" id="password" value={this.state.newUser.password} onChange={this.handleChange} />
-        {submitButton}
-      </form>
+      <div id="create-user">
+        <h2>Create User</h2>
+        <form name="signupform" onSubmit={this.handleSubmit}>
+          <table>
+            <tr>
+              <td><label htmlFor="username">User Name:</label></td>
+              <td><input type="text" name="user-username" id="username" value={this.state.newUser.username} onChange={this.handleChange} /></td>
+              <td>{usernameError}</td>
+            </tr>
+
+            <tr>
+              <td><label htmlFor="email">Email:</label></td>
+              <td><input type="text" name="user-email" id="email" value={this.state.newUser.email} onChange={this.handleChange} /></td>
+              <td>{emailError}</td>
+            </tr>
+
+            <tr>
+              <td><label htmlFor="password">Password:</label></td>
+              <td><input type="password" name="user-password" id="password" value={this.state.newUser.password} onChange={this.handleChange} /></td>
+              <td>{passwordError}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>{submitButton}</td>
+            </tr>
+          </table>
+        </form>
       </div>
     )
   }

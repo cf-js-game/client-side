@@ -152,12 +152,25 @@ var App = React.createClass({
 
     //var createUser = <a href onClick={this.handleCreateUserButton}>Create User</a>;
     //var createUser = <button onClick={this.handleCreateUserButton}>Create</button>;
-    var homePageCenterPanel = <div id='mainAction'><button onClick={this.handleCreateUserButton}>Create Account</button><button onClick={this.handleLoginButton}>Login</button></div>;
+    var homePageCenterPanel = 
+          <div id='mainAction'>
+            <h3>Explore infinite, procedurally generated dungeons. Get loot.</h3>
+            <button onClick={this.handleCreateUserButton}>Create Account</button>
+            <button onClick={this.handleLoginButton}>Login</button>
+          </div>;
 
     var logout = <div id='logout-link'><a href onClick={this.handleLogout}>Log Out</a></div>;
     if (createUserClicked) homePageCenterPanel = <CreateUser setFlag={this.setFlag}/>;
     if (loginClicked) homePageCenterPanel = <Login setFlag={this.setFlag}/>;
-    if (submitClickedOnLogin) homePageCenterPanel = <div>{logout}<CharForm /><CharList data={this.state} setFlag={this.setFlag}/></div>;
+    if (submitClickedOnLogin) { 
+      homePageCenterPanel = 
+        <div id='char-create-select'>
+          {logout}
+          <p>Create a new character or select a preexisting character. Select the 'start game' button to begin.</p>
+          <CharForm />
+          <CharList data={this.state} setFlag={this.setFlag}/>
+        </div>;
+    }
     if (showCharacterDetails) {
       // loop thru the array looking for selectedCharId
       var selectedCharIndex = 0;
@@ -167,7 +180,7 @@ var App = React.createClass({
         }
       }
 
-      homePageCenterPanel = <div>{logout}<CharForm /><CharList data={this.state} setFlag={this.setFlag}/><CharDetails data={this.state.charList[selectedCharIndex]} setFlag={this.setFlag}/></div>;
+      homePageCenterPanel = <div>{logout}<div><CharForm /><CharList data={this.state} setFlag={this.setFlag}/><CharDetails data={this.state.charList[selectedCharIndex]} setFlag={this.setFlag}/></div></div>;
     }
 
     if (startGame) homePageCenterPanel = <div>{logout}<CharDetails data={this.state.charList[selectedCharIndex]} setFlag={this.setFlag}/><GameComponent data={this.state} setFlag={this.setFlag}/></div>;
@@ -176,9 +189,6 @@ var App = React.createClass({
       <main>
         <Header/>
         <div id='landing'>
-          <h3>
-            Explore infinite, procedurally generated dungeons. Get loot.
-          </h3>
           {homePageCenterPanel}
         </div>
       </main>

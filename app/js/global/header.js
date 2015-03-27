@@ -12,7 +12,7 @@ var Header = React.createClass({
 			<header>
 				<div id='brand'>
 					<h1>WAGOGE</h1>
-					<h5>A procedurally generated dungeon crawler.</h5>
+					<h4>Wicked Awesome Game of Greater Employment</h4>
 				</div>
 				<nav>
 					<ul className='navList'>
