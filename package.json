@@ -4,13 +4,18 @@
   "description": "Client side of the game",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "grunt"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/cf-js-game/js-game.git"
   },
   "author": "Rory Sterley <rorysterley@gmail.com>",
+  "contributors": [
+    {"name": "Stephanie Beaton", "email": "stefanybeaton@gmail.com"},
+    {"name": "Ian McCunn", "email": "ianmccunn@gmail.com"},
+    {"name": "Daniel Nofziger", "email": "dannofziger@gmail.com"},
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/cf-js-game/js-game/issues"
