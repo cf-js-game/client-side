@@ -161,6 +161,7 @@ Crafty.c('PlayerCharacter', {
     var enemy = data[0].obj;
     this.details.enemiesKilled++;
     enemy.kill(this.details.level);
+    this.details.xpCalc();
     charUpdate.emit('characterUpdate', this.details);
     util.gameLogUpdate('They didn\'t suffer.');
   },
