@@ -34,9 +34,8 @@ var statCalc = function(char) {
   // Item Stat Calculations
   for (var key in char.paperDoll) {
     if (char.paperDoll[key]) {
-      var itemJSON = JSON.parse(char.paperDoll[key]);
-      for (var atribute in itemJSON.stats){
-        stat[atribute] += parseInt(itemJSON.stats[atribute], 10);
+      for (var atribute in char.paperDoll[key].stats){
+        stat[atribute] += parseInt(char.paperDoll[key].stats[atribute], 10);
       }
     }
   }
@@ -63,9 +62,11 @@ var statCalc = function(char) {
 
   // regenHP (Should tick once per second)
   stat.regenHP += stat.maxHP / 30;
+  stat.regenHP = stat.regenHP.toFixed(3);
 
   // regenMP (Should tick once per second)
   stat.regenMP += stat.maxMP / 20;
+  stat.regenMP = stat.regenMP.toFixed;
 
   /**
    * Update Char

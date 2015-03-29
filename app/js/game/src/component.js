@@ -1,7 +1,7 @@
 'use strict';
 
 var Game = require('../game');
-var Item = require('./item')();
+var Item = require('./item');
 var util = require('./util');
 var charUpdate = Game.charUpdate;
 
@@ -79,7 +79,7 @@ Crafty.c('Grid', {
       h: Game.map_grid.tile.height
     })
   },
- 
+
   // Locate this entity at the given position on the grid
   at: function(x, y) {
     if (x === undefined && y === undefined) {
@@ -90,7 +90,7 @@ Crafty.c('Grid', {
     }
   }
 });
- 
+
 
 Crafty.c('Actor', {
   init: function() {
@@ -356,7 +356,7 @@ Crafty.c('FitItem', {
       .attr({w: 4, h: 4,})
       .color('#ff0033');
   },
- 
+
   collect: function() {
     this.destroy();
   }

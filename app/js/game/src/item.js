@@ -123,165 +123,164 @@ var affix = {
   }
 };
 
-var Item = function() {
-  return {
-    random: function(min, max) {
-      return Math.floor(Math.random() * (max - min + 1) + min);
-    },
+var Item = {
 
-    _getKind: function() {
-      var rng = this.random(0, 99);
-      var type; // armor, jewelry, weapon
+  random: function(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  },
 
-      // armor: 0 to 49     | 50%
-      // jewelry: 50 to 64  | 15%
-      // weapon: 65 to 99   | 35%
-      if (rng < 50) {type = "armor";}
-      else if (rng < 65) {type = "jewelry";}
-      else if (rng < 100) {type = "weapon";}
+  _getKind: function() {
+    var rng = this.random(0, 99);
+    var type; // armor, jewelry, weapon
 
-      var slot = slots[type][this.random(0, slots[type].length - 1)];
-      var subtype;
+    // armor: 0 to 49     | 50%
+    // jewelry: 50 to 64  | 15%
+    // weapon: 65 to 99   | 35%
+    if (rng < 50) {type = "armor";}
+    else if (rng < 65) {type = "jewelry";}
+    else if (rng < 100) {type = "weapon";}
 
-      if (type === "weapon") {
-        subtype = subType[slot][this.random(0,subType[slot].length - 1)];
-      } else {
-        subtype = slot;
+    var slot = slots[type][this.random(0, slots[type].length - 1)];
+    var subtype;
+
+    if (type === "weapon") {
+      subtype = subType[slot][this.random(0,subType[slot].length - 1)];
+    } else {
+      subtype = slot;
+    }
+
+    var kind = {"type": type, "slot": slot, "subType": subtype};
+
+    return kind;
+  },
+
+  _getAffixes: function(kind, charLvl, mod) {
+    var prefix;
+    var suffix;
+    var suffixRNG;
+
+    // luck
+    var luck = this.random(1, 100);
+    if (luck === 100) {
+      mod += 20;
+    } else if (luck >= 98) {
+      mod += 10;
+    }
+
+    // min/max tier loot
+    var op = Math.floor((charLvl + mod) / 10) > 9; // Over Powered
+    var maxTier = op ? 9 : Math.floor((charLvl + mod) / 10);
+    var minTier = Math.floor((maxTier / 1.5));
+
+    // Be careful refactoring this; if it runs to fast you can get the same
+    // CPU seed on concurrent calls to random.
+    if (kind.type === "armor") {
+      prefix = affix.pre.armor[this.random(minTier, maxTier)];
+
+      suffixRNG = this.random(0, affix.suf.armor.length - 1);
+      suffix = affix.suf.armor[suffixRNG][this.random(minTier, maxTier)];
+    }
+    if (kind.type === "jewelry") {
+      prefix = affix.pre.jewelry[this.random(minTier, maxTier)];
+
+      suffixRNG = this.random(0, affix.suf.jewelry.length - 1);
+      suffix = affix.suf.jewelry[suffixRNG][this.random(minTier, maxTier)];
+    }
+    if (kind.type === "weapon") {
+      if (kind.slot === "mainHand") {
+        prefix = affix.pre.weapon[this.random(minTier, maxTier)];
+
+        suffixRNG = this.random(0, affix.suf.melee.length - 1);
+        suffix = affix.suf.melee[suffixRNG][this.random(minTier, maxTier)];
       }
+      if (kind.slot === "offHand") {
+        if (kind.subType === "shield") {
+          prefix = affix.pre.armor[this.random(minTier, maxTier)];
 
-      var kind = {"type": type, "slot": slot, "subType": subtype};
-
-      return kind;
-    },
-
-    _getAffixes: function(kind, charLvl, mod) {
-      var prefix;
-      var suffix;
-      var suffixRNG;
-
-      // luck
-      var luck = this.random(1, 100);
-      if (luck === 100) {
-        mod += 20;
-      } else if (luck >= 98) {
-        mod += 10;
-      }
-
-      // min/max tier loot
-      var op = Math.floor((charLvl + mod) / 10) > 9; // Over Powered
-      var maxTier = op ? 9 : Math.floor((charLvl + mod) / 10);
-      var minTier = Math.floor((maxTier / 1.5));
-
-      // Don"t refactor the 1-10 rng rolls, if they run concurrently node is so
-      // fast you have a high chance of getting the same cpu seed for random
-      if (kind.type === "armor") {
-        prefix = affix.pre.armor[this.random(minTier, maxTier)];
-
-        suffixRNG = this.random(0, affix.suf.armor.length - 1);
-        suffix = affix.suf.armor[suffixRNG][this.random(minTier, maxTier)];
-      }
-      if (kind.type === "jewelry") {
-        prefix = affix.pre.jewelry[this.random(minTier, maxTier)];
-
-        suffixRNG = this.random(0, affix.suf.jewelry.length - 1);
-        suffix = affix.suf.jewelry[suffixRNG][this.random(minTier, maxTier)];
-      }
-      if (kind.type === "weapon") {
-        if (kind.slot === "mainHand") {
+          suffixRNG = this.random(0, affix.suf.melee.length - 1);
+          suffix = affix.suf.melee[suffixRNG][this.random(minTier, maxTier)];
+        } else {
           prefix = affix.pre.weapon[this.random(minTier, maxTier)];
 
           suffixRNG = this.random(0, affix.suf.melee.length - 1);
           suffix = affix.suf.melee[suffixRNG][this.random(minTier, maxTier)];
         }
-        if (kind.slot === "offHand") {
-          if (kind.subType === "shield") {
-            prefix = affix.pre.armor[this.random(minTier, maxTier)];
+      }
+      if (kind.slot === "twoHand") {
+        if (kind.subType === "staff") {
+          prefix = affix.pre.weapon2h[this.random(minTier, maxTier)];
 
-            suffixRNG = this.random(0, affix.suf.melee.length - 1);
-            suffix = affix.suf.melee[suffixRNG][this.random(minTier, maxTier)];
-          } else {
-            prefix = affix.pre.weapon[this.random(minTier, maxTier)];
-
-            suffixRNG = this.random(0, affix.suf.melee.length - 1);
-            suffix = affix.suf.melee[suffixRNG][this.random(minTier, maxTier)];
-          }
+          suffixRNG = this.random(0, affix.suf.magic.length - 1);
+          suffix = affix.suf.magic[suffixRNG][this.random(minTier, maxTier)];
         }
-        if (kind.slot === "twoHand") {
-          if (kind.subType === "staff") {
-            prefix = affix.pre.weapon2h[this.random(minTier, maxTier)];
+        if (kind.subType === "bow") {
+          prefix = affix.pre.weapon2h[this.random(minTier, maxTier)];
 
-            suffixRNG = this.random(0, affix.suf.magic.length - 1);
-            suffix = affix.suf.magic[suffixRNG][this.random(minTier, maxTier)];
-          }
-          if (kind.subType === "bow") {
-            prefix = affix.pre.weapon2h[this.random(minTier, maxTier)];
+          suffixRNG = this.random(0, affix.suf.range.length - 1);
+          suffix = affix.suf.range[suffixRNG][this.random(minTier, maxTier)];
+        } else {
+          prefix = affix.pre.weapon2h[this.random(minTier, maxTier)];
 
-            suffixRNG = this.random(0, affix.suf.range.length - 1);
-            suffix = affix.suf.range[suffixRNG][this.random(minTier, maxTier)];
-          } else {
-            prefix = affix.pre.weapon2h[this.random(minTier, maxTier)];
-
-            suffixRNG = this.random(0, affix.suf.melee.length - 1);
-            suffix = affix.suf.melee[suffixRNG][this.random(minTier, maxTier)];
-          }
+          suffixRNG = this.random(0, affix.suf.melee.length - 1);
+          suffix = affix.suf.melee[suffixRNG][this.random(minTier, maxTier)];
         }
       }
-
-      return {"prefix": prefix, "suffix": suffix};
-    },
-
-    // charLvl = character level
-    // mod = integer modifier (1-100). mod is optional
-    // every 10 will potential bump up the quality of the loot one tier
-    spawn: function(charLvl, mod) {
-      mod = mod || 0;
-      var kind = this._getKind();
-      var affixes = this._getAffixes(kind, charLvl, mod);
-
-      var affixStats = {};
-
-      var key;
-      for (key in affixes.prefix) {
-        if (key !== "name") {
-          affixStats[key] = affixes.prefix[key];
-        }
-      }
-
-      for (key in affixes.suffix) {
-        if (key !== "name") {
-          affixStats[key] = affixes.suffix[key];
-        }
-      }
-
-      // weapon range
-      switch (kind.subType) {
-        case "sword":
-        case "axe":
-        case "maul":
-          affixStats.range = 1;
-          break;
-        case "great sword":
-        case "great axe":
-        case "great maul":
-          affixStats.range = 2;
-          break;
-        case "staff":
-          affixStats.range = 3;
-          break;
-        case "bow":
-          affixStats.range = 6;
-          break;
-      }
-
-      var item = {
-        slot: kind.slot,
-        name: affixes.prefix.name + kind.subType + affixes.suffix.name,
-        stats: affixStats
-      };
-
-      return item;
     }
-  };
+
+    return {"prefix": prefix, "suffix": suffix};
+  },
+
+  // charLvl = character level
+  // mod = integer modifier (1-100). mod is optional
+  // every 10 will potential bump up the quality of the loot one tier
+  spawn: function(charLvl, mod) {
+    mod = mod || 0;
+    var kind = this._getKind();
+    var affixes = this._getAffixes(kind, charLvl, mod);
+
+    var affixStats = {};
+
+    var key;
+    for (key in affixes.prefix) {
+      if (key !== "name") {
+        affixStats[key] = affixes.prefix[key];
+      }
+    }
+
+    for (key in affixes.suffix) {
+      if (key !== "name") {
+        affixStats[key] = affixes.suffix[key];
+      }
+    }
+
+    // weapon range
+    switch (kind.subType) {
+      case "sword":
+      case "axe":
+      case "maul":
+        affixStats.range = 1;
+        break;
+      case "great sword":
+      case "great axe":
+      case "great maul":
+        affixStats.range = 2;
+        break;
+      case "staff":
+        affixStats.range = 3;
+        break;
+      case "bow":
+        affixStats.range = 6;
+        break;
+    }
+
+    var item = {
+      slot: kind.slot,
+      name: affixes.prefix.name + kind.subType + affixes.suffix.name,
+      stats: affixStats
+    };
+
+    return item;
+  },
 };
 
 module.exports = Item;
