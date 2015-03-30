@@ -82,8 +82,8 @@ var CharDetails = React.createClass({
                 <tr><td>damage:</td> <td>{this.props.data.damage}</td></tr>
                 <tr><td>armor:</td> <td>{this.props.data.armor}</td></tr>
                 <tr><td>speed:</td> <td>{this.props.data.speed}</td></tr>
-                <tr><td>xp:</td> <td>{this.props.data.xp}</td></tr>
                 <tr><td>level:</td> <td>{this.props.data.level}</td></tr>
+                <tr><td>to next level:</td> <td><meter value={this.props.data.xpPercent}>{this.props.data.xpPercent}</meter></td></tr>
                 <tr><td>currentHP:</td> <td>{this.props.data.currentHP}</td></tr>
                 <tr><td>currentMP:</td> <td>{this.props.data.currentMP}</td></tr>
                 <tr><td>enemiesKilled:</td> <td>{this.props.data.enemiesKilled}</td></tr>

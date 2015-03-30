@@ -32,6 +32,7 @@ function Character (owner, name) {
   this.damage = 1;
   this.armor = 0;
 
+  this.xpPercent = 0;
   this.xp = 0;
   this.level = 1;
 
@@ -100,18 +101,22 @@ Character.prototype.equip = function(item) {
  * [xpCalc determines xp gained per kill and propagates level-ups]
  */
 Character.prototype.xpCalc = function() {
+  var lvlXP = 2000000; // xp required to level up: 2,000,000
   var mxp = 1000000; // monster xp: 1,000,000
 
   // Balanced for levels 1 - 100
   this.xp += Math.floor(mxp / ((Math.sqrt(this.level) * this.level) / 5 + Math.sqrt(this.level) + Math.exp(this.level/22)));
 
   // Level UP!
-  if (this.xp >= 2000000) {
-    this.xp = this.xp - 2000000;
+  if (this.xp >= lvlXP) {
+    this.xp = this.xp - lvlXP;
+    this.xpPercent = (this.xp / lvlXP).toFixed(2).toString();
     this.level += 1;
     statCalc(this);
     return;
   }
+
+  this.xpPercent = (this.xp / lvlXP).toFixed(2).toString();
 };
 
 /**

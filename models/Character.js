@@ -33,6 +33,7 @@ var characterSchema = new mongoose.Schema({
   damage: {type: Number, default: 1},
   armor: {type: Number, default: 0},
   speed: {type: Number, default: 2},
+  xpPercent: {type: Number, default: 0},
   xp: {type: Number, default: 0},
   level: {type: Number, default: 1},
   currentHP: {type: Number, default: 20},
