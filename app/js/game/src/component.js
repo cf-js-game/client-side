@@ -75,22 +75,21 @@ Crafty.sprite(32, 'js/game/assets/exit.png', {
 Crafty.c('Grid', {
   init: function() {
     this.attr({
-      w: Game.map_grid.tile.width,
-      h: Game.map_grid.tile.height
+      w: Game.grid.tile.width,
+      h: Game.grid.tile.height
     })
   },
 
   // Locate this entity at the given position on the grid
   at: function(x, y) {
     if (x === undefined && y === undefined) {
-      return { x: this.x/Game.map_grid.tile.width, y: this.y/Game.map_grid.tile.height }
+      return {x: this.x / Game.grid.tile.width, y: this.y / Game.grid.tile.height}
     } else {
-      this.attr({ x: x * Game.map_grid.tile.width, y: y * Game.map_grid.tile.height });
+      this.attr({x: x * Game.grid.tile.width, y: y * Game.grid.tile.height});
       return this;
     }
   }
 });
-
 
 Crafty.c('Actor', {
   init: function() {
@@ -111,31 +110,31 @@ Crafty.c('PlayerCharacter', {
           this.y = old.y;
         }
       })
-      .bind('NewDirection', function(direction){
+      .bind('NewDirection', function(direction) {
         var now = direction
-        if(direction.x === 0){
-          if(direction.y === 0){
+        if (direction.x === 0) {
+          if (direction.y === 0) {
             return;
-          }else if(direction.y > 0){
+          } else if (direction.y > 0) {
             this.rotation = 180;
-          }else if(direction.y < 0){
+          } else if (direction.y < 0) {
             this.rotation = 0;
           }
 
-        }else if(direction.x > 0){
-          if(direction.y === 0){
+        } else if (direction.x > 0) {
+          if (direction.y === 0) {
             this.rotation = 90;
-          }else if(direction.y > 0){
+          } else if (direction.y > 0) {
             this.rotation = 135;
-          }else if(direction.y < 0){
+          } else if (direction.y < 0) {
             this.rotation = 45;
           }
-        }else if(direction.x < 0){
-          if(direction.y === 0){
+        } else if (direction.x < 0) {
+          if (direction.y === 0) {
             this.rotation = 270;
-          }else if(direction.y > 0){
+          } else if (direction.y > 0) {
             this.rotation = 225;
-          }else if(direction.y < 0){
+          } else if (direction.y < 0) {
             this.rotation = 315;
           }
         }
@@ -165,7 +164,7 @@ Crafty.c('PlayerCharacter', {
     charUpdate.emit('characterUpdate', this.details);
     util.gameLogUpdate('They didn\'t suffer.');
   },
-  currPos: function(){
+  currPos: function() {
     return ([pTA(curr._x), pTA(curr._y)]);
   },
   details: Game.player
@@ -180,7 +179,7 @@ Crafty.c('Rat', {
       })
       .color('#A31E00')
       .collision()
-      .bind('Moved', function(old){
+      .bind('Moved', function(old) {
         if (this.hit('Solid')) {
           his.movement = false;
           this.speed = false;
@@ -199,7 +198,7 @@ Crafty.c('Rat', {
   moveSome: function() {
     this.move(this.direction, 0.2);
   },
-  track: function(){
+  track: function() {
 
   }
 });
@@ -340,7 +339,7 @@ Crafty.c('cItem', {
   stats: '',
   init: function() {
     this.requires('Actor, Color')
-      .attr({w: 4, h: 4,})
+      .attr({w: 4, h: 4})
       .color('#ff0033');
   },
   collect: function() {
@@ -354,7 +353,7 @@ Crafty.c('cItem', {
 Crafty.c('FitItem', {
   init: function() {
     this.requires('Actor, Color')
-      .attr({w: 4, h: 4,})
+      .attr({w: 4, h: 4})
       .color('#ff0033');
   },
 

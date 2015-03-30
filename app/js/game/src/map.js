@@ -22,8 +22,8 @@ var map = {
       }
     }
   },
-  w: Game.map_grid.width,
-  h: Game.map_grid.height,
+  w: Game.grid.width,
+  h: Game.grid.height,
   directions: {
     N: {
       x: 0,
@@ -47,7 +47,7 @@ var map = {
     console.log('starting map generation');
     this.initMap();
 
-    var iterations = Game.map_grid.iterations() || 16000;
+    var iterations = Game.grid.iterations() || 16000;
     var curPos = {x: this.w / 2, y: this.h / 2};
 
     while (iterations--) {
