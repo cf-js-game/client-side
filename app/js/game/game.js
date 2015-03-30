@@ -7,7 +7,7 @@ var EventEmitter = require('events').EventEmitter;
 var charUpdate = new EventEmitter();
 
 var Game = {
-	map_grid: {
+	grid: {
 		width: 500,
 		height: 500,
 		tile: {

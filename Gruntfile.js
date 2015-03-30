@@ -16,18 +16,20 @@ module.exports = function(grunt) {
       options:{
         jshintrc: true
       },
-    src: ['Gruntfile.js',
-          'test/**/*.js',
-          'models/**/*.js',
-          'routes/**/*.js',
-          'lib/**/*.js',
-          'server.js']
+      src: ['Gruntfile.js',
+            'test/**/*.js',
+            'models/**/*.js',
+            'routes/**/*.js',
+            'lib/**/*.js',
+            'app/game/**/*.js',
+            'server.js']
     },
     jscs: {
-      src: ['server.js'],
       options: {
         config: '.jscsrc'
-      }
+      },
+      src: ['server.js',
+            'app/js/game/**/*.js']
     },
     simplemocha: {
       all: {
