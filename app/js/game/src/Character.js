@@ -40,32 +40,32 @@ function Character (owner, name) {
 }
 
 Character.prototype.pickupItem = function(item) {
-	this.inventory.push(item);
+  this.inventory.push(item);
 };
 
 Character.prototype.dropItem = function(itemIndex) {
-	return this.inventory.splice(itemIndex, 1)[0];
+  return this.inventory.splice(itemIndex, 1)[0];
 };
 
 Character.prototype.dequip = function(slot) {
   if (this.paperDoll[slot]) {
     this.inventory.push(this.paperDoll[slot]);
-    this.paperDoll[slot] = "";
+    this.paperDoll[slot] = '';
     statCalc(this);
   }
 };
 
 Character.prototype.equip = function(item) {
-   if (this.paperDoll[item.slot]) {
+  if (this.paperDoll[item.slot]) {
     this.inventory.push(this.paperDoll[item.slot]);
-    this.paperDoll[item.slot] = "";
+    this.paperDoll[item.slot] = '';
   }
 
   if (item.slot === 'mainHand' || item.slot === 'offHand') {
     // Dequip twoHand
     if (this.paperDoll.twoHand) {
       this.inventory.push(this.paperDoll.twoHand);
-      this.paperDoll.twoHand = "";
+      this.paperDoll.twoHand = '';
     }
 
     this.paperDoll[item.slot] = item;
@@ -78,13 +78,13 @@ Character.prototype.equip = function(item) {
     // Dequip mainHand
     if (this.paperDoll.mainHand) {
       this.inventory.push(this.paperDoll.mainHand);
-      this.paperDoll.mainHand = "";
+      this.paperDoll.mainHand = '';
     }
 
     // Dequip offHand
     if (this.paperDoll.offHand) {
       this.inventory.push(this.paperDoll.offHand);
-      this.paperDoll.offHand = "";
+      this.paperDoll.offHand = '';
     }
 
     this.paperDoll[item.slot] = item;
@@ -105,7 +105,8 @@ Character.prototype.xpCalc = function() {
   var mxp = 1000000; // monster xp: 1,000,000
 
   // Balanced for levels 1 - 100
-  this.xp += Math.floor(mxp / ((Math.sqrt(this.level) * this.level) / 5 + Math.sqrt(this.level) + Math.exp(this.level/22)));
+  this.xp += Math.floor(mxp / ((Math.sqrt(this.level) * this.level) / 5 +
+             Math.sqrt(this.level) + Math.exp(this.level / 22)));
 
   // Level UP!
   if (this.xp >= lvlXP) {
@@ -129,4 +130,3 @@ Character.prototype.takeDamage = function(dmg) {
 };
 
 module.exports = Character;
-
