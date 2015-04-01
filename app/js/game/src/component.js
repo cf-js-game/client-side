@@ -7,7 +7,6 @@ var charUpdate = Game.charUpdate;
 
 var Map = require('./map');
 
-
 var directions = {
   card: [
     'n',
@@ -26,22 +25,22 @@ var directions = {
 };
 
 Crafty.extend({
-    randChance: function(a, b) {
-        return Crafty.randRange(0, b) > b - a;
-    },
-    rInt: function(min, max) {
-      return Math.floor(Math.random() * (max - min) + min);
-    },
-    rFlt: function(min, max) {
-      return Math.random() * (max - min) + min;
-    },
-    rSign: function(){
-      if(this.rInt(0,1) === 1){
-        return 1;
-      }else{
-        return -1;
-      }
+  randChance: function(a, b) {
+    return Crafty.randRange(0, b) > b - a;
+  },
+  rInt: function(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+  },
+  rFlt: function(min, max) {
+    return Math.random() * (max - min) + min;
+  },
+  rSign: function() {
+    if (this.rInt(0, 1) === 1) {
+      return 1;
+    } else {
+      return -1;
     }
+  }
 });
 
 Crafty.sprite(32, 'js/game/assets/rock.png', {
@@ -77,13 +76,14 @@ Crafty.c('Grid', {
     this.attr({
       w: Game.grid.tile.width,
       h: Game.grid.tile.height
-    })
+    });
   },
 
   // Locate this entity at the given position on the grid
   at: function(x, y) {
     if (x === undefined && y === undefined) {
-      return {x: this.x / Game.grid.tile.width, y: this.y / Game.grid.tile.height}
+      return {x: this.x / Game.grid.tile.width,
+              y: this.y / Game.grid.tile.height};
     } else {
       this.attr({x: x * Game.grid.tile.width, y: y * Game.grid.tile.height});
       return this;
@@ -111,7 +111,7 @@ Crafty.c('PlayerCharacter', {
         }
       })
       .bind('NewDirection', function(direction) {
-        var now = direction
+        var now = direction;
         if (direction.x === 0) {
           if (direction.y === 0) {
             return;
@@ -291,7 +291,7 @@ Crafty.c('Attack', {
   melee: function(range) {
     this.bind('EnterFrame', function(obj) {
       Pathing(Map.tileMap, [this.x, this.y], [heroArr]);
-    })
+    });
   }
 });
 
@@ -361,4 +361,3 @@ Crafty.c('FitItem', {
     this.destroy();
   }
 });
-
