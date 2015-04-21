@@ -41,13 +41,15 @@ var Login = React.createClass({
     var usernameError;
     var passwordError;
     var emailError;
+    var emailRE = /[A-za-z0-9]+\@[A-Za-z0-9\-]+\.\w{2,3}/g;
     var submitButton;
 
     if (this.state.user.username.length < 1 && this.state.changed)
       usernameError = <span style={{color: '#ff0000'}}>User name cannot be blank.</span>;
 
-    if (this.state.user.email.length < 1 && this.state.changed)
-      emailError = <span style={{color: '#ff0000'}}>Email cannot be blank.</span>;
+    if (this.state.user.email.length < 10 && this.state.changed && !this.state.user.email.length.match(emailRE)) {
+      emailError = <span style={{color: '#ff0000'}}>Email cannot be blank and must be valid.</span>;
+    }
 
     if (this.state.user.password.length < 1 && this.state.changed)
       passwordError = <span style={{color: '#ff0000'}}>Password cannot be blank.</span>;
