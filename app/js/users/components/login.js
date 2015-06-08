@@ -57,7 +57,7 @@ var Login = React.createClass({
     if (emailError || passwordError && !this.state.changed)
       submitButton = <button type="submit" disabled>Login</button>;
     else
-      submitButton = <button type="submit" >Login</button>;
+      submitButton = <button type="submit">Login</button>;
 
     return (
       <div id="login-form">
