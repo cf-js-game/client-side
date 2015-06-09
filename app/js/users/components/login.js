@@ -47,7 +47,7 @@ var Login = React.createClass({
     if (this.state.user.username.length < 1 && this.state.changed)
       usernameError = <span style={{color: '#ff0000'}}>User name cannot be blank.</span>;
 
-    if (this.state.user.email.length < 10 && this.state.changed && !this.state.user.email.length.match(emailRE)) {
+    if (this.state.user.email.length < 10 && this.state.changed && !this.state.user.email.match(emailRE)) {
       emailError = <span style={{color: '#ff0000'}}>Email cannot be blank and must be valid.</span>;
     }
 
@@ -57,7 +57,7 @@ var Login = React.createClass({
     if (emailError || passwordError && !this.state.changed)
       submitButton = <button type="submit" disabled>Login</button>;
     else
-      submitButton = <button type="submit" >Login</button>;
+      submitButton = <button type="submit">Login</button>;
 
     return (
       <div id="login-form">

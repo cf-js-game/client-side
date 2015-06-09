@@ -2,3 +2,4 @@ node_modules
 db
 build
 app/js/char_list.bak
+**/*.swp

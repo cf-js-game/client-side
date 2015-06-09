@@ -12,9 +12,18 @@
   },
   "author": "Rory Sterley <rorysterley@gmail.com>",
   "contributors": [
-    {"name": "Stephanie Beaton", "email": "stefanybeaton@gmail.com"},
-    {"name": "Ian McCunn", "email": "ianmccunn@gmail.com"},
-    {"name": "Daniel Nofziger", "email": "dannofziger@gmail.com"}
+    {
+      "name": "Stephanie Beaton",
+      "email": "stefanybeaton@gmail.com"
+    },
+    {
+      "name": "Ian McCunn",
+      "email": "ianmccunn@gmail.com"
+    },
+    {
+      "name": "Daniel Nofziger",
+      "email": "dannofziger@gmail.com"
+    }
   ],
   "license": "MIT",
   "bugs": {
@@ -49,7 +58,7 @@
     "craftyjs": "^0.6.3",
     "eat": "^0.1.1",
     "express": "^4.12.2",
-    "mongoose": "^3.8.25",
+    "mongoose": "^3.9.7",
     "mongoose-unique-validator": "^0.4.1",
     "passport": "^0.2.1",
     "passport-http": "^0.2.2"
